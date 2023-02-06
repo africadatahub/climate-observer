@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { ResponsiveContainer, ComposedChart, Bar, Brush, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
+import { ResponsiveContainer, ComposedChart, Bar, Brush, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, Legend } from 'recharts';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -19,9 +19,12 @@ export class Climate extends React.Component {
         super();
         this.state = {
             datasets: {
-                climatology_avg: 'e295d928-ed2a-4f14-9130-2d1d340159cb',
-                temperature_avg: '9380faec-af20-43d8-a224-141b5ca91dac'
+                climatology_max: 'd70ef6de-1eda-42c9-bde1-23c6c177db23',
+                temperature_max: 'c585164d-15f4-49e5-9be8-176f11f818bc',
+                climatology_avg: 'c290ed98-5cf4-4ecf-abaa-4d4f212c28b2',
+                temperature_avg: '00820415-edd5-41a1-9ad1-657b6c117f90',
             },
+            current_dataset: 'max',
             lat: 30.0444196,
             long: 31.2357116,
             rounded_lat: undefined,
@@ -29,10 +32,16 @@ export class Climate extends React.Component {
             selected_year: 2010,
             data: [],
             data_work: {
+                climatology_max: [],
+                temperature_max: [],
                 climatology_avg: [],
                 temperature_avg: []
-            }
+            },
+            loading: true,
+            show_climatology: true,
+            show_calculated_temp: true,
         }
+        this.citySelectRef = React.createRef();
         
     }
     useLocation = () => {
@@ -40,6 +49,7 @@ export class Climate extends React.Component {
             window.navigator.geolocation.getCurrentPosition((position) => {
                 this.setState({lat: position.coords.latitude, long: position.coords.longitude}, () => {
                     this.getLocationData();
+                    this.citySelectRef.current.value = 'location';
                 })
             })
         } 
@@ -63,31 +73,53 @@ export class Climate extends React.Component {
     }
     
     changeLocation = (lat, long) => {
-        this.setState({lat: lat, long: long}, () => {
+        this.setState({lat: lat, long: long, loading: true}, () => {
             this.getLocationData();
         })
     }
+
+    changeDataset = (dataset) => {
+        this.setState({current_dataset: dataset}, () => {
+            this.getLocationData();
+        })
+    }
+
+    legendClick = (e) => {
+        if (e.dataKey === 'climatology') {
+            this.setState({show_climatology: !this.state.show_climatology})
+        } else if (e.dataKey === 'calculated_temp') {
+            this.setState({show_calculated_temp: !this.state.show_calculated_temp})
+        }
+    }
+
+
+
 
     getLocationData = () => {
 
         let self = this;
 
         self.setState({
-            data: {
+            data: [],
+            data_work: {
+                climatology_max: [],
+                temperature_max: [],
                 climatology_avg: [],
                 temperature_avg: []
             }
         }, () => {
 
-            axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + self.state.datasets.climatology_avg + '"%20WHERE%20latitude%20%3E%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%20' + (self.state.long - 0.5) + '%20AND%20longitude%20%3C%20' + (self.state.long + 0.5) + '%20',
+            let current_climatology_dataset = 'climatology_' + self.state.current_dataset;
+
+            axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + self.state.datasets[current_climatology_dataset] + '"%20WHERE%20latitude%20%3E%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%20' + (self.state.long - 0.5) + '%20AND%20longitude%20%3C%20' + (self.state.long + 0.5) + '%20',
                 { headers: {
                     "Authorization": process.env.CKAN
                 }
             }).then(function(response) {
 
                 let data_work = self.state.data_work;
-                
-                data_work.climatology_avg = response.data.result.records;
+
+                data_work[current_climatology_dataset] = response.data.result.records;
 
                 self.setState({
                     data_work: data_work,
@@ -95,14 +127,23 @@ export class Climate extends React.Component {
                     rounded_long: response.data.result.records[0].longitude
                 }, () => {
 
-                    axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + self.state.datasets.temperature_avg + '"%20WHERE%20latitude%20%3E%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%20' + (self.state.long - 0.5) + '%20AND%20longitude%20%3C%20' + (self.state.long + 0.5) + '%20',
+                    let current_temperature_dataset = 'temperature_' + self.state.current_dataset;
+
+                    axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + self.state.datasets[current_temperature_dataset] + '"%20WHERE%20latitude%20%3E%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%20' + (self.state.long - 0.5) + '%20AND%20longitude%20%3C%20' + (self.state.long + 0.5) + '%20',
                         { headers: {
                             "Authorization": process.env.CKAN
                         }
                     }).then(function(response) {
 
-                        // for every record, add a column for the date
-                        response.data.result.records.forEach((record) => {
+                        let this_data = response.data.result.records;
+
+                        this_data.forEach((record) => {
+
+                            // sort records by time
+                            this_data.sort((a, b) => {
+                                return a.time - b.time;
+                            })
+
                             // split date at first .
                             let date = record.time.split('.');
                             if(date[1] == '0416666666663') {
@@ -134,28 +175,23 @@ export class Climate extends React.Component {
                             record.date = (date[1] + 1) + '/' + date[0];
                             record.month_number = date[1];
 
-                            let climatology = data_work.climatology_avg.filter((clim) => {
+                            let climatology = data_work[current_climatology_dataset].filter((clim) => {
                                 return clim.month_number == record.month_number;
                             })
 
                             record.climatology = Math.round(climatology[0].climatology * 100) / 100;
 
-                            record.temperature = record.climatology - record.temperature;
-
                             record.temperature = Math.round(record.temperature * 100) / 100;
 
-                            // sort records by time
-                            response.data.result.records.sort((a, b) => {
-                                return a.time - b.time;
-                            })
+                            record.calculated_temp = parseFloat(record.climatology) + parseFloat(record.temperature);
 
+                            record.calculated_temp = Math.round(record.calculated_temp * 100) / 100;
                         
                         })
 
-                        // data.temperature_avg = response.data.result.records;
-
                         self.setState({
-                            data: response.data.result.records
+                            data: this_data,
+                            loading: false
                         })
 
 
@@ -181,10 +217,17 @@ export class Climate extends React.Component {
         <Container>
             <Row className="my-4">
                 <Col>
-                    <Form.Select onChange={(e) => this.changeLocation(cities[e.target.value].Latitude, cities[e.target.value].Longitude)}>
+                    <Form.Select onChange={(e) => this.changeDataset(e.target.value)}>
+                        <option value="max">Berkeley TMAX</option>
+                        <option value="avg">Berkeley TAVG</option>
+                    </Form.Select>
+                </Col>
+                <Col>
+                    <Form.Select ref={this.citySelectRef} onChange={(e) => this.changeLocation(cities[e.target.value].Latitude, cities[e.target.value].Longitude)}>
                         {cities.map((city, index) => {
                             return <option key={'c'+index} value={index}>{city.City}</option>
                         })}
+                        <option value="location">Your Location</option>
                     </Form.Select>
                 </Col>
                 <Col>
@@ -194,7 +237,9 @@ export class Climate extends React.Component {
                     <Form.Control type="text" value={this.state.long} onChange={(e) => this.changeLocation(this.state.lat,e.target.value,)} />
                 </Col>
                 <Col>
-                    <Button onClick={() => this.useLocation()}>Use my location</Button>
+                    <div className="d-grid gap-2">
+                        <Button onClick={() => this.useLocation()}>Use my location</Button>
+                    </div>
                 </Col>
             </Row>                            
 
@@ -205,23 +250,29 @@ export class Climate extends React.Component {
                         <Card.Body>
                             <p>Looking at data between: {this.state.rounded_lat} and {this.state.rounded_long}</p>
 
-                            <ResponsiveContainer width="100%" height={400}>
-                                <ComposedChart data={this.state.data} margin={{top: 20, right: 0, bottom: 0, left: 0}}>
-                                    <XAxis dataKey="date"/>
+                            {this.state.loading ? <p>Loading...</p> :
+                                <ResponsiveContainer width="100%" height={400}>
+                                    <ComposedChart data={this.state.data} margin={{top: 20, right: 0, bottom: 0, left: 0}}>
+                                        <XAxis dataKey="date"/>
 
-                                    <YAxis yAxisId="left" orientation="left" stroke="#99b3bb" domain={[0,40]}/>
-                                    
-                                    {/* <ReferenceLine y={0} yAxisId="left" stroke="red" label="0%" strokeDasharray="3 3" /> */}
-                                    
-                                    <CartesianGrid strokeDasharray="1 1"/>
+                                        <YAxis yAxisId="left" orientation="left" stroke="#99b3bb" domain={[0,40]}/>
+                                        
+                                        {/* <ReferenceLine y={0} yAxisId="left" stroke="red" label="0%" strokeDasharray="3 3" /> */}
+                                        
+                                        <CartesianGrid strokeDasharray="1 1"/>
+                                        <Legend onClick={this.legendClick} />
 
-                                    <Tooltip/>
-                                    <Line strokeDasharray="4" type="monotone" yAxisId="left" dot={false} dataKey="climatology" strokeWidth={2} stroke="#089fd1" />
-                                    <Line type="monotone" yAxisId="left" dot={false} dataKey="temperature" strokeWidth={2}  stroke="#f00" />
-
-                                    <Brush dataKey="date" height={30} stroke="#8eb4bf" />
-                                </ComposedChart>
-                            </ResponsiveContainer>
+                                        <Tooltip/>
+                                        
+                                            <Line strokeOpacity={this.state.show_climatology ? 1 : 0} strokeDasharray="4" type="monotone" yAxisId="left" dot={false} dataKey="climatology" strokeWidth={2} stroke="#089fd1" />
+                                        
+                                        
+                                            <Line strokeOpacity={this.state.show_calculated_temp ? 1 : 0} type="monotone" yAxisId="left" dot={false} dataKey="calculated_temp" strokeWidth={2}  stroke="#f00" />
+                                        
+                                        <Brush dataKey="date" height={30} stroke="#8eb4bf" />
+                                    </ComposedChart>
+                                </ResponsiveContainer>
+                            }
                         </Card.Body>
                     </Card>
                 </Col>

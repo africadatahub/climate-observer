@@ -1,0 +1,902 @@
+[
+  {
+    "Rank": 1,
+    "City": "Cairo",
+    "Latitude": 30.0444196,
+    "Longitude": 31.2357116,
+    "Country": "Egypt",
+    "Population": 22183200,
+    "Date of estimate": "2023[1]"
+  },
+  {
+    "Rank": 2,
+    "City": "Kinshasa",
+    "Latitude": -4.4419311,
+    "Longitude": 15.2662931,
+    "Country": "Democratic Republic of the Congo",
+    "Population": 16315534,
+    "Date of estimate": "2023[2]"
+  },
+  {
+    "Rank": 3,
+    "City": "Lagos",
+    "Latitude": 6.5243793,
+    "Longitude": 3.3792057,
+    "Country": "Nigeria",
+    "Population": 15387639,
+    "Date of estimate": "2022[3]"
+  },
+  {
+    "Rank": 4,
+    "City": "Giza",
+    "Latitude": 30.0130557,
+    "Longitude": 31.2088526,
+    "Country": "Egypt",
+    "Population": 9200000,
+    "Date of estimate": 2021
+  },
+  {
+    "Rank": 5,
+    "City": "Luanda",
+    "Latitude": -8.8146556,
+    "Longitude": 13.2301756,
+    "Country": "Angola",
+    "Population": 8952496,
+    "Date of estimate": "2022[4]"
+  },
+  {
+    "Rank": 6,
+    "City": "Dar es Salaam",
+    "Latitude": -6.792354,
+    "Longitude": 39.2083284,
+    "Country": "Tanzania",
+    "Population": 7404689,
+    "Date of estimate": "2022[5]"
+  },
+  {
+    "Rank": 7,
+    "City": "Khartoum",
+    "Latitude": 15.5006544,
+    "Longitude": 32.5598994,
+    "Country": "Sudan",
+    "Population": 6160327,
+    "Date of estimate": "2022[6]"
+  },
+  {
+    "Rank": 8,
+    "City": "Johannesburg",
+    "Latitude": -26.2041028,
+    "Longitude": 28.0473051,
+    "Country": "South Africa",
+    "Population": 6065354,
+    "Date of estimate": "2022[7]"
+  },
+  {
+    "Rank": 9,
+    "City": "Abidjan",
+    "Latitude": 5.3599517,
+    "Longitude": -4.0082563,
+    "Country": "Côte d'Ivoire",
+    "Population": 5515790,
+    "Date of estimate": "2022[8]"
+  },
+  {
+    "Rank": 10,
+    "City": "Alexandria",
+    "Latitude": 38.8048355,
+    "Longitude": -77.0469214,
+    "Country": "Egypt",
+    "Population": 5483605,
+    "Date of estimate": "2022[9]"
+  },
+  {
+    "Rank": 11,
+    "City": "Addis Ababa",
+    "Latitude": 8.9806034,
+    "Longitude": 38.7577605,
+    "Country": "Ethiopia",
+    "Population": 5227794,
+    "Date of estimate": "2022[10]"
+  },
+  {
+    "Rank": 12,
+    "City": "Nairobi",
+    "Latitude": -1.2920659,
+    "Longitude": 36.8219462,
+    "Country": "Kenya",
+    "Population": 5118844,
+    "Date of estimate": "2022[11]"
+  },
+  {
+    "Rank": 13,
+    "City": "Cape Town",
+    "Latitude": -33.9248685,
+    "Longitude": 18.4240553,
+    "Country": "South Africa",
+    "Population": 4800954,
+    "Date of estimate": "2022[12]"
+  },
+  {
+    "Rank": 14,
+    "City": "Yaoundé",
+    "Latitude": 3.8480325,
+    "Longitude": 11.5020752,
+    "Country": "Cameroon",
+    "Population": 4336670,
+    "Date of estimate": "2022[13]"
+  },
+  {
+    "Rank": 15,
+    "City": "Kano",
+    "Latitude": 12.000000,
+    "Longitude": 8.516667,
+    "Country": "Nigeria",
+    "Population": 4219209,
+    "Date of estimate": "2022[14]"
+  },
+  {
+    "Rank": 16,
+    "City": "Ekurhuleni",
+    "Latitude": "",
+    "Longitude": "",
+    "Country": "South Africa",
+    "Population": 4045000,
+    "Date of estimate": "2022[15]"
+  },
+  {
+    "Rank": 17,
+    "City": "Douala",
+    "Latitude": 4.0510564,
+    "Longitude": 9.7678687,
+    "Country": "Cameroon",
+    "Population": 3926645,
+    "Date of estimate": "2022[16]"
+  },
+  {
+    "Rank": 18,
+    "City": "Casablanca",
+    "Latitude": 33.58831,
+    "Longitude": -7.61138,
+    "Country": "Morocco",
+    "Population": 3840396,
+    "Date of estimate": "2022[17]"
+  },
+  {
+    "Rank": 19,
+    "City": "Ibadan",
+    "Latitude": 7.3775355,
+    "Longitude": 3.9470396,
+    "Country": "Nigeria",
+    "Population": 3756445,
+    "Date of estimate": "2022[18]"
+  },
+  {
+    "Rank": 20,
+    "City": "Antananarivo",
+    "Latitude": -18.8791902,
+    "Longitude": 47.5079055,
+    "Country": "Madagascar",
+    "Population": 3699900,
+    "Date of estimate": "2022[19]"
+  },
+  {
+    "Rank": 21,
+    "City": "Abuja",
+    "Latitude": 9.0764785,
+    "Longitude": 7.398574,
+    "Country": "Nigeria",
+    "Population": 3652029,
+    "Date of estimate": "2022[20]"
+  },
+  {
+    "Rank": 22,
+    "City": "Kampala",
+    "Latitude": 0.3475964,
+    "Longitude": 32.5825197,
+    "Country": "Uganda",
+    "Population": 3651919,
+    "Date of estimate": "2022[21]"
+  },
+  {
+    "Rank": 23,
+    "City": "Kumasi",
+    "Latitude": 6.6666004,
+    "Longitude": -1.6162709,
+    "Country": "Ghana",
+    "Population": 3630326,
+    "Date of estimate": "2022[22]"
+  },
+  {
+    "Rank": 24,
+    "City": "Dakar",
+    "Latitude": 14.716677,
+    "Longitude": -17.4676861,
+    "Country": "Senegal",
+    "Population": 3326001,
+    "Date of estimate": "2022[23]"
+  },
+  {
+    "Rank": 25,
+    "City": "Port Harcourt",
+    "Latitude": 4.8472226,
+    "Longitude": 6.974604,
+    "Country": "Nigeria",
+    "Population": 3324694,
+    "Date of estimate": "2022[24]"
+  },
+  {
+    "Rank": 26,
+    "City": "eThekwini",
+    "Latitude": -29.8586804,
+    "Longitude": 31.0218404,
+    "Country": "South Africa",
+    "Population": 3199329,
+    "Date of estimate": "2022[25]"
+  },
+  {
+    "Rank": 27,
+    "City": "Ouagadougou",
+    "Latitude": 12.3714277,
+    "Longitude": -1.5196603,
+    "Country": "Burkina Faso",
+    "Population": 3055788,
+    "Date of estimate": "2022[26]"
+  },
+  {
+    "Rank": 28,
+    "City": "Lusaka",
+    "Latitude": -15.3875259,
+    "Longitude": 28.3228165,
+    "Country": "Zambia",
+    "Population": 3041789,
+    "Date of estimate": "2022[27]"
+  },
+  {
+    "Rank": 29,
+    "City": "Algiers",
+    "Latitude": 36.753768,
+    "Longitude": 3.0587561,
+    "Country": "Algeria",
+    "Population": 2853959,
+    "Date of estimate": "2022[28]"
+  },
+  {
+    "Rank": 30,
+    "City": "Bamako",
+    "Latitude": 12.6392316,
+    "Longitude": -8.0028892,
+    "Country": "Mali",
+    "Population": 2816943,
+    "Date of estimate": "2022[29]"
+  },
+  {
+    "Rank": 31,
+    "City": "Omdurman",
+    "Latitude": 15.6475782,
+    "Longitude": 32.4806894,
+    "Country": "Sudan",
+    "Population": 2805396,
+    "Date of estimate": "2022[30]"
+  },
+  {
+    "Rank": 32,
+    "City": "Mbuji-Mayi",
+    "Latitude": -6.1306709,
+    "Longitude": 23.5966577,
+    "Country": "Democratic Republic of the Congo",
+    "Population": 2765002,
+    "Date of estimate": "2022[31]"
+  },
+  {
+    "Rank": 33,
+    "City": "Tshwane",
+    "Latitude": -25.6051205,
+    "Longitude": 28.3929417,
+    "Country": "South Africa",
+    "Population": 2739768,
+    "Date of estimate": "2022[32]"
+  },
+  {
+    "Rank": 34,
+    "City": "Lubumbashi",
+    "Latitude": -11.6876026,
+    "Longitude": 27.5026174,
+    "Country": "Democratic Republic of the Congo",
+    "Population": 2695331,
+    "Date of estimate": "2022[33]"
+  },
+  {
+    "Rank": 35,
+    "City": "Accra",
+    "Latitude": 5.6037168,
+    "Longitude": -0.1869644,
+    "Country": "Ghana",
+    "Population": 2605402,
+    "Date of estimate": "2022[34]"
+  },
+  {
+    "Rank": 36,
+    "City": "Brazzaville",
+    "Latitude": -4.2633597,
+    "Longitude": 15.2428853,
+    "Country": "Republic of the Congo",
+    "Population": 2552813,
+    "Date of estimate": "2022[35]"
+  },
+  {
+    "Rank": 37,
+    "City": "Mogadishu",
+    "Latitude": 2.0469343,
+    "Longitude": 45.3181623,
+    "Country": "Somalia",
+    "Population": 2497463,
+    "Date of estimate": "2022[36]"
+  },
+  {
+    "Rank": 38,
+    "City": "Tunis",
+    "Latitude": 33.886917,
+    "Longitude": 9.537499,
+    "Country": "Tunisia",
+    "Population": 2435961,
+    "Date of estimate": "2022[37]"
+  },
+  {
+    "Rank": 39,
+    "City": "Conakry",
+    "Latitude": 9.6411855,
+    "Longitude": -13.5784012,
+    "Country": "Guinea",
+    "Population": 2048525,
+    "Date of estimate": "2022[38]"
+  },
+  {
+    "Rank": 40,
+    "City": "Rabat",
+    "Latitude": 33.9715904,
+    "Longitude": -6.8498129,
+    "Country": "Morocco",
+    "Population": 1931930,
+    "Date of estimate": "2022[39]"
+  },
+  {
+    "Rank": 41,
+    "City": "Lomé",
+    "Latitude": 6.1256261,
+    "Longitude": 1.2254183,
+    "Country": "Togo",
+    "Population": 1925517,
+    "Date of estimate": "2022[40]"
+  },
+  {
+    "Rank": 42,
+    "City": "Benin City",
+    "Latitude": 6.334986,
+    "Longitude": 5.6037465,
+    "Country": "Nigeria",
+    "Population": 1841084,
+    "Date of estimate": "2022[41]"
+  },
+  {
+    "Rank": 43,
+    "City": "Matola",
+    "Latitude": -25.9239093,
+    "Longitude": 32.465802,
+    "Country": "Mozambique",
+    "Population": 1796872,
+    "Date of estimate": "2022[42]"
+  },
+  {
+    "Rank": 44,
+    "City": "Monrovia",
+    "Latitude": 34.1442616,
+    "Longitude": -118.0019482,
+    "Country": "Liberia",
+    "Population": 1622582,
+    "Date of estimate": "2022[43]"
+  },
+  {
+    "Rank": 45,
+    "City": "Kananga",
+    "Latitude": -5.897522,
+    "Longitude": 22.4172256,
+    "Country": "Democratic Republic of the Congo",
+    "Population": 1592924,
+    "Date of estimate": "2022[44]"
+  },
+  {
+    "Rank": 46,
+    "City": "Harare",
+    "Latitude": -17.8216288,
+    "Longitude": 31.0492259,
+    "Country": "Zimbabwe",
+    "Population": 1557740,
+    "Date of estimate": "2022[45]"
+  },
+  {
+    "Rank": 47,
+    "City": "Onitsha",
+    "Latitude": 6.1329419,
+    "Longitude": 6.7923994,
+    "Country": "Nigeria",
+    "Population": 1552630,
+    "Date of estimate": "2022[46]"
+  },
+  {
+    "Rank": 48,
+    "City": "N'Djamena",
+    "Latitude": 12.1348457,
+    "Longitude": 15.0557415,
+    "Country": "Chad",
+    "Population": 1532588,
+    "Date of estimate": "2022[47]"
+  },
+  {
+    "Rank": 49,
+    "City": "Nouakchott",
+    "Latitude": 18.0735299,
+    "Longitude": -15.9582372,
+    "Country": "Mauritania",
+    "Population": 1431539,
+    "Date of estimate": "2022[48]"
+  },
+  {
+    "Rank": 50,
+    "City": "Mombasa",
+    "Latitude": -4.0434771,
+    "Longitude": 39.6682065,
+    "Country": "Kenya",
+    "Population": 1388979,
+    "Date of estimate": "2022[49]"
+  },
+  {
+    "Rank": 51,
+    "City": "Niamey",
+    "Latitude": 13.5115963,
+    "Longitude": 2.1253854,
+    "Country": "Niger",
+    "Population": 1383909,
+    "Date of estimate": "2022[50]"
+  },
+  {
+    "Rank": 52,
+    "City": "Kisangani",
+    "Latitude": 0.5185303,
+    "Longitude": 25.2007728,
+    "Country": "Democratic Republic of the Congo",
+    "Population": 1366342,
+    "Date of estimate": "2022[51]"
+  },
+  {
+    "Rank": 53,
+    "City": "Pointe-Noire",
+    "Latitude": -4.7691623,
+    "Longitude": 11.866362,
+    "Country": "Republic of the Congo",
+    "Population": 1294612,
+    "Date of estimate": "2022[52]"
+  },
+  {
+    "Rank": 54,
+    "City": "Gqeberha (Port Elizabeth)",
+    "Latitude": -33.9608369,
+    "Longitude": 25.6022423,
+    "Country": "South Africa",
+    "Population": 1280550,
+    "Date of estimate": "2022[53]"
+  },
+  {
+    "Rank": 55,
+    "City": "Tangier",
+    "Latitude": 35.7594651,
+    "Longitude": -5.8339543,
+    "Country": "Morocco",
+    "Population": 1277242,
+    "Date of estimate": "2022[54]"
+  },
+  {
+    "Rank": 56,
+    "City": "Freetown",
+    "Latitude": 8.4656765,
+    "Longitude": -13.2317225,
+    "Country": "Sierra Leone",
+    "Population": 1272145,
+    "Date of estimate": "2022[55]"
+  },
+  {
+    "Rank": 57,
+    "City": "Fez",
+    "Latitude": 34.0181246,
+    "Longitude": -5.0078451,
+    "Country": "Morocco",
+    "Population": 1267317,
+    "Date of estimate": "2022[56]"
+  },
+  {
+    "Rank": 58,
+    "City": "Uyo",
+    "Latitude": 5.0377396,
+    "Longitude": 7.9127945,
+    "Country": "Nigeria",
+    "Population": 1264636,
+    "Date of estimate": "2022[57]"
+  },
+  {
+    "Rank": 59,
+    "City": "Mwanza",
+    "Latitude": -2.5164305,
+    "Longitude": 32.9174517,
+    "Country": "Tanzania",
+    "Population": 1245444,
+    "Date of estimate": "2022[58]"
+  },
+  {
+    "Rank": 60,
+    "City": "Lilongwe",
+    "Latitude": -13.9626121,
+    "Longitude": 33.7741195,
+    "Country": "Malawi",
+    "Population": 1222325,
+    "Date of estimate": "2022[59]"
+  },
+  {
+    "Rank": 61,
+    "City": "Kigali",
+    "Latitude": -1.9440727,
+    "Longitude": 30.0618851,
+    "Country": "Rwanda",
+    "Population": 1208296,
+    "Date of estimate": "2022[60]"
+  },
+  {
+    "Rank": 62,
+    "City": "Bukavu",
+    "Latitude": -2.5123017,
+    "Longitude": 28.8480284,
+    "Country": "Democratic Republic of the Congo",
+    "Population": 1190367,
+    "Date of estimate": "2022[61]"
+  },
+  {
+    "Rank": 63,
+    "City": "Abomey-Calavi",
+    "Latitude": 6.4503024,
+    "Longitude": 2.3468195,
+    "Country": "Benin",
+    "Population": 1188736,
+    "Date of estimate": "2022[62]"
+  },
+  {
+    "Rank": 64,
+    "City": "Nnewi",
+    "Latitude": 6.0105192,
+    "Longitude": 6.9103455,
+    "Country": "Nigeria",
+    "Population": 1176550,
+    "Date of estimate": "2022[63]"
+  },
+  {
+    "Rank": 65,
+    "City": "Tripoli",
+    "Latitude": 32.8872094,
+    "Longitude": 13.1913383,
+    "Country": "Libya",
+    "Population": 1175830,
+    "Date of estimate": "2022[64]"
+  },
+  {
+    "Rank": 66,
+    "City": "Kaduna",
+    "Latitude": 10.5015183,
+    "Longitude": 7.4408397,
+    "Country": "Nigeria",
+    "Population": 1158048,
+    "Date of estimate": "2022[65]"
+  },
+  {
+    "Rank": 67,
+    "City": "Aba",
+    "Latitude": 5.1066,
+    "Longitude": 7.3667,
+    "Country": "Nigeria",
+    "Population": 1150116,
+    "Date of estimate": "2022[66]"
+  },
+  {
+    "Rank": 68,
+    "City": "Bujumbura",
+    "Latitude": -3.361378,
+    "Longitude": 29.3598782,
+    "Country": "Burundi",
+    "Population": 1139265,
+    "Date of estimate": "2022[67]"
+  },
+  {
+    "Rank": 69,
+    "City": "Maputo",
+    "Latitude": -25.969248,
+    "Longitude": 32.5731746,
+    "Country": "Mozambique",
+    "Population": 1138960,
+    "Date of estimate": "2022[68]"
+  },
+  {
+    "Rank": 70,
+    "City": "Hargeisa",
+    "Latitude": 9.562389,
+    "Longitude": 44.0770134,
+    "Country": "Somalia",
+    "Population": 1079377,
+    "Date of estimate": "2022[69]"
+  },
+  {
+    "Rank": 71,
+    "City": "Bobo Dioulasso",
+    "Latitude": 11.1649219,
+    "Longitude": -4.3051542,
+    "Country": "Burkina Faso",
+    "Population": 1074309,
+    "Date of estimate": "2022[70]"
+  },
+  {
+    "Rank": 72,
+    "City": "Shubra el-Kheima",
+    "Latitude": 30.1233853,
+    "Longitude": 31.2609288,
+    "Country": "Egypt",
+    "Population": 1072951,
+    "Date of estimate": "2022[71]"
+  },
+  {
+    "Rank": 73,
+    "City": "Ikorodu",
+    "Latitude": 6.6194131,
+    "Longitude": 3.5104537,
+    "Country": "Nigeria",
+    "Population": 1041166,
+    "Date of estimate": "2022[72]"
+  },
+  {
+    "Rank": 74,
+    "City": "Asmara",
+    "Latitude": 15.3228767,
+    "Longitude": 38.9250517,
+    "Country": "Eritrea",
+    "Population": 1034872,
+    "Date of estimate": "2022[73]"
+  },
+  {
+    "Rank": 75,
+    "City": "Marrakesh",
+    "Latitude": 31.6294723,
+    "Longitude": -7.9810845,
+    "Country": "Morocco",
+    "Population": 1033050,
+    "Date of estimate": "2022[74]"
+  },
+  {
+    "Rank": 76,
+    "City": "Tshikapa",
+    "Latitude": -6.4192148,
+    "Longitude": 20.7926941,
+    "Country": "Democratic Republic of the Congo",
+    "Population": 1023575,
+    "Date of estimate": "2022[75]"
+  },
+  {
+    "Rank": 77,
+    "City": "Nyala",
+    "Latitude": 12.057452,
+    "Longitude": 24.892616,
+    "Country": "Sudan",
+    "Population": 1012312,
+    "Date of estimate": "2022[76]"
+  },
+  {
+    "Rank": 78,
+    "City": "Ilorin",
+    "Latitude": 8.5373356,
+    "Longitude": 4.5443923,
+    "Country": "Nigeria",
+    "Population": 1000477,
+    "Date of estimate": "2022[77]"
+  },
+  {
+    "Rank": 79,
+    "City": "Blantyre",
+    "Latitude": 42.3360514,
+    "Longitude": -73.2588668,
+    "Country": "Malawi",
+    "Population": 994911,
+    "Date of estimate": "2022[78]"
+  },
+  {
+    "Rank": 80,
+    "City": "Agadir",
+    "Latitude": 30.4277547,
+    "Longitude": -9.5981072,
+    "Country": "Morocco",
+    "Population": 960438,
+    "Date of estimate": "2022[79]"
+  },
+  {
+    "Rank": 81,
+    "City": "Misratah",
+    "Latitude": 32.3255884,
+    "Longitude": 15.0992556,
+    "Country": "Libya",
+    "Population": 953472,
+    "Date of estimate": "2022[80]"
+  },
+  {
+    "Rank": 82,
+    "City": "Owerri",
+    "Latitude": 5.5096455,
+    "Longitude": 7.0390904,
+    "Country": "Nigeria",
+    "Population": 945046,
+    "Date of estimate": "2022[81]"
+  },
+  {
+    "Rank": 83,
+    "City": "Warri",
+    "Latitude": 5.5494304,
+    "Longitude": 5.7668515,
+    "Country": "Nigeria",
+    "Population": 942683,
+    "Date of estimate": "2022[82]"
+  },
+  {
+    "Rank": 84,
+    "City": "Jos",
+    "Latitude": 9.8965273,
+    "Longitude": 8.8583309,
+    "Country": "Nigeria",
+    "Population": 942167,
+    "Date of estimate": "2022[83]"
+  },
+  {
+    "Rank": 85,
+    "City": "Bangui",
+    "Latitude": 4.3946735,
+    "Longitude": 18.5581899,
+    "Country": "Central African Republic",
+    "Population": 933176,
+    "Date of estimate": "2022[84]"
+  },
+  {
+    "Rank": 86,
+    "City": "Nampula",
+    "Latitude": -15.1266347,
+    "Longitude": 39.2687161,
+    "Country": "Mozambique",
+    "Population": 927472,
+    "Date of estimate": "2022[85]"
+  },
+  {
+    "Rank": 87,
+    "City": "Oran",
+    "Latitude": 35.6987388,
+    "Longitude": -0.6349319,
+    "Country": "Algeria",
+    "Population": 922302,
+    "Date of estimate": "2022[86]"
+  },
+  {
+    "Rank": 88,
+    "City": "West Rand",
+    "Latitude": -26.3213939,
+    "Longitude": 27.4556388,
+    "Country": "South Africa",
+    "Population": 921524,
+    "Date of estimate": "2022[87]"
+  },
+  {
+    "Rank": 89,
+    "City": "Lubango",
+    "Latitude": -14.9186136,
+    "Longitude": 13.5321234,
+    "Country": "Angola",
+    "Population": 914456,
+    "Date of estimate": "2022[88]"
+  },
+  {
+    "Rank": 90,
+    "City": "Cabinda",
+    "Latitude": -5.5705739,
+    "Longitude": 12.197583,
+    "Country": "Angola",
+    "Population": 861878,
+    "Date of estimate": "2022[89]"
+  },
+  {
+    "Rank": 91,
+    "City": "Umuahia",
+    "Latitude": 5.5249526,
+    "Longitude": 7.4922407,
+    "Country": "Nigeria",
+    "Population": 860555,
+    "Date of estimate": "2022[90]"
+  },
+  {
+    "Rank": 92,
+    "City": "Libreville",
+    "Latitude": 0.4161976,
+    "Longitude": 9.4672676,
+    "Country": "Gabon",
+    "Population": 856854,
+    "Date of estimate": "2022[91]"
+  },
+  {
+    "Rank": 93,
+    "City": "Benghazi",
+    "Latitude": 32.1194242,
+    "Longitude": 20.0867909,
+    "Country": "Libya",
+    "Population": 847790,
+    "Date of estimate": "2022[92]"
+  },
+  {
+    "Rank": 94,
+    "City": "Maiduguri",
+    "Latitude": 11.8310981,
+    "Longitude": 13.1509672,
+    "Country": "Nigeria",
+    "Population": 822337,
+    "Date of estimate": "2022[93]"
+  },
+  {
+    "Rank": 95,
+    "City": "Enugu",
+    "Latitude": 6.4482701,
+    "Longitude": 7.5138947,
+    "Country": "Nigeria",
+    "Population": 819791,
+    "Date of estimate": "2022[94]"
+  },
+  {
+    "Rank": 96,
+    "City": "Lokoja",
+    "Latitude": 7.8023204,
+    "Longitude": 6.733343,
+    "Country": "Nigeria",
+    "Population": 790742,
+    "Date of estimate": "2022[95]"
+  },
+  {
+    "Rank": 97,
+    "City": "Vereeniging (Emfuleni)",
+    "Latitude": -26.5969312,
+    "Longitude": 27.9014654,
+    "Country": "South Africa",
+    "Population": 786127,
+    "Date of estimate": "2022[96]"
+  },
+  {
+    "Rank": 98,
+    "City": "Benguela",
+    "Latitude": -12.5905158,
+    "Longitude": 13.416501,
+    "Country": "Angola",
+    "Population": 776832,
+    "Date of estimate": "2022[97]"
+  },
+  {
+    "Rank": 99,
+    "City": "Bunia",
+    "Latitude": 1.574278,
+    "Longitude": 30.2397336,
+    "Country": "Democratic Republic of the Congo",
+    "Population": 767645,
+    "Date of estimate": "2022[98]"
+  },
+  {
+    "Rank": 100,
+    "City": "Zanzibar",
+    "Latitude": -6.16394,
+    "Longitude": 39.19793,
+    "Country": "Tanzania",
+    "Population": 766392,
+    "Date of estimate": "2022[99]"
+  }
+]

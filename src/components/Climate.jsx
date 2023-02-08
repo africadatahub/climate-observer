@@ -11,11 +11,11 @@ import Form from 'react-bootstrap/Form';
 
 import { MultiSelect } from 'react-multi-select-component';
 
-import { MapContainer, TileLayer, useMap, Marker, Popup, Tooltip, ZoomControl, Circle } from 'react-leaflet';
-import '../../node_modules/leaflet/dist/leaflet.css';
+// import { MapContainer, TileLayer, useMap, Marker, Popup, Tooltip, ZoomControl, Circle } from 'react-leaflet';
+// import '../../node_modules/leaflet/dist/leaflet.css';
 
 import *  as cities from '../data/100-cities.json';
-import * as locations from '../data/locations.json';
+// import * as locations from '../data/locations.json';
 
 export class Climate extends React.Component {
 
@@ -374,25 +374,7 @@ export class Climate extends React.Component {
                 </Col>
             </Row>
 
-            <Row className="mt-4">
-                <Col>
-                    <Card>
-                        <Card.Body>
-                            <MapContainer center={this.state.center} zoom={3} scrollWheelZoom={false} style={{height: '600px'}} zoomControl={false}>
-                                <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
-                                <ZoomControl position="bottomright"/>
-
-                                {locations.map((location, index) =>
-
-                                    <Circle center={[location.latitude, location.longitude]} radius={2} style="fill:red"/>
-                                    
-                                )}
-
-                            </MapContainer>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
+            
 
 
         </Container>

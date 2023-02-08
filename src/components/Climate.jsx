@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 
 import { MultiSelect } from 'react-multi-select-component';
 
@@ -51,7 +52,14 @@ export class Climate extends React.Component {
                     data: [],
                     climatology_color: '#90caf9',
                     temperature_color: '#2196f3'
-                }    
+                },
+                {
+                    label: 'GPCC Precipitation',
+                    value: 'precip',
+                    precipitation: '2f0d9cbc-f53a-41d1-8f93-67c339fd9068',
+                    data: [],
+                    precipitation_color: '#ccc'
+                }   
             ],
             selected_datasets: [
                 {
@@ -74,6 +82,7 @@ export class Climate extends React.Component {
             rounded_long: undefined,
             loading: true,
             center: [-6.559482, 22.937506],
+            modal: false,
             
         }
         this.citySelectRef = React.createRef();
@@ -131,6 +140,17 @@ export class Climate extends React.Component {
         }
     }
 
+    numberToWord = (number) => {
+    
+        // array of 1 to a hundred in words ['first','second','third',...]
+
+        let number_words = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth', 'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth', 'twentieth', 'twenty first', 'twenty second', 'twenty third', 'twenty fourth', 'twenty fifth', 'twenty sixth', 'twenty seventh', 'twenty eighth', 'twenty ninth', 'thirtieth', 'thirty first', 'thirty second', 'thirty third', 'thirty fourth', 'thirty fifth', 'thirty sixth', 'thirty seventh', 'thirty eighth', 'thirty ninth', 'fortieth', 'forty first', 'forty second', 'forty third', 'forty fourth', 'forty fifth', 'forty sixth', 'forty seventh', 'forty eighth', 'forty ninth', 'fiftieth', 'fifty first', 'fifty second', 'fifty third', 'fifty fourth', 'fifty fifth', 'fifty sixth', 'fifty seventh', 'fifty eighth', 'fifty ninth', 'sixtieth', 'sixty first', 'sixty second', 'sixty third', 'sixty fourth', 'sixty fifth', 'sixty sixth', 'sixty seventh', 'sixty eighth', 'sixty ninth', 'seventieth', 'seventy first', 'seventy second', 'seventy third', 'seventy fourth', 'seventy fifth', 'seventy sixth', 'seventy seventh', 'seventy eighth', 'seventy ninth', 'eightieth', 'eighty first', 'eighty second', 'eighty third', 'eighty fourth', 'eighty fifth', 'eighty sixth', 'eighty seventh', 'eighty eighth', 'eighty ninth', 'ninetieth', 'ninety first', 'ninety second', 'ninety third', 'ninety fourth', 'ninety fifth', 'ninety sixth', 'ninety seventh', 'ninety eighth', 'ninety ninth', 'hundredth'];
+
+        return number_words[number - 1];
+        
+
+    }
+
 
     getData = () => {
 
@@ -147,6 +167,8 @@ export class Climate extends React.Component {
             self.state.selected_datasets.forEach((dataset) => {
                 if(dataset.value == 'max' || dataset.value == 'avg' || dataset.value == 'min') {
                     promises.push(self.getBerkeleyData(dataset));
+                } else if(dataset.value == 'precip') {
+                    promises.push(self.getGPCCData(dataset));
                 }
             })
 
@@ -183,6 +205,44 @@ export class Climate extends React.Component {
         })
         
     
+    }
+
+    getGPCCData = (dataset) => {
+
+        let self = this;
+
+        return new Promise(function(resolve, reject) {
+
+            let current_dataset = self.state.datasets.find((d) => d.value == dataset.value);
+
+            let current_precipitation_dataset = current_dataset.precipitation;
+
+            axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + current_precipitation_dataset + '"%20WHERE%20latitude%20%3E%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%20' + (self.state.long - 0.5) + '%20AND%20longitude%20%3C%20' + (self.state.long + 0.5) + '%20',
+                { headers: {
+                    "Authorization": process.env.CKAN
+                }
+            }).then(function(response) {
+
+                response.data.result.records.forEach((record) => {
+                    record.date = record.month_number + '/' + record.time;
+                    record.precip = Math.round(record.precip * 100) / 100;
+                })
+
+                let datasets = self.state.datasets;
+
+                datasets[datasets.indexOf(current_dataset)].data = response.data.result.records;
+
+                self.setState({datasets: datasets}, () => {
+                    resolve(response.data.result.records);
+                })
+
+
+
+            })
+        
+
+        })
+
     }
 
 
@@ -302,7 +362,27 @@ export class Climate extends React.Component {
     render() {
         return (<>
 
+            <Modal show={this.state.modal} onHide={() => this.setState({modal: !this.state.modal})}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Use Custom Location</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Row>
+                        <Col>
+                            <Form.Control type="text" value={this.state.lat} onChange={(e) => this.changeLocation(e.target.value, this.state.long)} className="h-100"/>
+                        </Col>
+                        <Col>
+                            <Form.Control type="text" value={this.state.long} onChange={(e) => this.changeLocation(this.state.lat, e.target.value)} className="h-100"/>
+                        </Col>
+                    </Row>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={() => this.useLocation()}>Use My Location</Button>
+                </Modal.Footer>
+            </Modal>
+
         <Container>
+
             <Row className="my-4">
                 <Col>
                    
@@ -313,23 +393,21 @@ export class Climate extends React.Component {
                         labelledBy="Select"
                     />
                 </Col>
-                <Col>
+                <Col xs={2}>
                     <Form.Select ref={this.citySelectRef} onChange={(e) => this.changeLocation(e.target.value)} className="h-100">
                         {cities.map((city, index) => {
-                            return <option key={'c'+index} value={index}>{city.City}</option>
+                            return <option key={'c'+index} value={index}>{index + 1 + '. ' + city.City}</option>
                         })}
                         <option value="location">Your Location</option>
                     </Form.Select>
                 </Col>
+                    
                 <Col>
-                    <Form.Control type="text" value={this.state.lat} onChange={(e) => this.changeLocation(e.target.value,this.state.long)} className="h-100"/>
                 </Col>
-                <Col>
-                    <Form.Control type="text" value={this.state.long} onChange={(e) => this.changeLocation(this.state.lat,e.target.value,)} className="h-100"/>
-                </Col>
-                <Col>
+                
+                <Col xs={2}>
                     <div className="d-grid gap-2 h-100">
-                        <Button onClick={() => this.useLocation()}>Use my location</Button>
+                        <Button onClick={() => this.setState({modal: !this.state.modal})}>Use Custom Location</Button>
                     </div>
                 </Col>
             </Row>                            
@@ -339,8 +417,6 @@ export class Climate extends React.Component {
                 <Col>
                     <Card>
                         <Card.Body>
-                            <p>Looking at data between: {this.state.rounded_lat} and {this.state.rounded_long}</p>
-
                             {this.state.loading ? <p>Loading...</p> :
                                 <ResponsiveContainer width="100%" height={400}>
                                     <ComposedChart data={this.state.data} margin={{top: 20, right: 0, bottom: 0, left: 0}}>
@@ -348,6 +424,7 @@ export class Climate extends React.Component {
                                         <XAxis dataKey="date"/>
 
                                         <YAxis yAxisId="left" orientation="left" stroke="#99b3bb" domain={[0,40]}/>
+                                        <YAxis yAxisId="right" orientation="right" stroke="#99b3bb" domain={[0,5]}/>
                                         
                                         {/* <ReferenceLine y={0} yAxisId="left" stroke="red" label="0%" strokeDasharray="3 3" /> */}
                                         
@@ -358,16 +435,40 @@ export class Climate extends React.Component {
 
                                         
                                         {this.state.selected_datasets.map((dataset, index) =>
-                                            <>
-                                                <Line isAnimationActive={false} strokeDasharray="4" key={'cli-' + index + '-' + dataset.value} type="monotone" yAxisId="left" dot={false} dataKey={'climatology_' + dataset.value} strokeWidth={2} stroke={this.state.datasets.find(d => d.value == dataset.value).climatology_color}/>
-                                                <Line isAnimationActive={false} key={'temp-' + index + '-' + dataset.value} type="monotone" yAxisId="left" dot={false} dataKey={'calculated_temp_' + dataset.value} strokeWidth={2} stroke={this.state.datasets.find(d => d.value == dataset.value).temperature_color}/>
-                                            </>
+                                            (dataset.value == 'max' || dataset.value == 'min' || dataset.value == 'avg') ?
+                                                <>
+                                                    <Line isAnimationActive={false} strokeDasharray="4" key={'cli-' + index + '-' + dataset.value} type="monotone" yAxisId="left" dot={false} dataKey={'climatology_' + dataset.value} strokeWidth={2} stroke={this.state.datasets.find(d => d.value == dataset.value).climatology_color}/>
+                                                    <Line isAnimationActive={false} key={'temp-' + index + '-' + dataset.value} type="monotone" yAxisId="left" dot={false} dataKey={'calculated_temp_' + dataset.value} strokeWidth={2} stroke={this.state.datasets.find(d => d.value == dataset.value).temperature_color}/>
+                                                </>
+                                            :
+                                                <Bar isAnimationActive={false} key={'precip-' + index + '-' + dataset.value} yAxisId="right" dataKey="precip" fill={this.state.datasets.find(d => d.value == dataset.value).precipitation_color}/>
                                         )}   
                                             
 
                                         <Brush data={this.state.datasets.find((d) => d.value == this.state.selected_datasets[0].value).data} dataKey="date" height={30} stroke="#8eb4bf" />
                                     </ComposedChart>
                                 </ResponsiveContainer>
+                            }
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+
+            <Row className="mt-4">
+                <Col>
+                    <Card className="p-4">
+                        <Card.Body>
+                            {(this.citySelectRef.current != undefined && this.citySelectRef.current.value != 'location') &&
+                            <>
+                                <h3><strong>{cities.find((city,index) => index == this.citySelectRef.current.value).City}</strong>, <span className="fs-5">{cities.find((city,index) => index == this.citySelectRef.current.value).Country}</span></h3>
+                                <h5>It is the <strong>{this.numberToWord(cities.find((city,index) => index == this.citySelectRef.current.value).Rank)}</strong> most populous city in Africa with <strong>{cities.find((city,index) => index == this.citySelectRef.current.value).Population.toLocaleString()}</strong> people.</h5>
+                                <p>{cities.find((city,index) => index == this.citySelectRef.current.value)["Date of estimate"]} estimate</p>
+                            </>}
+                            {(this.citySelectRef.current != undefined && this.citySelectRef.current.value == 'location') &&
+                            <>
+                                <h3>Your Location</h3>
+                                <h5>Closest data point is: {this.state.rounded_lat} and {this.state.rounded_long}</h5>
+                            </>
                             }
                         </Card.Body>
                     </Card>

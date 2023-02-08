@@ -435,13 +435,13 @@ export class Climate extends React.Component {
 
                                         
                                         {this.state.selected_datasets.map((dataset, index) =>
-                                            (dataset.value == 'max' || dataset.value == 'min' || dataset.value == 'avg') ?
+                                            dataset.value == 'precip' ?
+                                                <Bar isAnimationActive={false} key={'precip-' + index} yAxisId="right" dataKey='precip' fill={this.state.datasets.find(d => d.value == dataset.value).precipitation_color}/>
+                                            :
                                                 <>
                                                     <Line isAnimationActive={false} strokeDasharray="4" key={'cli-' + index + '-' + dataset.value} type="monotone" yAxisId="left" dot={false} dataKey={'climatology_' + dataset.value} strokeWidth={2} stroke={this.state.datasets.find(d => d.value == dataset.value).climatology_color}/>
                                                     <Line isAnimationActive={false} key={'temp-' + index + '-' + dataset.value} type="monotone" yAxisId="left" dot={false} dataKey={'calculated_temp_' + dataset.value} strokeWidth={2} stroke={this.state.datasets.find(d => d.value == dataset.value).temperature_color}/>
                                                 </>
-                                            :
-                                                <Bar isAnimationActive={false} key={'precip-' + index + '-' + dataset.value} yAxisId="right" dataKey="precip" fill={this.state.datasets.find(d => d.value == dataset.value).precipitation_color}/>
                                         )}   
                                             
 
@@ -462,7 +462,7 @@ export class Climate extends React.Component {
                             <>
                                 <h3><strong>{cities.find((city,index) => index == this.citySelectRef.current.value).City}</strong>, <span className="fs-5">{cities.find((city,index) => index == this.citySelectRef.current.value).Country}</span></h3>
                                 <h5>It is the <strong>{this.numberToWord(cities.find((city,index) => index == this.citySelectRef.current.value).Rank)}</strong> most populous city in Africa with <strong>{cities.find((city,index) => index == this.citySelectRef.current.value).Population.toLocaleString()}</strong> people.</h5>
-                                <p>{cities.find((city,index) => index == this.citySelectRef.current.value)["Date of estimate"]} estimate</p>
+                                <p>{cities.find((city,index) => index == this.citySelectRef.current.value)["Date of estimate"].split('[')[0]} estimate</p>
                             </>}
                             {(this.citySelectRef.current != undefined && this.citySelectRef.current.value == 'location') &&
                             <>

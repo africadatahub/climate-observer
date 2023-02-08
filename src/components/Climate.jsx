@@ -195,7 +195,6 @@ export class Climate extends React.Component {
                         rounded_long: data[0].longitude,
                         loading: false
                     }, () => {
-                    console.log(self.state.data);
                 })
 
 

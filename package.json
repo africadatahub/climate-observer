@@ -9,10 +9,13 @@
     "dependencies": {
         "axios": "^0.27.2",
         "bootstrap": "^5.2.3",
+        "leaflet": "^1.9.3",
         "parcel": "^2.6.2",
         "react": "^18.2.0",
         "react-bootstrap": "^2.7.0",
         "react-dom": "^18.2.0",
+        "react-leaflet": "^4.2.0",
+        "react-multi-select-component": "^4.3.4",
         "recharts": "^2.3.2"
     },
     "devDependencies": {

@@ -74,6 +74,10 @@ export class Climate extends React.Component {
                     label: 'Berkeley Min',
                     value: 'min',
                 },
+                {
+                    label: 'GPCC Precipitation',
+                    value: 'precip',
+                }
             ],
             data: [],
             lat: 30.0444196,
@@ -411,6 +415,36 @@ export class Climate extends React.Component {
                 </Col>
             </Row>                            
 
+            <Row className="mb-2">
+                <Col>
+                    <Card className="p-2">
+                        <Card.Body>
+                            
+                                {(this.citySelectRef.current != undefined && this.citySelectRef.current.value != 'location') &&
+                                    <Row>
+                                        <Col>
+                                            <h3><strong>{cities.find((city,index) => index == this.citySelectRef.current.value).City}</strong>, <span className="fs-5">{cities.find((city,index) => index == this.citySelectRef.current.value).Country}</span></h3>
+                                        </Col>
+                                        <Col>    
+                                            <h5>It is the <strong>{this.numberToWord(cities.find((city,index) => index == this.citySelectRef.current.value).Rank)}</strong> most populous city in Africa with <strong>{cities.find((city,index) => index == this.citySelectRef.current.value).Population.toLocaleString()}</strong> people.</h5>
+                                            <span>{cities.find((city,index) => index == this.citySelectRef.current.value)["Date of estimate"].split('[')[0]} estimate</span>
+                                        </Col>
+                                    </Row>
+                                }
+                                {(this.citySelectRef.current != undefined && this.citySelectRef.current.value == 'location') &&
+                                <Row>
+                                    <Col>
+                                        <h3>Your Location</h3>
+                                    </Col>
+                                    <Col>
+                                        <h5>Closest data point is: {this.state.rounded_lat} and {this.state.rounded_long}</h5>
+                                    </Col>
+                                </Row>
+                                }
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
 
             <Row>
                 <Col>
@@ -453,26 +487,46 @@ export class Climate extends React.Component {
                 </Col>
             </Row>
 
-            <Row className="mt-4">
+            <Row className="mt-2">
                 <Col>
-                    <Card className="p-4">
+                    <Card className="p-2">
                         <Card.Body>
-                            {(this.citySelectRef.current != undefined && this.citySelectRef.current.value != 'location') &&
-                            <>
-                                <h3><strong>{cities.find((city,index) => index == this.citySelectRef.current.value).City}</strong>, <span className="fs-5">{cities.find((city,index) => index == this.citySelectRef.current.value).Country}</span></h3>
-                                <h5>It is the <strong>{this.numberToWord(cities.find((city,index) => index == this.citySelectRef.current.value).Rank)}</strong> most populous city in Africa with <strong>{cities.find((city,index) => index == this.citySelectRef.current.value).Population.toLocaleString()}</strong> people.</h5>
-                                <p>{cities.find((city,index) => index == this.citySelectRef.current.value)["Date of estimate"].split('[')[0]} estimate</p>
-                            </>}
-                            {(this.citySelectRef.current != undefined && this.citySelectRef.current.value == 'location') &&
-                            <>
-                                <h3>Your Location</h3>
-                                <h5>Closest data point is: {this.state.rounded_lat} and {this.state.rounded_long}</h5>
-                            </>
-                            }
+                            <Row>
+                                <Col className="p-4">
+                                    <h4 className="mb-4">About the Climate Observer</h4>
+                                    <p>These charts show climate related data for Africa for the last 10 years. Navigation is currently based on the 100 largest cities in Africa, but is based on datasets from <a style=
+                                    {{color: "#f36c60"}} target="_blank" href="https://berkeleyearth.org/data/">Berkley Earth</a> and the <a style=
+                                    {{color: "#f36c60"}} target="_blank" href="http://climexp.knmi.nl/select.cgi?id=&field=gpccall_10">Global Precipitation Climatology Centre (GPCC)</a>, both of which use 1x1 degree tiles for spatial data. A final explorer could be based on specific locations or realtime geocoding using OSM or Google APIs.</p>
+
+                                    <p>The data is a blend of observed and modelled data, but the two datasets used are highly robust, well known and cited (Berkley Earth is used for the Climate Stripes project).</p>
+
+                                    <p>Temperature data is recorded as minimum, average and maximum temperatures for any given month. Precipitation is recorded rainfall in mm.</p>
+
+                                    <p>The dotted lines for temperatures are the averages for the period 1950-1980, and are therefore the same every year. The dotted lines are the actual (or modelled) temperatures, so the gap between two lines of similar colour indicates anomalies (eg. it was 1.5 degrees hotter than the baseline temperature in June).</p>
+
+                                    <p>CKAN datasetes are accessible <a style=
+                                    {{color: "#f36c60"}} target="_blank" href="https://ckandev.africadatahub.org/dataset/climate-data">here</a>.</p>
+                                </Col>
+                                <Col className="p-4">
+                                    <h4 className="mb-4">Some questions to think about:</h4> 
+
+                                    <ul>
+                                        <li>What will journalists ask/understand in a visualisation?</li> 
+                                        <li>Do they need comparisons with other regions?</li>
+                                        <li>Do we need separate viz for averages and anomalies etc.</li>
+                                        <li>Is ten years enough data?</li>
+                                        <li>Do we need to make it easier to extra data for eg. June 2010 to 2022?</li>
+                                    </ul>
+
+                                    <p><strong>NB:</strong> Using city-based locations will enable us to SEO this in the same way we did the Inflation Observer recently. In other words, we can aim for <em>"Rainfall for last 10 years in Johannesburg"</em> in google</p>
+                                </Col>
+                            </Row>
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
+
+            
 
             
 

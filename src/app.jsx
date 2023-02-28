@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import axios from 'axios';
 import './app.scss';
 
+import { Cities } from './components/Cities';
 import { Climate } from './components/Climate';
 
 
@@ -22,7 +23,11 @@ export class App extends React.Component {
 
     render() {
         return (
-            <Climate />
+            <>
+                {
+                    window.location.search == "" ? <Cities /> : <Climate />
+                }
+            </>
         )
     }
 

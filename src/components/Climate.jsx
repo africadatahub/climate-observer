@@ -138,7 +138,7 @@ export class Climate extends React.Component {
         } else if(window.location.search.includes('city=')) {
             
             let city = window.location.search;
-            city = city.replace('?city=', '');
+            city = city.replace('?city=', '').replace('-',' ');
 
             let city_data = cities.find(c => c.city.toLowerCase() === city.toLowerCase());
 
@@ -716,7 +716,7 @@ export class Climate extends React.Component {
             <Row className="my-4">
                 <Col>
                     <Card>
-                        <Card.Header>
+                        <Card.Header className="py-4">
                             <Row>
                                 <Col xs="auto">
                                     <Icon path={mdiThermometer} size={2} />
@@ -744,7 +744,7 @@ export class Climate extends React.Component {
                 </Col>
                 <Col>
                     <Card>
-                        <Card.Header>
+                        <Card.Header className="py-4">
                             <Row>
                                 <Col xs="auto">
                                     <Icon path={mdiWeatherPouring} size={2} />
@@ -776,7 +776,7 @@ export class Climate extends React.Component {
             <Row>
                 <Col>
                     <Card>
-                        <Card.Header>
+                        <Card.Header className="py-4">
                             <Row>
                                 <Col xs="auto">
                                     <Icon path={mdiWeatherPouring} size={2} />

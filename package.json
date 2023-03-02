@@ -4,14 +4,22 @@
     "license": "MIT",
     "scripts": {
         "dev": "parcel src/index.html",
-        "build": "parcel build src/index.html"
+        "build": "parcel build src/index.html",
+        "start": "node server.js"
     },
     "dependencies": {
         "@mdi/js": "^7.1.96",
         "@mdi/react": "^1.6.1",
         "axios": "^0.27.2",
         "bootstrap": "^5.2.3",
+        "cal-heatmap": "^4.1.0",
+        "cors": "^2.8.5",
         "country-iso-3-to-2": "^1.1.1",
+        "d3-scale-chromatic": "^3.0.0",
+        "echarts": "^5.4.1",
+        "echarts-for-react": "^3.0.2",
+        "express": "^4.18.2",
+        "http-proxy-middleware": "^2.0.6",
         "javascript-color-gradient": "^2.4.4",
         "leaflet": "^1.9.3",
         "parcel": "^2.6.2",
@@ -23,12 +31,23 @@
         "react-leaflet": "^4.2.0",
         "react-multi-select-component": "^4.3.4",
         "react-router-dom": "^6.8.1",
+        "react-vis": "^1.11.12",
         "recharts": "^2.3.2",
         "styled-components": "^5.3.6"
     },
     "devDependencies": {
         "@parcel/transformer-sass": "2.6.2",
+        "assert": "^2.0.0",
+        "browserify-zlib": "^0.2.0",
         "buffer": "^6.0.3",
-        "process": "^0.11.10"
+        "events": "^3.3.0",
+        "https-browserify": "^1.0.0",
+        "path-browserify": "^1.0.1",
+        "process": "^0.11.10",
+        "querystring-es3": "^0.2.1",
+        "stream-browserify": "^3.0.0",
+        "stream-http": "^3.2.0",
+        "url": "^0.11.0",
+        "util": "^0.12.5"
     }
 }

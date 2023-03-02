@@ -1,6 +1,13 @@
 $primary: #094151;
 $control-grey: #DFE6E8;
-$theme-colors: ( "primary": $primary, "control-grey": $control-grey, "warning": #ffc107, "light-grey": #f6f6f6);
+$theme-colors: ( 
+    "primary": $primary,
+    "control-grey": $control-grey,
+    "warning": #ffc107,
+    "light-grey": #f6f6f6,
+    "adh-orange": #ff6f47,
+    "adh-brown": #c2b59b
+);
 $border-radius: 6px;
 
 @import "bootstrap/scss/bootstrap";
@@ -18,6 +25,29 @@ body {
 
 }
 
+.search-options {
+    position: absolute;
+    overflow-x: hidden;
+    z-index: 9999;
+}
+
+.search-options ul {
+    list-style: none;
+    padding: 0.5em;
+    background-color: #fff;
+    border-radius: 0px 0px 5px 5px;
+
+    li {
+        padding: 0.5em;
+        border-bottom: 1px solid #DFE6E8;
+
+        &:hover {
+                background: #DFE6E8;
+                cursor: pointer;
+            }
+    }
+}
+
 .temperature-card {
     font-size: 3em;
     
@@ -26,6 +56,20 @@ body {
 .precip-table {
     width: 100%;
     height: 100px;
+}
+
+.hintBox {
+    background: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    padding: 1em;
+    font-size: 14px;
+    color: #000;
+    border-radius: 5px;
+    opacity: 0.95;
+}
+
+.card {
+    border: none !important;
 }
 
 // .card-max {

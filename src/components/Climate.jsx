@@ -1,25 +1,42 @@
 import React from 'react';
 import axios from 'axios';
-import { ResponsiveContainer, ComposedChart, Bar, Cell, Brush, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, Legend } from 'recharts';
+import { ResponsiveContainer, ComposedChart, Area, Brush, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, Legend } from 'recharts';
 
-import Container from 'react-bootstrap/Container';
+import '../../node_modules/react-vis/dist/style.css';
+import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, LineMarkSeries, LineSeries, AreaSeries, Hint, GradientDefs, HeatmapSeries, LabelSeries, } from 'react-vis';
+
+import { interpolateYlGnBu } from 'd3-scale-chromatic';
+
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
+import Table from 'react-bootstrap/Table';
+
+import getCountryISO2 from 'country-iso-3-to-2';
+import ReactCountryFlag from 'react-country-flag';
+
+import { Icon } from '@mdi/react';
+import { mdiThermometer, mdiWeatherPouring } from '@mdi/js';
 
 import { MultiSelect } from 'react-multi-select-component';
 
-import { Temperature } from './Temperature';
 
 
 
-import *  as cities from '../data/100-cities.json';
-// import * as locations from '../data/locations.json';
+// import { Temperature } from './Temperature';
+
+// import CalHeatmap from 'cal-heatmap/dist/cal-heatmap.js';
+// import Tooltip from 'cal-heatmap/dist/plugins/Tooltip.min.esm.js';
+// import 'cal-heatmap/dist/cal-heatmap.css';
+
+
+
+import * as cities from '../data/places.json';
+
+
 
 export class Climate extends React.Component {
 
@@ -35,7 +52,7 @@ export class Climate extends React.Component {
                     temperature: 'c13119ab-750a-4c18-a146-8e9a477088fc',
                     data: [],
                     climatology_color: '#ccc',
-                    temperature_color: '#999'
+                    temperature_color: '#f43f5e'
 
                 },
                 {
@@ -45,7 +62,7 @@ export class Climate extends React.Component {
                     temperature: '66da171e-be57-4f16-aee2-0d86a6b69dd5',
                     data: [],
                     climatology_color: '#666',
-                    temperature_color: '#f43f5e'
+                    temperature_color: '#F57F17'
                 },
                 {
                     label: 'Berkeley Min',
@@ -54,7 +71,7 @@ export class Climate extends React.Component {
                     temperature: '036d381a-911d-4f6a-8964-920646bbe557',
                     data: [],
                     climatology_color: '#ccc',
-                    temperature_color: '#999'
+                    temperature_color: '#2196f3'
                 },
                 {
                     label: 'GPCC Precipitation',
@@ -69,9 +86,20 @@ export class Climate extends React.Component {
                     label: 'Berkeley Avg',
                     value: 'avg',
                 },
+                {
+                    label: 'Berkeley Max',
+                    value: 'max',
+                },
+                {
+                    label: 'Berkeley Min',
+                    value: 'min',
+                },
+                
             ],
+            position_details: {},
             data: [],
             precip_data: [],
+            climate_data: [],
             lat: 30.0444196,
             lon: 31.2357116,
             rounded_lat: undefined,
@@ -79,17 +107,8 @@ export class Climate extends React.Component {
             loading: true,
             center: [-6.559482, 22.937506],
             modal: false,
-            precip_gradient: [
-                'rgb(254,254,216)', // 0
-                'rgb(193,232,183)', // 1
-                'rgb(112,200,190)', // 2
-                'rgb(49,170,195)', // 3
-                'rgb(25,117,179)', // 4
-                'rgb(27,97,171)', // 5
-                'rgb(21,40,130)', // 6
-                'rgb(2,21,86)', // 7
-                'rgb(0,0,0)' // 8
-            ]
+            options: {},
+            hint_value: null
 
             
         }
@@ -102,21 +121,115 @@ export class Climate extends React.Component {
 
         let self = this;
 
-        let position = window.location.search;
-        position = position.replace('?position=', '');
+        if(window.location.search.includes('position=')) {
 
-        if(position.includes(',')) {
-            let lat = parseFloat(position.split(',')[0]);
-            let lon = parseFloat(position.split(',')[1]);
-            self.setState({lat: lat, lon: lon}, () => 
-            {
-                console.log(self.state.lat, self.state.lon)
+            let position = window.location.search;
+            position = position.replace('?position=', '');
 
-                self.getData();
-                self.getPrecipData();
-            })
+            if(position.includes(',')) {
+                let lat = parseFloat(position.split(',')[0]);
+                let lon = parseFloat(position.split(',')[1]);
+                self.setState({lat: lat, lon: lon}, () => 
+                {
+                    self.getData();
+                    self.getPrecipData();
+                })
+            }
+        } else if(window.location.search.includes('city=')) {
+            
+            let city = window.location.search;
+            city = city.replace('?city=', '');
+
+            let city_data = cities.find(c => c.city.toLowerCase() === city.toLowerCase());
+
+            if(city_data) {
+
+                let positions_details = {
+                    place: city_data.city,
+                    country: city_data.country,
+                    iso_code: city_data.iso_code,
+                }
+
+                self.setState({lat: city_data.lat, lon: city_data.lon, position_details: positions_details}, () => 
+                {
+                    self.getData();
+                    self.getPrecipData();
+                })
+            }
+            
         }
+
         
+    }
+
+    getPositionInformation = () => {
+        let self = this;
+
+        let lat = self.state.lat;
+        let lon = self.state.lon;
+
+        axios.get('http://localhost:3000/')
+        .then(response => {
+            console.log(response);
+        })
+
+
+        // find the closest city or town to the lat/lon from wikidata
+        axios.get('http://localhost:3000/wikidata', {
+            params: {
+              query: `
+              SELECT DISTINCT ?iso_code WHERE {
+                SERVICE wikibase:around {
+                  ?place wdt:P625 ?location .
+                  bd:serviceParam wikibase:center "Point(${lon} ${lat})"^^geo:wktLiteral .
+                  bd:serviceParam wikibase:radius "100" .
+                }
+                ?place wdt:P17 ?country .
+                ?country wdt:P298 ?iso_code .
+              } LIMIT 1
+              `
+            },
+            headers: {
+              'Accept': 'application/sparql-results+json'
+            }
+          })
+          .then(response => {
+            console.log(response.data.results.bindings[0].iso_code);
+            })
+
+
+
+
+
+
+
+        // axios.get('http://localhost:3000/wikidata', {
+        //     params: {
+        //         action: 'query',
+        //         format: 'json',
+        //         list: 'geosearch',
+        //         gscoord: `${lat}|${lon}`,
+        //         gsradius: 10000,
+        //         gslimit: 1,
+        //         utf8: 1,
+        //         formatversion: 2
+        //     }
+        //     })
+        //     .then(response => {
+        //         console.log(response);
+        //         const title = response.data.query.geosearch[0].title;
+        //         const lat = response.data.query.geosearch[0].lat;
+        //         const lon = response.data.query.geosearch[0].lon;
+        //         console.log(`The city at (${lat}, ${lon}) is ${title}`);
+
+                
+
+
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //     });
+    
     }
 
    
@@ -152,6 +265,37 @@ export class Climate extends React.Component {
         } else if (e.dataKey === 'calculated_temp') {
             this.setState({show_calculated_temp: !this.state.show_calculated_temp})
         }
+    }
+
+    getPositionDetails = (type) => {
+    
+        let self = this;
+
+        if(type == 'country_code') {
+            if(self.state.position_details.place) {
+                return getCountryISO2(self.state.position_details.iso_code);
+            } else {
+                return self.props.positionDetails.country_code;
+            }
+        }
+
+        if(type) {
+            if(self.state.position_details.place) {
+                return self.state.position_details[type];
+            } else {
+                return self.props.positionDetails[type];
+            }
+
+
+        } else {
+
+            if(self.state.position_details.place) {
+                return self.state.position_details.place + ', ' + self.state.position_details.country;
+            } else {
+                return self.props.positionDetails.county + ', ' + self.props.positionDetails.country;
+            }
+        }
+    
     }
 
     
@@ -191,19 +335,30 @@ export class Climate extends React.Component {
                 
                 })
 
-               
+                finalData = finalData.filter((entry) => entry.x && entry.y && entry.y0);
+
+
+                let avgData = [];
+
+                finalData.forEach((entry) => {
+                    avgData.push(Object.assign({}, entry));
+                })
+
+                avgData.forEach((entry) => {
+                    entry.y = entry.calculated_temp_avg;
+                })
                 
 
                 self.setState(
                     {
+                        data2: avgData,
                         data: finalData, 
                         rounded_lat: data[0].latitude,
                         rounded_lon: data[0].longitude,
                         loading: false
                     }, () => {
 
-                        
-
+ 
                 })
 
 
@@ -221,13 +376,51 @@ export class Climate extends React.Component {
         self.getGPCCData(self.state.datasets.find(dataset => dataset.value == 'precip')).then((data) => {
 
             self.setState({precip_data: data}, () => {
-                // get the maximum precipitation value
-                let max_precip = 0;
-                data.forEach((entry) => {
-                    if(entry.precip > max_precip) max_precip = entry.precip;
-                }
-                )
-                console.log(max_precip);
+
+
+                // console.log(data);
+                // console.log(data.map((d) => [d.precip]));
+                
+                // const cal = new CalHeatmap();
+                // cal.paint(
+                //     {
+                //         date: { start: new Date('1993-01-01') },
+                //         range: 30,
+                //         domain: {
+                //             type: 'year',	
+                //         },
+                //         subDomain: {
+                //             type: 'month',
+                //             width: 3,
+                //             height: 50,
+                //             gutter: 0
+                //         },
+                //         scale: { color: { type: 'linear', scheme: 'GnBu', domain: [0, 10] } },
+                //         data: {
+                //             source: data,
+                //             x: datum => {
+                //                 return +new Date(datum['time'], datum['month_number'] - 1, 1);
+                //             },
+                //             y: datum => {
+                //                 return datum['precip'];
+                //             },
+                //         },
+                //     },
+                //     [
+                //         [
+                //           Tooltip,
+                //           {
+                //             text: function (date, value, dayjsDate) {
+                //                 return (
+                //                   (value ? value + 'mm' : 'No data') + ' on ' + dayjsDate.format('MMM YYYY')
+                //                 );
+                //               },
+                //           },
+                //         ]
+                //     ]
+                    
+                // );
+                
             })
 
         })
@@ -312,7 +505,7 @@ export class Climate extends React.Component {
 
                         let this_data = response.data.result.records;
 
-                        this_data.forEach((record) => {
+                        this_data.forEach((record,index) => {
 
                             // sort records by time
                             this_data.sort((a, b) => {
@@ -354,8 +547,6 @@ export class Climate extends React.Component {
                                 return clim.month_number == record.month_number;
                             })
 
-                            
-
                             record['climatology_' + dataset.value] = Math.round(climatology[0].climatology * 100) / 100;
 
                             record['temperature_' + dataset.value] = Math.round(record.temperature * 100) / 100;
@@ -364,12 +555,22 @@ export class Climate extends React.Component {
 
                             record['calculated_temp_' + dataset.value] = Math.round(record['calculated_temp_' + dataset.value] * 100) / 100;
                         
+                            if(dataset.value == 'max') {
+                                record.y = record['calculated_temp_' + dataset.value];
+                            } else if(dataset.value == 'min') {
+                                record.y0 = record['calculated_temp_' + dataset.value];
+                            }
+
+                            record.x = index
+                            
+
                         })
 
                         datasets = self.state.datasets;
 
                         datasets[datasets.indexOf(current_dataset)].data = this_data;
 
+                        
                         resolve(this_data);
                     
                     })
@@ -393,15 +594,13 @@ export class Climate extends React.Component {
     
     }
 
-
     
+    toPercent = (decimal, fixed = 0) => `${(decimal * 100).toFixed(fixed)}%`;
 
-    
-
-
-
-
-
+    getPercent = (value, total) => {
+        const ratio = total > 0 ? value / total : 0;
+         return toPercent(ratio, 2);
+    };
 
    
         
@@ -409,27 +608,36 @@ export class Climate extends React.Component {
     render() {
         return (<>
 
-            
-
-        <Container>
-
             <Row className="mt-4">
-                <Col md={6}>
+                <Col md={5}>
                     <Card className="h-100">
-                        <Card.Body>
-                            <Card.Title>{window.location.search.replace('?position=','')}</Card.Title>
+                        <Card.Body className="p-4">
+                            <Row>
+                                <Col>
+                                    <p className="fs-4 mb-0"><strong>The Africa Data Hub Climate Observer</strong> is designed to help journalists and academics reporting and researching the impact of the climate crisis in <span className="text-adh-orange"><ReactCountryFlag style={{position: 'relative', top: '-1px'}} countryCode={this.getPositionDetails('country_code')} svg /> {this.getPositionDetails('country')}</span> and Africa.</p>
+                                </Col>
+                            </Row>
                         </Card.Body>
-                    </Card>    
+                    </Card>
                 </Col>
-                
                 <Col>
-                    <Temperature data={this.state.data} type="avg" />
+                    <Card>
+                        <Card.Body className="p-4">
+                            <Row>
+                                <Col style={{fontWeight: '300'}}>
+                                    <p>Data used is taken from <a href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a> and Global <a href="https://www.dwd.de/EN/ourservices/gpcc/gpcc.html" target="_blank">Precipitation Climatology Centre</a>. It is based on both observations made (eg. weather stations) and modelled data based on observations (for areas where there are no monitoring stations).</p>
+                                </Col>
+                                <Col style={{fontWeight: '300'}}>
+                                    <p>Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong>. All positions are rounded to the nearest 1x1 square.</p>
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
                 </Col>
-                
-                
             </Row>
+           
 
-            <Row className="my-4">
+            {/* <Row className="my-4">
                 <Col>
                    
                     <MultiSelect
@@ -440,43 +648,65 @@ export class Climate extends React.Component {
                     />
                 </Col>
                
-            </Row>                            
+            </Row>                             */}
 
             
-            <Row>
+            <Row className="mt-4">
                 <Col>
                     <Card>
-                        <Card.Body>
+                        <Card.Header className="py-4">
+                            <Row>
+                                <Col xs="auto">
+                                    <Icon path={mdiThermometer} size={2} />
+                                </Col>
+                                <Col>
+                                    <h5>Monthly Temperature for <span className="text-adh-orange">{this.getPositionDetails() }</span></h5>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows minimum, maximum and average temperature per month for the last 30 years. The dotted lines show the average monthly temperature for the period 1950-1980.</p>
+                                </Col>
+                            </Row>
+                        </Card.Header>
+                        <Card.Body id="chartContainer">
                             {this.state.loading ? <p>Loading...</p> :
-                                <ResponsiveContainer width="100%" height={400}>
-                                    <ComposedChart data={this.state.data} margin={{top: 20, right: 0, bottom: 0, left: 0}}>
-                                        
-                                        <XAxis dataKey="date"/>
+                                <XYPlot width={document.getElementById('chartContainer').getBoundingClientRect().width - 20} height={300} onMouseLeave={() => this.setState({hint_value: null})}>
+                                   <GradientDefs>
+                                        <linearGradient id="CoolGradient" x1="0" x2="0" y1="0" y2="1">
+                                        <stop offset="0%" stopColor="#fee2e2" stopOpacity={1}/>
+                                        <stop offset="100%" stopColor="#e0f2fe" stopOpacity={1} />
+                                        </linearGradient>
+                                    </GradientDefs>
+                                    <VerticalGridLines />
+                                    <HorizontalGridLines />
+                                    <XAxis />
+                                    <YAxis />
+                                    <AreaSeries
+                                        className="area-elevated-series-1"
+                                        color={'url(#CoolGradient)'}
+                                        data={this.state.data}
+                                        onNearestX={(value) => this.setState({hint_value: value})}
+                                    />
 
-                                        {/* domain = min of  */}
-
-                                        <YAxis yAxisId="left" orientation="left" stroke="#99b3bb" domain={[0,25]}/>
-                                        
-                                        
-                                        <CartesianGrid strokeDasharray="1 1"/>
-                                        {/* <Legend onClick={this.legendClick} /> */}
-
-                                        <Tooltip/>
-
-                                        
-                                        {this.state.selected_datasets.length > 0 && this.state.selected_datasets.map((dataset, index) =>
+                                    <LineSeries
+                                        className="area-elevated-line-series"
+                                        data={this.state.data2}
+                                        color={'#155e75'}
+                                    />
+                                    
+                                    
+                                    
+                                    { this.state.hint_value && (
+                                        <Hint value={this.state.hint_value}>
+                                            <div className="hintBox">
+                                                <h6>{this.state.hint_value.date}</h6>
+                                                <span style={{color: "#ef4444"}}><strong>MAX TEMP:</strong> {this.state.hint_value.y}</span><br/>
+                                                <span style={{color: "#155e75"}}><strong>AVG TEMP:</strong> {this.state.hint_value.calculated_temp_avg}</span><br/>
+                                                <span style={{color: "#93c5fd"}}><strong>MIN TEMP:</strong> {this.state.hint_value.y0}</span>
+                                            </div>
                                                 
-                                                <>
-                                                    <Line isAnimationActive={false} key={'cli-' + index + '-' + dataset.value} type="monotone" yAxisId="left" dot={false} dataKey={'climatology_' + dataset.value} strokeWidth={2} stroke={this.state.datasets.find(d => d.value == dataset.value).climatology_color}/>
-                                                    <Line isAnimationActive={false} key={'temp-' + index + '-' + dataset.value} type="monotone" yAxisId="left" dot={false} dataKey={'calculated_temp_' + dataset.value} dashArray={4} strokeWidth={2} stroke={this.state.datasets.find(d => d.value == dataset.value).temperature_color}/>
-                                                </>
-                                        )}   
-                                            
-                                        {this.state.selected_datasets.length > 0 &&
-                                            <Brush data={this.state.datasets.find((d) => d.value == this.state.selected_datasets[0].value).data} dataKey="date" height={30} stroke="#8eb4bf"/>
-                                        }
-                                    </ComposedChart>
-                                </ResponsiveContainer>
+                                        </Hint>
+                                    )}
+                                    
+                                </XYPlot>
+                                
                             }
                         </Card.Body>
                     </Card>
@@ -486,61 +716,99 @@ export class Climate extends React.Component {
             <Row className="my-4">
                 <Col>
                     <Card>
+                        <Card.Header>
+                            <Row>
+                                <Col xs="auto">
+                                    <Icon path={mdiThermometer} size={2} />
+                                </Col>
+                                <Col>
+                                    <h5>Average monthly temperature versus last 12 months</h5>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the...</p>
+                                </Col>
+                            </Row>
+                        </Card.Header>
                         <Card.Body>
-                        
-                            <table className="precip-table">
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Avg</th>
+                                        <th>Recent</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr>
-                                    {
-                                        this.state.precip_data.map((record, index) => {
-                                            return (<td key={index} style={{backgroundColor: this.getBarColor(record)}}>
-                                                
-                                                <OverlayTrigger
-                                                    key={'tooltip-' + index}
-                                                    placement="top"
-                                                    overlay={
-                                                        <Tooltip>{record.precip}</Tooltip>
-                                                    }
-                                                    >
-                                                    <div className="h-100"></div>
-                                                </OverlayTrigger>
-
-                                            </td>)
-                                        })
-                                    }
-                                    </tr>
-                                    <tr>
-                                    {
-                                        this.state.precip_data.map((record, index) => {
-                                            return (<td key={index} className="position-relative p-0">
-                                                
-                                                { record.time % 2 && record.month_number == '1' ?
-                                                    <div className="position-absolute precip-label">{record.month_number + '/' + record.time.slice(-2)}</div> : ''
-                                                }
-                                                
-
-                                            </td>)
-                                        })
-                                    }
-                                    </tr>
                                 </tbody>
-                            </table>
-                            
-
-
+                            </Table>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col>
+                    <Card>
+                        <Card.Header>
+                            <Row>
+                                <Col xs="auto">
+                                    <Icon path={mdiWeatherPouring} size={2} />
+                                </Col>
+                                <Col>
+                                <h5>Average monthly precipitation versus last twelve months</h5>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the...</p>
+                                </Col>
+                            </Row>
+                        </Card.Header>
+                        <Card.Body>
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Avg</th>
+                                        <th>Recent</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </Table>
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
 
             
-
-            
-
-            
-
-
-        </Container>
+            <Row>
+                <Col>
+                    <Card>
+                        <Card.Header>
+                            <Row>
+                                <Col xs="auto">
+                                    <Icon path={mdiWeatherPouring} size={2} />
+                                </Col>
+                                <Col>
+                                    <h5>Monthly Precipitation for <span className="text-adh-orange">{this.getPositionDetails() }</span></h5>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the...</p>
+                                </Col>
+                            </Row>
+                            
+                        </Card.Header>
+                        <Card.Body>
+                            {this.state.loading ? <p>Loading...</p> :
+                            <XYPlot
+                            width={document.getElementById('chartContainer').getBoundingClientRect().width - 20}
+                            height={300}>
+                                <XAxis />
+                                <YAxis />
+                                <HeatmapSeries
+                                    colorType="literal"
+                                    data={
+                                        this.state.precip_data.map((d,index) => {
+                                            return {x: parseInt(d.month_number), y: parseInt(d.time) , color: isNaN(d.precip) ? 0 : interpolateYlGnBu(d.precip)}
+                                        })
+                                    }/>
+                            </XYPlot>
+                            }
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+        
         
         
 

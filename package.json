@@ -31,6 +31,7 @@
         "react-leaflet": "^4.2.0",
         "react-multi-select-component": "^4.3.4",
         "react-router-dom": "^6.8.1",
+        "react-spinners": "^0.13.8",
         "react-vis": "^1.11.12",
         "recharts": "^2.3.2",
         "styled-components": "^5.3.6"

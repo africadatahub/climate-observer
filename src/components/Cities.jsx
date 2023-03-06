@@ -86,6 +86,52 @@ export class Cities extends React.Component {
 
     }
 
+    getPositionInformation = () => {
+        let self = this;
+
+        let lat = self.state.lat;
+        let lon = self.state.lon;
+
+        axios.get('http://localhost:3000/')
+        .then(response => {
+            console.log(response);
+        })
+
+
+        // find the closest city or town to the lat/lon from wikidata
+        axios.get('http://localhost:3000/wikidata', {
+            params: {
+              query: `
+              SELECT DISTINCT ?iso_code WHERE {
+                SERVICE wikibase:around {
+                  ?place wdt:P625 ?location .
+                  bd:serviceParam wikibase:center "Point(${lon} ${lat})"^^geo:wktLiteral .
+                  bd:serviceParam wikibase:radius "100" .
+                }
+                ?place wdt:P17 ?country .
+                ?country wdt:P298 ?iso_code .
+              } LIMIT 1
+              `
+            },
+            headers: {
+              'Accept': 'application/sparql-results+json'
+            }
+          })
+          .then(response => {
+            console.log(response.data.results.bindings[0].iso_code);
+        })
+
+
+
+
+
+
+
+        
+    
+    }
+
+
         
 
     render() {

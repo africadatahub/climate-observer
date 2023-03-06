@@ -43,18 +43,32 @@ export class Search extends React.Component {
         });
 
         this.setState({cities: cities}, () => {
+
+            let searchTerms = window.location.search.split('&');
         
             if(window.location.search.includes('city=')){
-                this.citySelectRef.current.value = window.location.search.split('city=')[1];
-                let city = cities.filter(city => city.city.toLowerCase().replaceAll(' ','-') == window.location.search.split('city=')[1])[0];
+
+                let citysearch = searchTerms.filter(term => term.includes('city='))[0];
+
+                this.citySelectRef.current.value = citysearch.split('city=')[1];
+
+                let city = cities.filter(city => city.city.toLowerCase().replaceAll(' ','-') == citysearch.split('city=')[1])[0];
+
                 this.setState({lat: city.lat, lon: city.lon});
 
+
             } else if(window.location.search.includes('position=')){
+
+
+                let positionsearch = searchTerms.filter(term => term.includes('position='))[0];
+
                 this.citySelectRef.current.value = 'location';
-                let place = window.location.search.split('position=')[1];
+
+                let place = positionsearch.split('position=')[1];
+
                 this.setState({lat: place.split(',')[0], lon: place.split(',')[1]});
 
-                axios.get(`https://nominatim.openstreetmap.org/search?q=${window.location.search.split('position=')[1]}&format=json&polygon=1&addressdetails=1`)
+                axios.get(`https://nominatim.openstreetmap.org/search?q=${place}&format=json&polygon=1&addressdetails=1`)
                 .then(function (response) {
 
                     self.searchRef.current.value = response.data[0].display_name;
@@ -63,6 +77,7 @@ export class Search extends React.Component {
 
 
                 })
+
             }
         });
 

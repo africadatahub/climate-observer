@@ -147,6 +147,7 @@ export class Climate extends React.Component {
             temp_table_metric: 'avg',
             temp_table_year: 2022,
             precip_table_year: 2022,
+            update_precip_chart: 1,
         }
         this.dateRangeStartRef = React.createRef();
         this.dateRangeEndRef = React.createRef();
@@ -1013,7 +1014,8 @@ export class Climate extends React.Component {
                             {this.state.loading ? <Row><Col className="text-center"><BeatLoader/></Col></Row> :
                             <div className="chart-container3">
                                 <XYPlot
-                                width={document.querySelector('.chart-container3') != null ? document.querySelector('.chart-container3').getBoundingClientRect().width : 800}
+                                key={this.state.update_precip_chart}
+                                width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width : 1000}
                                 height={this.dateRange().length < 10 ? this.dateRange().length * 40 : this.dateRange().length * 30}
                                 xType="ordinal"
                                 xDomain={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}

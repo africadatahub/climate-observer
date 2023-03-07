@@ -836,8 +836,8 @@ export class Climate extends React.Component {
                                     <Icon path={mdiThermometer} size={2} />
                                 </Col>
                                 <Col>
-                                    <h5>Monthly Temperature Anomoly <span className="text-adh-orange">{ this.getPositionDetails() }</span> from {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the average temperature anomoly per month from from {this.state.date_range[0]} to {this.state.date_range[1]}. the anomoly is the degrees celcius above or below the climatological average of 1950-1980.</p>
+                                    <h5>Monthly Temperature Anomaly <span className="text-adh-orange">{ this.getPositionDetails() }</span> from {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the average temperature anomaly per month from from {this.state.date_range[0]} to {this.state.date_range[1]}. the anomaly is the degrees celcius above or below the climatological average of 1950-1980.</p>
                                 </Col>
                             </Row>
                         </Card.Header>
@@ -866,7 +866,7 @@ export class Climate extends React.Component {
                                         <Hint value={this.state.temp_bar_hint_value} style={{marginLeft: '1em', marginRight: '1em'}}>
                                             <div className="hintBox">
                                                 <h6>{this.state.temp_bar_hint_value.date}</h6>
-                                                <span><strong>ANOMOLY:</strong> {parseFloat(this.state.temp_bar_hint_value.y).toFixed(2)}°C</span><br/>
+                                                <span><strong>ANOMALY:</strong> {parseFloat(this.state.temp_bar_hint_value.y).toFixed(2)}°C</span><br/>
                                             </div>
                                                 
                                         </Hint>

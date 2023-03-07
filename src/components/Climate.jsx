@@ -20,7 +20,7 @@ import getCountryISO2 from 'country-iso-3-to-2';
 import ReactCountryFlag from 'react-country-flag';
 
 import { Icon } from '@mdi/react';
-import { mdiThermometer, mdiWeatherPouring, mdiArrowUpThick, mdiArrowDownThick, mdiMinusThick, mdiCalendarRange, mdiArrowRight } from '@mdi/js';
+import { mdiThermometer, mdiWeatherPouring, mdiArrowUpThick, mdiArrowDownThick, mdiMinusThick, mdiCalendarRange, mdiArrowRight, mdiMapMarker } from '@mdi/js';
 
 import { MultiSelect } from 'react-multi-select-component';
 
@@ -172,7 +172,8 @@ export class Climate extends React.Component {
                 let end = parseInt(date_range.split(',')[1]);
                 self.setState({
                     date_range: [start, end],
-                    temp_table_year: end
+                    temp_table_year: end,
+                    precip_table_year: end,
                 });
             }
 
@@ -242,7 +243,7 @@ export class Climate extends React.Component {
 
     selectTempChartOptions = (temp_chart_selected) => {
         this.setState({temp_chart_selected: temp_chart_selected}, () => {
-            this.getData();
+            // this.getData();
         })
     }
 
@@ -672,16 +673,17 @@ export class Climate extends React.Component {
                 </Col>
                 <Col>
                     <Card>
-                        <Card.Body className="p-4 fs-5">
+                        <Card.Body className="p-4">
                             <Row>
                                 <Col>
-                                    <p>Choose a location from the 100 biggest African cities dropdown or search for a specific place above.</p>
-                                    <p style={{fontWeight: '300'}}>Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong> and all positions are rounded to the nearest 1x1 square.</p>
-                                </Col>
-                                <Col style={{fontWeight: '300'}}>
-                                    <p>The Climate Observer uses temperature data from <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a> and precitiptation date 
+                                    <p className="fs-5">The Climate Observer uses temperature data from <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a> and precitiptation date 
                                     from the <a className="text-adh-orange text-decoration-none" href="https://www.dwd.de/EN/ourservices/gpcc/gpcc.html" target="_blank">Precipitation Climatology Centre</a>. It is based on both observations made (eg. weather stations) and modelled data based on observations (for areas where there are no monitoring stations).
                                     </p>
+                                    <p>All temperature data shown is taken from <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a>, and precipitation (rainfall) data from the <a className="text-adh-orange text-decoration-none" href="https://www.dwd.de/EN/ourservices/gpcc/gpcc.html" target="_blank">Precipitation Climatology Centre</a>.</p>
+
+                                    <p>When using this data, it is important to note and communicate to readers that not all data points are direct measurements from weather stations. For information on Berkeley Earth's methodology for producing broad geographic data from weather station observations, <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/methodology/" target="_blank"> see here</a>.
+                                    </p>
+                                    <p className="mb-0">Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong> and all positions are rounded to the nearest 1x1 square.</p>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -697,10 +699,10 @@ export class Climate extends React.Component {
                                 <Col xs="auto">
                                     <Icon path={mdiCalendarRange} size={2} />
                                 </Col>
-                                <Col>
+                                <Col xs={10} md>
                                     <h5 style={{marginTop: '0.6em'}}>Choose a date range to study the climate data for that period</h5>
                                 </Col>
-                                <Col xs="auto">
+                                <Col xs={5} md>
                                     <Form.Select size="lg" className="bg-control-grey" ref={this.dateRangeStartRef} onChange={() => this.changeDateRange()}>
                                         {
                                             Array.from({length: 30}, (_, i) => 1993 + i).map((year) => {
@@ -712,7 +714,7 @@ export class Climate extends React.Component {
                                 <Col xs="auto">
                                     <Icon path={mdiArrowRight} size={1} style={{marginTop: '0.8em'}}/>
                                 </Col>
-                                <Col xs="auto">
+                                <Col xs={5} md>
                                     <Form.Select size="lg" className="bg-control-grey" ref={this.dateRangeEndRef} onChange={() => this.changeDateRange()}>
                                         {
                                             Array.from({length: 30}, (_, i) => 1993 + i).map((year) => {
@@ -769,8 +771,8 @@ export class Climate extends React.Component {
                                     </GradientDefs>
                                     <VerticalGridLines />
                                     <HorizontalGridLines />
-                                    <XAxis />
-                                    <YAxis />
+                                    <XAxis tickFormat={v => this.state.data[v].date} />
+                                    <YAxis tickFormat={v => v + '°C'} />
 
                                     {
                                     this.state.temp_chart_selected.some(item => item.value === 'temp_range') &&
@@ -837,7 +839,7 @@ export class Climate extends React.Component {
                                 </Col>
                                 <Col>
                                     <h5>Monthly Temperature Anomaly <span className="text-adh-orange">{ this.getPositionDetails() }</span> from {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the average temperature anomaly per month from from {this.state.date_range[0]} to {this.state.date_range[1]}. the anomaly is the degrees celcius above or below the climatological average of 1950-1980.</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the average temperature anomaly per month from from {this.state.date_range[0]} to {this.state.date_range[1]}. The anomaly is the degrees celcius above or below the climatological average of 1950-1980. The visualisation is based on the approach taken by Prof Ed Hawkins at <a className="text-adh-orange text-decoration-none" href="https://showyourstripes.info/" target="_blank">#ShowYourStripes</a> </p>
                                 </Col>
                             </Row>
                         </Card.Header>
@@ -847,8 +849,8 @@ export class Climate extends React.Component {
                                 <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width : 600} height={300} onMouseLeave={() => this.setState({hint_value: null})} yDomain={[-3, 3]} >
                                     <VerticalGridLines />
                                     <HorizontalGridLines />
-                                    <XAxis />
-                                    <YAxis/>
+                                    <XAxis  tickFormat={v => this.state.temp_bar_data[v].date}/>
+                                    <YAxis tickFormat={v => v + '°C'} />
                                     <VerticalBarSeries
                                         data={this.state.temp_bar_data.map(d => ({ ...d, 
                                             y0: 0, 
@@ -881,7 +883,7 @@ export class Climate extends React.Component {
             </Row>
 
             <Row className="my-4">
-                <Col>
+                <Col md>
                     <Card className="h-100">
                         <Card.Header className="py-4">
                             <Row>
@@ -905,18 +907,17 @@ export class Climate extends React.Component {
                                         }
                                     </Form.Select>
                                     </h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the how the temperatures in {this.state.temp_table_year} compare with the expected climatological averages between 1950 and 1980</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the how the temperatures in {this.state.temp_table_year} compare with the recorded climatological averages between 1950 and 1980</p>
                                 </Col>
                             </Row>
                         </Card.Header>
-                        <Card.Body>
+                        <Card.Body className="p-4">
                             <Table>
                                 <thead>
                                     <tr>
                                         <th>Month</th>
                                         <th className="text-end" style={{width: '20%'}}>Mean {this.state.temp_table_metric}</th>
                                         <th className="text-end" style={{width: '20%'}}>{this.state.temp_table_year}</th>
-                                        <th className="text-end" style={{width: '20%'}}>Last Data</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -930,7 +931,6 @@ export class Climate extends React.Component {
                                                         <span className={data['calculated_temp_' + this.state.temp_table_metric] > data['climatology_' + this.state.temp_table_metric] ? 'text-adh-red' : ''}>
                                                             {data['calculated_temp_' + this.state.temp_table_metric]}°C</span>
                                                     </td>
-                                                    <td className="text-end">{data.date.split('/')[1]}</td>
                                                 </tr>
                                             )
                                         })
@@ -962,14 +962,13 @@ export class Climate extends React.Component {
                                 </Col>
                             </Row>
                         </Card.Header>
-                        <Card.Body>
+                        <Card.Body className="p-4">
                             <Table>
                             <thead>
                                     <tr>
                                         <th>Month</th>
                                         <th className="text-end" style={{width: '20%'}}>Mean Precip</th>
                                         <th className="text-end" style={{width: '20%'}}>{this.state.precip_table_year}</th>
-                                        <th className="text-end" style={{width: '20%'}}>Last Data</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -983,7 +982,6 @@ export class Climate extends React.Component {
                                                         <span className={data.precip > data.month_avg ? 'text-adh-red' : ''}>
                                                             {data.precip}mm</span>
                                                     </td>
-                                                    <td className="text-end">{data.date.split('/')[1]}</td>
                                                 </tr>
                                             )
                                         })
@@ -1016,7 +1014,7 @@ export class Climate extends React.Component {
                             <div className="chart-container3">
                                 <XYPlot
                                 width={document.querySelector('.chart-container3') != null ? document.querySelector('.chart-container3').getBoundingClientRect().width : 800}
-                                height={this.dateRange().length * 20}
+                                height={this.dateRange().length < 10 ? this.dateRange().length * 40 : this.dateRange().length * 30}
                                 xType="ordinal"
                                 xDomain={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
                                 yType="ordinal"

@@ -155,7 +155,7 @@ export class Search extends React.Component {
                     </Form.Select>
                 </Col>
                 <Col md={8}>
-                    <Form.Control size="lg" ref={this.searchRef} type="text" placeholder="Search for a specific place..." onChange={(e) => this.addressLookup(e.target.value)} className={this.state.loading ? 'loading' : ''}  className="bg-control-grey"/>
+                    <Form.Control size="lg" ref={this.searchRef} type="text" placeholder="Search for a specific place..." onChange={(e) => this.addressLookup(e.target.value)} className={this.state.loading ? 'loading bg-control-grey' : 'bg-control-grey'}/>
                     <div className="search-options">
                         {this.state.options.length > 0 &&
                             <ul>
@@ -173,8 +173,7 @@ export class Search extends React.Component {
                         }
                     </div>
                 </Col>
-                <Col xs="auto">
-                    
+                <Col>
                     <Button size="lg" className="geolocation-btn" onClick={() => this.useLocation()}>Use my location</Button>
                 </Col>
             </Row>

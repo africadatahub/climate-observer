@@ -14,6 +14,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
+import Badge from 'react-bootstrap/Badge';
 
 import getCountryISO2 from 'country-iso-3-to-2';
 import ReactCountryFlag from 'react-country-flag';
@@ -663,7 +664,7 @@ export class Climate extends React.Component {
                         <Card.Body className="p-4">
                             <Row>
                                 <Col>
-                                    <p className="fs-4 mb-0"><strong>The Africa Data Hub Climate Observer</strong> is designed to help journalists and academics reporting and researching the impact of the climate crisis in <span className="text-adh-orange text-nowrap"><ReactCountryFlag style={{position: 'relative', top: '-1px'}} countryCode={this.getPositionDetails('country_code')} svg /> {this.getPositionDetails('country')}</span> and Africa.</p>
+                                    <p className="fs-4 mb-0"><strong className="text-adh-orange">The Africa Data Hub Climate Observer</strong> is designed to help journalists and academics reporting and researching climate change in <span className="text-adh-orange text-nowrap"><ReactCountryFlag style={{position: 'relative', top: '-1px'}} countryCode={this.getPositionDetails('country_code')} svg /> {this.getPositionDetails('country')}</span> and Africa.</p>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -671,13 +672,16 @@ export class Climate extends React.Component {
                 </Col>
                 <Col>
                     <Card>
-                        <Card.Body className="p-4">
+                        <Card.Body className="p-4 fs-5">
                             <Row>
-                                <Col style={{fontWeight: '300'}}>
-                                    <p>Data used is taken from <a href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a> and Global <a href="https://www.dwd.de/EN/ourservices/gpcc/gpcc.html" target="_blank">Precipitation Climatology Centre</a>. It is based on both observations made (eg. weather stations) and modelled data based on observations (for areas where there are no monitoring stations).</p>
+                                <Col>
+                                    <p>Choose a location from the 100 biggest African cities dropdown or search for a specific place above.</p>
+                                    <p style={{fontWeight: '300'}}>Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong> and all positions are rounded to the nearest 1x1 square.</p>
                                 </Col>
                                 <Col style={{fontWeight: '300'}}>
-                                    <p>Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong>. All positions are rounded to the nearest 1x1 square.</p>
+                                    <p>The Climate Observer uses temperature data from <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a> and precitiptation date 
+                                    from the <a className="text-adh-orange text-decoration-none" href="https://www.dwd.de/EN/ourservices/gpcc/gpcc.html" target="_blank">Precipitation Climatology Centre</a>. It is based on both observations made (eg. weather stations) and modelled data based on observations (for areas where there are no monitoring stations).
+                                    </p>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -736,7 +740,7 @@ export class Climate extends React.Component {
                                 </Col>
                                 <Col>
                                     <h5>Monthly Temperature for <span className="text-adh-orange">{ this.getPositionDetails() }</span> from {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows minimum, maximum and average temperature per month for the last 30 years. The dotted lines show the average monthly temperature for the period 1950-1980.</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the minimum, maximum and average temperatures per month from from {this.state.date_range[0]} to {this.state.date_range[1]}. Use the dropdown to show or hide different metrics. Dotted climatology lines show the average monthly temperature for the period 1950-1980.</p>
                                 </Col>
                                 <Col md={3}>
 
@@ -833,7 +837,7 @@ export class Climate extends React.Component {
                                 </Col>
                                 <Col>
                                     <h5>Monthly Temperature Anomoly <span className="text-adh-orange">{ this.getPositionDetails() }</span> from {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows ...</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the average temperature anomoly per month from from {this.state.date_range[0]} to {this.state.date_range[1]}. the anomoly is the degrees celcius above or below the climatological average of 1950-1980.</p>
                                 </Col>
                             </Row>
                         </Card.Header>
@@ -901,7 +905,7 @@ export class Climate extends React.Component {
                                         }
                                     </Form.Select>
                                     </h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the how the most recent average temperatures compared with the average between 1950 and 1980</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the how the temperatures in {this.state.temp_table_year} compare with the expected climatological averages between 1950 and 1980</p>
                                 </Col>
                             </Row>
                         </Card.Header>
@@ -954,7 +958,7 @@ export class Climate extends React.Component {
 
                                         }
                                     </Form.Select></h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the how the most recent monthly average precipitation compared with the average between 1950 and 1980</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the how the monthly average precipitation in {this.precip_table_year} compare with the average between 1950 and 1980</p>
                                 </Col>
                             </Row>
                         </Card.Header>
@@ -1002,7 +1006,7 @@ export class Climate extends React.Component {
                                 </Col>
                                 <Col>
                                     <h5>Monthly Precipitation for <span className="text-adh-orange">{this.getPositionDetails() }</span></h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the...</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the average monthly preciptitation for every month from {this.state.date_range[0]} to {this.state.date_range[1]}. the colour scale ranges from <div className="badge-pill" style={{background: '#feffd8', color: '#333'}}>0mm</div> to <div className="badge-pill" style={{backgroundColor: '#081d58', color: '#fff'}}>10mm</div>.</p>
                                 </Col>
                             </Row>
                             
@@ -1057,7 +1061,7 @@ export class Climate extends React.Component {
                                 </XYPlot>
                             </div>
                             }
-                            <ContinuousColorLegend width={200} startTitle="0" endTitle="10" startColor={interpolateYlGnBu(0)} endcolor={interpolateYlGnBu(1)} />
+                            {/* <ContinuousColorLegend width={200} startTitle="0" endTitle="10" startColor={interpolateYlGnBu(0)} endcolor={interpolateYlGnBu(1)} /> */}
                         </Card.Body>
                     </Card>
                 </Col>

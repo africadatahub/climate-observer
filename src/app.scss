@@ -77,6 +77,15 @@ body {
     border: none !important;
 }
 
+.badge-pill {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 0.1em 0.5em;
+    font-weight: bold;
+    height: 22px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.2);
+}
+
 // .card-max {
 //     color: #fff;
 //     background: #e51c23;

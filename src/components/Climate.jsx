@@ -702,7 +702,7 @@ export class Climate extends React.Component {
                                 <Col xs={10} md>
                                     <h5 style={{marginTop: '0.6em'}}>Choose a date range to study the climate data for that period</h5>
                                 </Col>
-                                <Col xs={5} md>
+                                <Col xs={5} md="auto">
                                     <Form.Select size="lg" className="bg-control-grey" ref={this.dateRangeStartRef} onChange={() => this.changeDateRange()}>
                                         {
                                             Array.from({length: 30}, (_, i) => 1993 + i).map((year) => {
@@ -714,7 +714,7 @@ export class Climate extends React.Component {
                                 <Col xs="auto">
                                     <Icon path={mdiArrowRight} size={1} style={{marginTop: '0.8em'}}/>
                                 </Col>
-                                <Col xs={5} md>
+                                <Col xs={5} md="auto">
                                     <Form.Select size="lg" className="bg-control-grey" ref={this.dateRangeEndRef} onChange={() => this.changeDateRange()}>
                                         {
                                             Array.from({length: 30}, (_, i) => 1993 + i).map((year) => {

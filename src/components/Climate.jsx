@@ -524,6 +524,12 @@ export class Climate extends React.Component {
                 startref.current.value = endref.current.value;
             }
 
+            // set the daterange in the window.location.search
+            let searchParams = new URLSearchParams(window.location.search);
+            searchParams.set('daterange', startref.current.value + ',' + endref.current.value);
+            window.history.replaceState({}, '', window.location.pathname + '?' + searchParams.toString().replace('%2C',','));
+
+
             self.setState({date_range: [parseInt(startref.current.value), parseInt(endref.current.value)]}, () => {
                 self.getData();
                 self.getPrecipData();
@@ -772,7 +778,7 @@ export class Climate extends React.Component {
                                     </GradientDefs>
                                     <VerticalGridLines />
                                     <HorizontalGridLines />
-                                    <XAxis tickFormat={v => this.state.data[v].date} />
+                                    <XAxis tickFormat={v => this.state.data[v] != undefined ? this.state.data[v].date : v} />
                                     <YAxis tickFormat={v => v + '°C'} />
 
                                     {
@@ -850,7 +856,7 @@ export class Climate extends React.Component {
                                 <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width : 600} height={300} onMouseLeave={() => this.setState({hint_value: null})} yDomain={[-3, 3]} >
                                     <VerticalGridLines />
                                     <HorizontalGridLines />
-                                    <XAxis  tickFormat={v => this.state.temp_bar_data[v].date}/>
+                                    <XAxis tickFormat={v => this.state.data[v] != undefined ? this.state.data[v].date : v} />
                                     <YAxis tickFormat={v => v + '°C'} />
                                     <VerticalBarSeries
                                         data={this.state.temp_bar_data.map(d => ({ ...d, 

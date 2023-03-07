@@ -1064,6 +1064,21 @@ export class Climate extends React.Component {
                     </Card>
                 </Col>
             </Row>
+
+            <Row className="my-4">
+                <Col>
+                    <Card>
+                        <Card.Body>
+                            <Row className="align-items-end">
+                                <Col></Col>
+                                <Col xs="auto">
+                                    <div style={{display: 'inline-block', position: 'relative', top: '0.2em', right: '0.6em'}}>POWERED BY</div> <a target="_blank" href="https://www.openup.org.za"><img style={{width: '100px'}} src="https://brand-assets.openup.org.za/openup/PNG/Standard/openup-logo-1200x267.png"/></a>
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
         
         
         

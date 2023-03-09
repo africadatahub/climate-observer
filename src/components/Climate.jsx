@@ -740,7 +740,7 @@ export class Climate extends React.Component {
 
             <Row className="mt-4">
                 <Col md={5}>
-                    <Animation keyframes={this.getKeyFrames()} timing={this.getTiming(0, 500)}>
+                    
                         <Card className="h-100">
                             <Card.Body className="p-4">
                                 <Row>
@@ -750,10 +750,10 @@ export class Climate extends React.Component {
                                 </Row>
                             </Card.Body>
                         </Card>
-                    </Animation>
+                    
                 </Col>
                 <Col>
-                    <Animation keyframes={this.getKeyFrames()} timing={this.getTiming(300,800)}>
+                    
                         <Card>
                             <Card.Body className="p-4">
                                 <Row>
@@ -770,7 +770,7 @@ export class Climate extends React.Component {
                                 </Row>
                             </Card.Body>
                         </Card>
-                    </Animation>
+                    
                 </Col>
             </Row>
 

@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 // import { ResponsiveContainer, ComposedChart, Area, Brush, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, Legend } from 'recharts';
 
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, LineMarkSeries, VerticalBarSeries, LineSeries, AreaSeries, Hint, GradientDefs, HeatmapSeries, LabelSeries, Crosshair, ContinuousColorLegend } from 'react-vis';
+import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, LineMarkSeries, MarkSeries, VerticalBarSeries, LineSeries, AreaSeries, Hint, GradientDefs, HeatmapSeries, LabelSeries, Crosshair, ContinuousColorLegend } from 'react-vis';
 import '../../node_modules/react-vis/dist/style.css';
 
 import { interpolateYlGnBu, interpolateRdBu } from 'd3-scale-chromatic';
@@ -20,14 +20,21 @@ import getCountryISO2 from 'country-iso-3-to-2';
 import ReactCountryFlag from 'react-country-flag';
 
 import { Icon } from '@mdi/react';
-import { mdiThermometer, mdiWeatherPouring, mdiArrowUpThick, mdiArrowDownThick, mdiMinusThick, mdiCalendarRange, mdiArrowRight, mdiMapMarker } from '@mdi/js';
+import { mdiThermometer, mdiWeatherPouring, mdiArrowUpThick, mdiArrowDownThick, mdiMinusThick, mdiCalendarRange, mdiArrowRight, mdiMapMarker, mdiChartTimelineVariantShimmer, mdiHomeAccount } from '@mdi/js';
 
 import { MultiSelect } from 'react-multi-select-component';
 
 import { BeatLoader } from 'react-spinners';
 
+import { Animation } from 'react-web-animation';
+
+import milestones from 'd3-milestones';
+
+import '../../node_modules/d3-milestones/build/d3-milestones.css';
+
 import * as cities from '../data/places.json';
 
+import ReactHtmlParser from 'react-html-parser';
 
 
 export class Climate extends React.Component {
@@ -69,7 +76,13 @@ export class Climate extends React.Component {
                     value: 'precip_avg',
                     precipitation: '3111fb54-12d5-4d45-9538-d58337ba7384',
                     data: [],
-                }
+                },
+                {
+                    label: 'EM-DAT Disasters',
+                    value: 'disasters',
+                    disasters: 'fbee2045-ac71-472b-bc29-2a7cb7e37880',
+                    data: [],
+                },
                 
             ],
             selected_datasets: [
@@ -132,6 +145,7 @@ export class Climate extends React.Component {
             data: [],
             precip_data: [],
             climatology_data: [],
+            disasters_data: [],
             date_range: [2012, 2022],
             lat: 30.0444196,
             lon: 31.2357116,
@@ -144,6 +158,7 @@ export class Climate extends React.Component {
             hint_value: null,
             temp_bar_hint_value: null,
             hint_value_precip: null,
+            hint_value_disaster: null,
             temp_table_metric: 'avg',
             temp_table_year: 2022,
             precip_table_year: 2022,
@@ -193,6 +208,9 @@ export class Climate extends React.Component {
                 {
                     self.getData();
                     self.getPrecipData();
+                    setTimeout(() => {
+                        self.getDisasters();
+                    }, 3000);
                 })
             }
 
@@ -218,6 +236,9 @@ export class Climate extends React.Component {
                 {
                     self.getData();
                     self.getPrecipData();
+                    setTimeout(() => {
+                        self.getDisasters();
+                    }, 3000);
                 })
             }
             
@@ -229,8 +250,6 @@ export class Climate extends React.Component {
             self.tempTableYear.current.value = self.state.temp_table_year;
             self.precipTableYear.current.value = self.state.precip_table_year;
         }, 1000);
-
-        
         
     }
    
@@ -252,33 +271,6 @@ export class Climate extends React.Component {
     getMonthName = (month) => {
         let month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         return month_names[month];
-    }
-
-
-    
-
-   
-    
-    changeLocation = (city) => {
-
-        if(city == 'location') return this.useLocation();
-
-        let lat = cities[city].atitude;
-        let lon = cities[city].Longitude;
-
-        this.setState({lat: lat, lon: lon, loading: true}, () => {
-            this.getData();
-        })
-    }
-
-    
-
-    legendClick = (e) => {
-        if (e.dataKey === 'climatology') {
-            this.setState({show_climatology: !this.state.show_climatology})
-        } else if (e.dataKey === 'calculated_temp') {
-            this.setState({show_calculated_temp: !this.state.show_calculated_temp})
-        }
     }
 
     getPositionDetails = (type) => {
@@ -311,8 +303,6 @@ export class Climate extends React.Component {
         }
     
     }
-
-    
 
 
     getData = () => {
@@ -376,12 +366,6 @@ export class Climate extends React.Component {
                     entry.y = entry.temperature;
                 })
 
-
-            
-
-
-
-
                 self.setState(
                     {
                         temp_line_data: avgData,
@@ -426,11 +410,8 @@ export class Climate extends React.Component {
                 self.setState({precip_data: precip_data})
     
             })
-    
 
         })
-
-
         
     }
 
@@ -465,11 +446,9 @@ export class Climate extends React.Component {
                 })
 
             })
-        
-
         })
-
     }
+
 
     getGPCCDataAvg = (dataset) => {
 
@@ -493,10 +472,68 @@ export class Climate extends React.Component {
     
     }
 
-    
+    getDisasters = () => {
+
+        let self = this;
+
+        let disasters_dataset = self.state.datasets.find((d) => d.value == 'disasters').disasters;
+
+        axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + disasters_dataset + '"%20WHERE%20"ISO"%20LIKE%20%27' + self.state.position_details.iso_code + '%27',
+            { headers: {
+                "Authorization": process.env.CKAN
+            }
+        }).then(function(response) {
+
+
+
+            let disasters = response.data.result.records;
+
+            let disasters_colors = [
+                {name: 'Biological', color: '#d7191c'},
+                {name: 'Hydrological', color: '#2c7bb6'},
+                {name: 'Geophysical', color: '#fdae61'},
+                {name: 'Climatological', color: '#abd9e9'},
+                {name: 'Meteorological', color: '#312e81'}
+            ]
+            
+
+            disasters.forEach((disaster) => {
+
+                disaster.date = disaster['Start Month'] + '/' + disaster['Start Year'];
+                // find the index of self.state.data where the date is equal to the disaster date
+                let index = self.state.data.findIndex((d) => d.date == disaster.date);
+
+                if(index != -1) {
+                    disaster.x = index;
+                    disaster.y = 0;
+                    disaster.year = parseInt(disaster.Year);
+                    disaster.color = disasters_colors.find((d) => d.name == disaster['Disaster Subgroup']).color;
+                    disaster.title = disaster['Disaster Type'];
+                }
+            })
+
+            disasters.forEach((disaster) => {
+
+                let count = disasters.filter((d) => d.date == disaster.date).length;
+
+                let disaster_index = disasters.filter((d) => d.date == disaster.date).findIndex((d) => d == disaster);
+
+                disaster.y = disaster_index > 0 ? disaster_index + 1 : disaster_index;
+
+                
+            })
+
+            disasters = disasters.filter((d) => d.x != undefined);
+
+            self.setState({disasters_data: disasters}, () => {
+
+                
+            })
+        })
+    }
+
 
     dateRange = () => {
-
         let self = this;
     
         let dates = [];
@@ -508,7 +545,6 @@ export class Climate extends React.Component {
         }
 
         return dates;
-    
     }
 
     changeDateRange = () => {
@@ -652,10 +688,46 @@ export class Climate extends React.Component {
 
         })
 
-       
-
     }
 
+    getKeyFrames = () => {
+        return [
+            { transform: 'translateY(-10%)', opacity: 0 },
+            { transform: 'translateY(0)', opacity: 1 },
+        ];
+    };
+
+    getTiming = (delay, duration) => {
+        return {
+            duration,
+            delay,
+            iterations: 1,
+            direction: 'alternate',
+            easing: 'ease-in-out',
+            fill: 'forwards'
+        };
+    };
+
+    getTooltip = (hint) => {
+        
+        let self = this;
+
+        let fields = ['Disaster Subgroup', 'Disaster Type', 'Disaster Subtype', 'Location', 'Total Affected', 'Total Deaths', 'Origin'];
+
+        let hint_text = '<div>';
+        
+        fields.forEach((field) => {
+            if(hint[field] != '' && hint[field] != undefined && hint[field] != null) {
+                hint_text += '<div class="row mb-1" style="width: 400px"><div class="col-4">' + field + ':</div><div class="col">' + hint[field] + '</div></div>';
+            }
+        })
+
+        hint_text += '</div>';
+
+        return hint_text;
+
+
+    }
     
 
     
@@ -668,33 +740,37 @@ export class Climate extends React.Component {
 
             <Row className="mt-4">
                 <Col md={5}>
-                    <Card className="h-100">
-                        <Card.Body className="p-4">
-                            <Row>
-                                <Col>
-                                    <p className="fs-4 mb-0"><strong className="text-adh-orange">The Africa Data Hub Climate Observer</strong> is designed to help journalists and academics reporting and researching climate change in <span className="text-adh-orange text-nowrap"><ReactCountryFlag style={{position: 'relative', top: '-1px'}} countryCode={this.getPositionDetails('country_code')} svg /> {this.getPositionDetails('country')}</span> and Africa.</p>
-                                </Col>
-                            </Row>
-                        </Card.Body>
-                    </Card>
+                    <Animation keyframes={this.getKeyFrames()} timing={this.getTiming(0, 500)}>
+                        <Card className="h-100">
+                            <Card.Body className="p-4">
+                                <Row>
+                                    <Col>
+                                        <p className="fs-4 mb-0"><strong className="text-adh-orange">The Africa Data Hub Climate Observer</strong> is designed to help journalists and academics reporting and researching climate change in <span className="text-adh-orange text-nowrap"><ReactCountryFlag style={{position: 'relative', top: '-1px'}} countryCode={this.getPositionDetails('country_code')} svg /> {this.getPositionDetails('country')}</span> and Africa.</p>
+                                    </Col>
+                                </Row>
+                            </Card.Body>
+                        </Card>
+                    </Animation>
                 </Col>
                 <Col>
-                    <Card>
-                        <Card.Body className="p-4">
-                            <Row>
-                                <Col>
-                                    <p className="fs-5">The Climate Observer uses temperature data from <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a> and precitiptation date 
-                                    from the <a className="text-adh-orange text-decoration-none" href="https://www.dwd.de/EN/ourservices/gpcc/gpcc.html" target="_blank">Precipitation Climatology Centre</a>. It is based on both observations made (eg. weather stations) and modelled data based on observations (for areas where there are no monitoring stations).
-                                    </p>
-                                    <p>All temperature data shown is taken from <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a>, and precipitation (rainfall) data from the <a className="text-adh-orange text-decoration-none" href="https://www.dwd.de/EN/ourservices/gpcc/gpcc.html" target="_blank">Precipitation Climatology Centre</a>.</p>
+                    <Animation keyframes={this.getKeyFrames()} timing={this.getTiming(300,800)}>
+                        <Card>
+                            <Card.Body className="p-4">
+                                <Row>
+                                    <Col>
+                                        <p className="fs-5">The Climate Observer uses temperature data from <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a> and precitiptation date 
+                                        from the <a className="text-adh-orange text-decoration-none" href="https://www.dwd.de/EN/ourservices/gpcc/gpcc.html" target="_blank">Precipitation Climatology Centre</a>. It is based on both observations made (eg. weather stations) and modelled data based on observations (for areas where there are no monitoring stations).
+                                        </p>
+                                        <p>All temperature data shown is taken from <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a>, and precipitation (rainfall) data from the <a className="text-adh-orange text-decoration-none" href="https://www.dwd.de/EN/ourservices/gpcc/gpcc.html" target="_blank">Precipitation Climatology Centre</a>.</p>
 
-                                    <p>When using this data, it is important to note and communicate to readers that not all data points are direct measurements from weather stations. For information on Berkeley Earth's methodology for producing broad geographic data from weather station observations, <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/methodology/" target="_blank"> see here</a>.
-                                    </p>
-                                    <p className="mb-0">Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong> and all positions are rounded to the nearest 1x1 square.</p>
-                                </Col>
-                            </Row>
-                        </Card.Body>
-                    </Card>
+                                        <p>When using this data, it is important to note and communicate to readers that not all data points are direct measurements from weather stations. For information on Berkeley Earth's methodology for producing broad geographic data from weather station observations, <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/methodology/" target="_blank"> see here</a>.
+                                        </p>
+                                        <p className="mb-0">Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong> and all positions are rounded to the nearest 1x1 square.</p>
+                                    </Col>
+                                </Row>
+                            </Card.Body>
+                        </Card>
+                    </Animation>
                 </Col>
             </Row>
 
@@ -809,7 +885,8 @@ export class Climate extends React.Component {
                                         strokeWidth={selected_dataset.value.includes('climatology') ? 1 : 2}
                                         />
                                     )}
-                                    
+
+                                   
                                     <Crosshair values={[this.state.hint_value]}>
                                         <div></div>
                                     </Crosshair>
@@ -825,9 +902,18 @@ export class Climate extends React.Component {
                                                         </>
                                                     )
                                                 }
+                                                {
+                                                    this.state.disasters_data.filter(disaster => disaster.x == this.state.hint_value.x).map((disaster,index) =>
+                                                        <>
+                                                            <strong>{disaster['Disaster Type']}</strong>: {disaster['Event Name']}<br/>
+                                                        </>
+                                                    )
+                                                }
                                             </div>
                                         </Hint>
                                     )}
+
+                                   
                                     
                                 </XYPlot>
                             }
@@ -866,6 +952,8 @@ export class Climate extends React.Component {
                                         colorType="literal"
                                         onNearestX={(value) => this.setState({temp_bar_hint_value: value})}
                                     />
+
+                                    
                                     
                                     <Crosshair values={[this.state.temp_bar_hint_value]}>
                                         <div></div>
@@ -884,6 +972,49 @@ export class Climate extends React.Component {
                                 </XYPlot>
                             }
                             </div>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+
+            <Row className="mt-4">
+                <Col>
+                    <Card>
+                        <Card.Header className="py-4">
+                            <Row>
+                                <Col xs="auto">
+                                    <Icon path={mdiChartTimelineVariantShimmer} size={2} />
+                                </Col>
+                                <Col>
+                                    <h5>Timeline of natural disasters for <span className="text-adh-orange">{ this.getPositionDetails('country') }</span> from {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows natural disasters in the seleted period for the whole country and <strong>might not have affected the currently viewed location</strong>.</p>
+                                </Col>
+                            </Row>
+                        </Card.Header>
+                        <Card.Body>
+                            
+                            <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width - 10 : 600} height={150} onMouseLeave={() => this.setState({hint_value: null})} yDomain={[0, 10]} >
+                                    {/* <VerticalGridLines /> */}
+                                    <HorizontalGridLines />
+                                    <XAxis tickFormat={v => this.state.data[v] != undefined ? this.state.data[v].date : v} />
+                                    <YAxis />
+                                    <MarkSeries data={this.state.disasters_data} onValueMouseOver={(value) => this.setState({hint_value_disaster: value})} colorType="literal" onValueMouseOut={(value) => this.setState({hint_value_disaster: null})}/>
+                                    
+                                   <LineSeries data={this.state.data}/>
+                                    
+                                    { this.state.hint_value_disaster && (
+                                        <Hint value={this.state.hint_value_disaster} style={{marginLeft: '1em', marginRight: '1em'}}>
+                                            <div className="hintBox">
+                                                <div className="badge-pill hint-badge-pill" style={{backgroundColor: this.state.hint_value_disaster.color}}>{this.state.hint_value_disaster.title}</div>
+                                                <h6>{this.state.hint_value_disaster.date}</h6>
+                                                {ReactHtmlParser(this.getTooltip(this.state.hint_value_disaster))}
+                                            </div>
+                                                
+                                        </Hint>
+                                    )}
+                            </XYPlot>
+
+
                         </Card.Body>
                     </Card>
                 </Col>
@@ -1011,7 +1142,7 @@ export class Climate extends React.Component {
                                 </Col>
                                 <Col>
                                     <h5>Monthly Precipitation for <span className="text-adh-orange">{this.getPositionDetails() }</span></h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the average monthly preciptitation for every month from {this.state.date_range[0]} to {this.state.date_range[1]}. the colour scale ranges from <div className="badge-pill" style={{background: '#feffd8', color: '#333'}}>0mm</div> to <div className="badge-pill" style={{backgroundColor: '#081d58', color: '#fff'}}>10mm</div>.</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the average monthly preciptitation for every month from {this.state.date_range[0]} to {this.state.date_range[1]}. the colour scale ranges from <span className="badge-pill" style={{background: '#feffd8', color: '#333'}}>0mm</span> to <span className="badge-pill" style={{backgroundColor: '#081d58', color: '#fff'}}>10mm</span>.</p>
                                 </Col>
                             </Row>
                             

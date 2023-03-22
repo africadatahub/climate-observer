@@ -788,8 +788,6 @@ export class Climate extends React.Component {
 
         } else if (chartRef == 'disasterChart') {
 
-            console.log(self.state);
-
             data = JSON.parse(JSON.stringify(self.state.disasters_data));
 
             data.forEach((entry) => {

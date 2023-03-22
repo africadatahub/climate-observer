@@ -4,8 +4,7 @@ import axios from 'axios';
 import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, LineMarkSeries, MarkSeries, VerticalBarSeries, LineSeries, AreaSeries, Hint, GradientDefs, HeatmapSeries, LabelSeries, Crosshair, ContinuousColorLegend } from 'react-vis';
 import '../../node_modules/react-vis/dist/style.css';
 import html2canvas from 'html2canvas';
-import { saveAs } from 'file-saver';
-
+import Papa from 'papaparse';
 
 import { interpolateYlGnBu, interpolateRdBu } from 'd3-scale-chromatic';
 
@@ -377,7 +376,7 @@ export class Climate extends React.Component {
 
                 temp_bar_data.forEach((entry) => {
                     delete entry.y0;
-                    entry.y = entry.temperature;
+                    entry.y = entry.temperature_avg;
                 })
 
                 self.setState(
@@ -751,7 +750,7 @@ export class Climate extends React.Component {
         html2canvas(chart.current, { scale: 2 }).then(canvas => {
             const link = document.createElement('a');
             let filename = chartRef == 'tempChart' ? 'temperature' : chartRef == 'precipChart' ? 'precipitation' : 'disaster';
-            link.download = filename + '-' + self.state.date_range[0] + '-' + self.state.date_range[1] + '.png'; 
+            link.download = filename + '-' + self.state.rounded_lat + '-' + self.state.rounded_lon + '-' + self.state.date_range[0] + '-' + self.state.date_range[1] + '.png'; 
             link.href = canvas.toDataURL();
             link.click();
         });
@@ -762,9 +761,57 @@ export class Climate extends React.Component {
 
         let self = this;
 
-        let chart = self[chartRef];
-        console.log(chart);
-    
+        let data;
+
+        if(chartRef == 'tempChart' || chartRef == 'anomalyChart') {
+
+            data = JSON.parse(JSON.stringify(self.state.data));
+
+            data.forEach((entry) => {
+                delete entry.temperature;
+                delete entry.x;
+                delete entry.y;
+                delete entry.y0;
+                delete entry._full_text;
+                delete entry._id;
+            })
+
+        } else if(chartRef == 'precipChart') {
+
+            data = JSON.parse(JSON.stringify(self.state.precip_data));
+
+            data.forEach((entry) => {
+                delete entry._full_text;
+                delete entry._id;
+            })
+
+
+        } else if (chartRef == 'disasterChart') {
+
+            data = JSON.parse(JSON.stringify(self.state.disasters_data));
+
+            data.forEach((entry) => {
+                delete entry._full_text;
+                delete entry._id;
+                delete entry.color;
+                delete entry.x;
+                delete entry.y;
+                delete entry.title;
+            })
+
+        }
+
+        let csv = Papa.unparse(data);
+
+        const link = document.createElement('a');
+        let filename = chartRef == 'tempChart' ? 'temperature' : chartRef == 'anomalyChart' ? 'anomaly' : chartRef == 'precipChart' ? 'precipitation' : 'disaster';
+        link.download = filename + '-' + self.state.rounded_lat + '-' + self.state.rounded_lon + '-' + self.state.date_range[0] + '-' + self.state.date_range[1] + '.csv';
+        link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+        link.click();
+
+
+
+
     }
     
    
@@ -815,7 +862,7 @@ export class Climate extends React.Component {
                                         { (this.state.rounded_lat != null && this.state.rounded_lon != null) &&
                                         <>
                                             <p>Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong> and all positions are rounded to the nearest 1x1 square.</p>
-                                            <p>Current location is in the 1x1 degree square with a center point at <strong>{parseFloat(this.state.rounded_lon)}° and {parseFloat(this.state.rounded_lat)}°</strong></p>
+                                            <p>Current location is in the 1x1 degree square with a center point at <strong>{parseFloat(this.state.rounded_lat)}° and {parseFloat(this.state.rounded_lon)}°</strong></p>
                                         </>
                                         }
                                     </Col>
@@ -1098,7 +1145,8 @@ export class Climate extends React.Component {
                             </Row>
                         </Card.Header>
                         <Card.Body>
-                            <div ref={this.disasterChart}>                            
+                            <div ref={this.disasterChart}>
+                                {this.state.loading ? <Row><Col className="text-center"><BeatLoader/></Col></Row> :                            
                                 <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width - 10 : 600} height={150} onMouseLeave={() => this.setState({hint_value: null})} yDomain={[0, 10]} >
                                         {/* <VerticalGridLines /> */}
                                         <HorizontalGridLines />
@@ -1119,6 +1167,7 @@ export class Climate extends React.Component {
                                                 </Hint>
                                         )}
                                 </XYPlot>
+                                }
                             </div>
                         </Card.Body>
                         <Card.Footer>
@@ -1197,7 +1246,7 @@ export class Climate extends React.Component {
                                 </tbody>
                             </Table>
                         </Card.Body>
-                        <Card.Footer>
+                        {/* <Card.Footer>
                             <Row>
                                 <Col></Col>
                                 <Col xs="auto" className="py-2">
@@ -1211,7 +1260,7 @@ export class Climate extends React.Component {
                                     }
                                 </Col>
                             </Row>
-                        </Card.Footer>
+                        </Card.Footer> */}
                     </Card>
                 </Col>
                 <Col>
@@ -1263,7 +1312,7 @@ export class Climate extends React.Component {
                                 </tbody>
                             </Table>
                         </Card.Body>
-                        <Card.Footer>
+                        {/* <Card.Footer>
                             <Row>
                                 <Col></Col>
                                 <Col xs="auto" className="py-2">
@@ -1277,7 +1326,7 @@ export class Climate extends React.Component {
                                     }
                                 </Col>
                             </Row>
-                        </Card.Footer>
+                        </Card.Footer> */}
                     </Card>
                 </Col>
             </Row>

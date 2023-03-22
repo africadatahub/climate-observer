@@ -39,36 +39,37 @@ export class App extends React.Component {
     render() {
         return (
             <>  <Container>
+                    { window.location.search == '' && 
+                        <Row className="my-4">
+                            <Col md={5}>
+                                <Card className="h-100 shadow-sm">
+                                    <Card.Body className="p-4">
+                                        <Row>
+                                            <Col>
+                                                <p className="fs-4 mb-0"><strong className="text-adh-orange">The Africa Data Hub Climate Observer</strong> is designed to help journalists and academics reporting and researching climate change in Africa.</p>
+                                            </Col>
+                                        </Row>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                            <Col>
+                                <Card className="shadow-sm">
+                                    <Card.Body className="p-4 fs-5">
+                                        <Row>
+                                            <Col>
+                                                <p>Choose a location from the 100 biggest African cities dropdown or search for a specific place below.</p>
+                                                <p style={{fontWeight: '300'}}>Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong> and all positions are rounded to the nearest 1x1 square.</p>
+                                            </Col>
+                                            
+                                        </Row>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </Row>
+                    }
                     <Search updatePositionDetails={details => this.setState({position_details: details})} />
 
-                    { window.location.search == '' && 
-                    <Row className="mt-4">
-                        <Col md={5}>
-                            <Card className="h-100">
-                                <Card.Body className="p-4">
-                                    <Row>
-                                        <Col>
-                                            <p className="fs-4 mb-0"><strong className="text-adh-orange">The Africa Data Hub Climate Observer</strong> is designed to help journalists and academics reporting and researching climate change in Africa.</p>
-                                        </Col>
-                                    </Row>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                        <Col>
-                            <Card>
-                                <Card.Body className="p-4 fs-5">
-                                    <Row>
-                                        <Col>
-                                            <p>Choose a location from the 100 biggest African cities dropdown or search for a specific place above.</p>
-                                            <p style={{fontWeight: '300'}}>Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong> and all positions are rounded to the nearest 1x1 square.</p>
-                                        </Col>
-                                        
-                                    </Row>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
-                    }
+                    
                     { window.location.search != '' && <Climate positionDetails={this.state.position_details}/> }
                 </Container>
                 

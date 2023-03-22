@@ -19,7 +19,8 @@ html {
 
 body {
     font-family: 'Work Sans', sans-serif;
-    background: #eceff0;
+    // background: #eceff0;
+    background: #dfe2e2;
     color: $primary;
     min-height: 100vh;
     position: relative;
@@ -63,8 +64,13 @@ body {
     width: 100%;
 }
 
+.card {
+    border: 1px solid rgba(0,0,0,0.1) !important;
+}
+
 .card-header {
     background-color: #e8eef7;
+    border-bottom: none;
 }
 
 .hintBox {
@@ -75,10 +81,6 @@ body {
     color: #333;
     border-radius: 5px;
     opacity: 0.95;
-}
-
-.card {
-    border: none !important;
 }
 
 .badge-pill {

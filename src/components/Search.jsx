@@ -142,7 +142,7 @@ export class Search extends React.Component {
     }
 
     render() {
-        return (<Card>
+        return (<Card className="shadow-sm">
             <Card.Body>
             <Row>
                 <Col>
@@ -174,7 +174,9 @@ export class Search extends React.Component {
                     </div>
                 </Col>
                 <Col>
-                    <Button size="lg" className="geolocation-btn" onClick={() => this.useLocation()}>Use my location</Button>
+                    <div className="d-grid gap-2">
+                        <Button size="lg" className="geolocation-btn" onClick={() => this.useLocation()}>Use my location</Button>
+                    </div>
                 </Col>
             </Row>
             

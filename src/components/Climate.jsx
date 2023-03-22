@@ -1,16 +1,23 @@
 import React from 'react';
 import axios from 'axios';
-// import { ResponsiveContainer, ComposedChart, Area, Brush, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, Legend } from 'recharts';
 
 import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, LineMarkSeries, MarkSeries, VerticalBarSeries, LineSeries, AreaSeries, Hint, GradientDefs, HeatmapSeries, LabelSeries, Crosshair, ContinuousColorLegend } from 'react-vis';
 import '../../node_modules/react-vis/dist/style.css';
+import html2canvas from 'html2canvas';
+import { saveAs } from 'file-saver';
+
 
 import { interpolateYlGnBu, interpolateRdBu } from 'd3-scale-chromatic';
+
+import { MapContainer, TileLayer, Tooltip, CircleMarker, Rectangle } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+
 
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
@@ -20,7 +27,7 @@ import getCountryISO2 from 'country-iso-3-to-2';
 import ReactCountryFlag from 'react-country-flag';
 
 import { Icon } from '@mdi/react';
-import { mdiThermometer, mdiWeatherPouring, mdiArrowUpThick, mdiArrowDownThick, mdiMinusThick, mdiCalendarRange, mdiArrowRight, mdiMapMarker, mdiChartTimelineVariantShimmer, mdiHomeAccount } from '@mdi/js';
+import { mdiThermometer, mdiWeatherPouring, mdiArrowUpThick, mdiArrowDownThick, mdiMinusThick, mdiCalendarRange, mdiArrowRight, mdiMapMarker, mdiChartTimelineVariantShimmer, mdiHomeAccount, mdiAlertDecagram } from '@mdi/js';
 
 import { MultiSelect } from 'react-multi-select-component';
 
@@ -35,6 +42,9 @@ import '../../node_modules/d3-milestones/build/d3-milestones.css';
 import * as cities from '../data/places.json';
 
 import ReactHtmlParser from 'react-html-parser';
+
+import { countriesData } from '../data/africa.js';
+
 
 
 export class Climate extends React.Component {
@@ -149,8 +159,8 @@ export class Climate extends React.Component {
             date_range: [2012, 2022],
             lat: 30.0444196,
             lon: 31.2357116,
-            rounded_lat: undefined,
-            rounded_lon: undefined,
+            rounded_lat: null,
+            rounded_lon: null,
             loading: true,
             center: [-6.559482, 22.937506],
             modal: false,
@@ -168,6 +178,10 @@ export class Climate extends React.Component {
         this.dateRangeEndRef = React.createRef();
         this.tempTableYear = React.createRef();
         this.precipTableYear = React.createRef();
+        this.tempChart = React.createRef();
+        this.anomalyChart = React.createRef();
+        this.precipChart = React.createRef();
+        this.disasterChart = React.createRef();
     }
     
 
@@ -728,8 +742,30 @@ export class Climate extends React.Component {
 
 
     }
+
+    chartDownload = (chartRef) => {
+
+        let self = this;
+        let chart = self[chartRef];
+
+        html2canvas(chart.current, { scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            let filename = chartRef == 'tempChart' ? 'temperature' : chartRef == 'precipChart' ? 'precipitation' : 'disaster';
+            link.download = filename + '-' + self.state.date_range[0] + '-' + self.state.date_range[1] + '.png'; 
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    }
     
 
+    dataDownload = (chartRef) => {
+
+        let self = this;
+
+        let chart = self[chartRef];
+        console.log(chart);
+    
+    }
     
    
 
@@ -741,11 +777,47 @@ export class Climate extends React.Component {
             <Row className="mt-4">
                 <Col md={5}>
                     
-                        <Card className="h-100">
+                        <Card className="h-100 shadow-sm">
                             <Card.Body className="p-4">
                                 <Row>
                                     <Col>
                                         <p className="fs-4 mb-0"><strong className="text-adh-orange">The Africa Data Hub Climate Observer</strong> is designed to help journalists and academics reporting and researching climate change in <span className="text-adh-orange text-nowrap"><ReactCountryFlag style={{position: 'relative', top: '-1px'}} countryCode={this.getPositionDetails('country_code')} svg /> {this.getPositionDetails('country')}</span> and Africa.</p>
+                                    </Col>
+                                </Row>
+                                
+                                <Row className="mt-4">
+                                    <Col xs="auto">
+                                    { (this.state.rounded_lat != null && this.state.rounded_lon != null) &&
+                                        <MapContainer
+                                            
+                                            center={[this.state.rounded_lat, this.state.rounded_lon]}
+                                            zoom={7}
+                                            scrollWheelZoom={false}
+                                            zoomControl={false}
+                                            attributionControl={false}
+                                            doubleClickZoom={false}
+                                            touchZoom={false}
+                                            style={{background: '#fff', width: '150px', height: '150px', border: '3px solid #c2b59b'}}
+                                            dragging={false}>
+                                                <TileLayer
+                                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                />
+                                                <Rectangle bounds={[
+                                                    [parseFloat(this.state.rounded_lat) - 0.5, parseFloat(this.state.rounded_lon) - 0.5],
+                                                    [parseFloat(this.state.rounded_lat) + 0.5, parseFloat(this.state.rounded_lon) + 0.5],
+                                                ]} pathOptions={{color: '#ff6f47',fillColor: '#ff6f47'}}/>
+                                            </MapContainer>
+                                    }
+                                            
+                                    </Col>
+                                    <Col>
+                                        { (this.state.rounded_lat != null && this.state.rounded_lon != null) &&
+                                        <>
+                                            <p>Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong> and all positions are rounded to the nearest 1x1 square.</p>
+                                            <p>Current location is in the 1x1 degree square with a center point at <strong>{parseFloat(this.state.rounded_lon)}° and {parseFloat(this.state.rounded_lat)}°</strong></p>
+                                        </>
+                                        }
                                     </Col>
                                 </Row>
                             </Card.Body>
@@ -754,7 +826,7 @@ export class Climate extends React.Component {
                 </Col>
                 <Col>
                     
-                        <Card>
+                        <Card className="h-100 shadow-sm">
                             <Card.Body className="p-4">
                                 <Row>
                                     <Col>
@@ -765,7 +837,6 @@ export class Climate extends React.Component {
 
                                         <p>When using this data, it is important to note and communicate to readers that not all data points are direct measurements from weather stations. For information on Berkeley Earth's methodology for producing broad geographic data from weather station observations, <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/methodology/" target="_blank"> see here</a>.
                                         </p>
-                                        <p className="mb-0">Location data is mapped to grid squares which measure <strong>1x1 degree latitude and longitude</strong> and all positions are rounded to the nearest 1x1 square.</p>
                                     </Col>
                                 </Row>
                             </Card.Body>
@@ -776,7 +847,7 @@ export class Climate extends React.Component {
 
             <Row className="mt-4">
                 <Col>
-                    <Card>
+                    <Card className="shadow-sm">
                         <Card.Body className="p-4">
                             <Row>
                                 <Col xs="auto">
@@ -817,7 +888,7 @@ export class Climate extends React.Component {
             
             <Row className="mt-4">
                 <Col>
-                    <Card>
+                    <Card className="shadow-sm">
                         <Card.Header className="py-4">
                             <Row>
                                 <Col xs="auto">
@@ -837,7 +908,6 @@ export class Climate extends React.Component {
                                         disableSearch={true}
                                         labelledBy="Select"
                                     />
-
                                 </Col>
                             </Row>
                         </Card.Header>
@@ -845,86 +915,104 @@ export class Climate extends React.Component {
 
                             {this.state.loading ? <Row><Col className="text-center"><BeatLoader/></Col></Row> :
                                 
-                                <XYPlot width={document.getElementById('chartContainer').getBoundingClientRect().width - 20} height={300} onMouseLeave={() => this.setState({hint_value: null})}>
-                                   <GradientDefs>
-                                        <linearGradient id="CoolGradient" x1="0" x2="0" y1="0" y2="1">
-                                        <stop offset="0%" stopColor="#fee2e2" stopOpacity={1}/>
-                                        <stop offset="100%" stopColor="#e0f2fe" stopOpacity={1} />
-                                        </linearGradient>
-                                    </GradientDefs>
-                                    <VerticalGridLines />
-                                    <HorizontalGridLines />
-                                    <XAxis tickFormat={v => this.state.data[v] != undefined ? this.state.data[v].date : v} />
-                                    <YAxis tickFormat={v => v + '°C'} />
+                                <div  ref={this.tempChart}>
+                                
+                                    <XYPlot width={document.getElementById('chartContainer').getBoundingClientRect().width - 20} height={300} onMouseLeave={() => this.setState({hint_value: null})}>
+                                    <GradientDefs>
+                                            <linearGradient id="CoolGradient" x1="0" x2="0" y1="0" y2="1">
+                                            <stop offset="0%" stopColor="#fee2e2" stopOpacity={1}/>
+                                            <stop offset="100%" stopColor="#e0f2fe" stopOpacity={1} />
+                                            </linearGradient>
+                                        </GradientDefs>
+                                        <VerticalGridLines />
+                                        <HorizontalGridLines />
+                                        <XAxis tickFormat={v => this.state.data[v] != undefined ? this.state.data[v].date : v} />
+                                        <YAxis tickFormat={v => v + '°C'} />
 
-                                    {
-                                    this.state.temp_chart_selected.some(item => item.value === 'temp_range') &&
-                                        <AreaSeries
-                                        className="area-elevated-series-1"
-                                        color={'url(#CoolGradient)'}
-                                        data={this.state.data}
-                                        onNearestX={(value) => this.setState({hint_value: value})}
-                                        />
-                                    }
-
-                                    
-                                    {
-                                    this.state.temp_chart_selected.map((selected_dataset,index) => 
-                                        <LineSeries
-                                        className="area-elevated-line-series"
-                                        data={ this.state.data.map(item => { return { x: item.x, y: item[selected_dataset.value] } }) }
-                                        color={ 
-                                            selected_dataset.value == 'calculated_temp_max' ? '#ef4444' :
-                                            selected_dataset.value == 'calculated_temp_min' ? '#93c5fd' :
-                                            selected_dataset.value == 'calculated_temp_avg' ? '#094151' :
-                                            selected_dataset.value == 'climatology_max' ? '#fca5a5' :
-                                            selected_dataset.value == 'climatology_min' ? '#a0c4fd' :
-                                            selected_dataset.value == 'climatology_avg' ? '#155e75' : '#000000'
+                                        {
+                                        this.state.temp_chart_selected.some(item => item.value === 'temp_range') &&
+                                            <AreaSeries
+                                            className="area-elevated-series-1"
+                                            color={'url(#CoolGradient)'}
+                                            data={this.state.data}
+                                            onNearestX={(value) => this.setState({hint_value: value})}
+                                            />
                                         }
-                                        strokeStyle={selected_dataset.value.includes('climatology') ? 'dashed' : 'solid'}
-                                        strokeWidth={selected_dataset.value.includes('climatology') ? 1 : 2}
-                                        />
-                                    )}
 
-                                   
-                                    <Crosshair values={[this.state.hint_value]}>
-                                        <div></div>
-                                    </Crosshair>
-                                    
-                                    { this.state.hint_value && (
-                                        <Hint value={this.state.hint_value} style={{marginLeft: '1em', marginRight: '1em'}}>
-                                            <div className="hintBox">
-                                                <h6>{this.state.hint_value.date}</h6>
-                                                {
-                                                    this.state.temp_chart_selected.filter(selected_dataset => selected_dataset.value != 'temp_range').map((selected_dataset,index) =>
-                                                        <>
-                                                            <strong>{selected_dataset.label}</strong>: {this.state.hint_value[selected_dataset.value]}°C<br/>
-                                                        </>
-                                                    )
-                                                }
-                                                {
-                                                    this.state.disasters_data.filter(disaster => disaster.x == this.state.hint_value.x).map((disaster,index) =>
-                                                        <>
-                                                            <strong>{disaster['Disaster Type']}</strong>: {disaster['Event Name']}<br/>
-                                                        </>
-                                                    )
-                                                }
-                                            </div>
-                                        </Hint>
-                                    )}
+                                        
+                                        {
+                                        this.state.temp_chart_selected.map((selected_dataset,index) => 
+                                            <LineSeries
+                                            className="area-elevated-line-series"
+                                            data={ this.state.data.map(item => { return { x: item.x, y: item[selected_dataset.value] } }) }
+                                            color={ 
+                                                selected_dataset.value == 'calculated_temp_max' ? '#ef4444' :
+                                                selected_dataset.value == 'calculated_temp_min' ? '#93c5fd' :
+                                                selected_dataset.value == 'calculated_temp_avg' ? '#094151' :
+                                                selected_dataset.value == 'climatology_max' ? '#fca5a5' :
+                                                selected_dataset.value == 'climatology_min' ? '#a0c4fd' :
+                                                selected_dataset.value == 'climatology_avg' ? '#155e75' : '#000000'
+                                            }
+                                            strokeStyle={selected_dataset.value.includes('climatology') ? 'dashed' : 'solid'}
+                                            strokeWidth={selected_dataset.value.includes('climatology') ? 1 : 2}
+                                            />
+                                        )}
 
-                                   
                                     
-                                </XYPlot>
+                                        <Crosshair values={[this.state.hint_value]}>
+                                            <div></div>
+                                        </Crosshair>
+                                        
+                                        { this.state.hint_value && (
+                                            <Hint value={this.state.hint_value} style={{marginLeft: '1em', marginRight: '1em'}}>
+                                                <div className="hintBox">
+                                                    <h6>{this.state.hint_value.date}</h6>
+                                                    {
+                                                        this.state.temp_chart_selected.filter(selected_dataset => selected_dataset.value != 'temp_range').map((selected_dataset,index) =>
+                                                            <>
+                                                                <strong>{selected_dataset.label}</strong>: {this.state.hint_value[selected_dataset.value]}°C<br/>
+                                                            </>
+                                                        )
+                                                    }
+                                                    {
+                                                        this.state.disasters_data.filter(disaster => disaster.x == this.state.hint_value.x).map((disaster,index) =>
+                                                            <>
+                                                                <strong>{disaster['Disaster Type']}</strong>: {disaster['Event Name']}<br/>
+                                                            </>
+                                                        )
+                                                    }
+                                                </div>
+                                            </Hint>
+                                        )}
+                                        
+                                    </XYPlot>
+                                </div>
+                                
                             }
                         </Card.Body>
+                        <Card.Footer>
+                            <Row>
+                                <Col></Col>
+                                <Col xs="auto" className="py-2">
+                                    { this.state.loading ? '' :
+                                        <Dropdown className="mt-1">
+                                            <Dropdown.Toggle variant="control-grey">Download</Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item onClick={() => this.chartDownload('tempChart')}>Chart (PNG)</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => this.dataDownload('tempChart')}>Data (CSV)</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    }
+                                </Col>
+                            </Row>
+                        </Card.Footer>
                     </Card>
                 </Col>
             </Row>
 
             <Row className="mt-4">
                 <Col>
-                    <Card>
+                    <Card className="shadow-sm">
                         <Card.Header className="py-4">
                             <Row>
                                 <Col xs="auto">
@@ -939,51 +1027,69 @@ export class Climate extends React.Component {
                         <Card.Body id="chartContainer">
                             <div className="chart-container2">
                             {this.state.loading ? <Row><Col className="text-center"><BeatLoader/></Col></Row> :
-                                <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width : 600} height={300} onMouseLeave={() => this.setState({hint_value: null})} yDomain={[-3, 3]} >
-                                    <VerticalGridLines />
-                                    <HorizontalGridLines />
-                                    <XAxis tickFormat={v => this.state.data[v] != undefined ? this.state.data[v].date : v} />
-                                    <YAxis tickFormat={v => v + '°C'} />
-                                    <VerticalBarSeries
-                                        data={this.state.temp_bar_data.map(d => ({ ...d, 
-                                            y0: 0, 
-                                            color: d.y == null ? '#ccc' : interpolateRdBu((d.y*-1 + 3) / 6) 
-                                        }))}
-                                        colorType="literal"
-                                        onNearestX={(value) => this.setState({temp_bar_hint_value: value})}
-                                    />
+                                <div ref={this.anomalyChart}>
+                                    <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width : 600} height={300} onMouseLeave={() => this.setState({hint_value: null})} yDomain={[-3, 3]} >
+                                        <VerticalGridLines />
+                                        <HorizontalGridLines />
+                                        <XAxis tickFormat={v => this.state.data[v] != undefined ? this.state.data[v].date : v} />
+                                        <YAxis tickFormat={v => v + '°C'} />
+                                        <VerticalBarSeries
+                                            data={this.state.temp_bar_data.map(d => ({ ...d, 
+                                                y0: 0, 
+                                                color: d.y == null ? '#ccc' : interpolateRdBu((d.y*-1 + 3) / 6) 
+                                            }))}
+                                            colorType="literal"
+                                            onNearestX={(value) => this.setState({temp_bar_hint_value: value})}
+                                        />
 
-                                    
-                                    
-                                    <Crosshair values={[this.state.temp_bar_hint_value]}>
-                                        <div></div>
-                                    </Crosshair>
-                                    
-                                    { this.state.temp_bar_hint_value && (
-                                        <Hint value={this.state.temp_bar_hint_value} style={{marginLeft: '1em', marginRight: '1em'}}>
-                                            <div className="hintBox">
-                                                <h6>{this.state.temp_bar_hint_value.date}</h6>
-                                                <span><strong>ANOMALY:</strong> {parseFloat(this.state.temp_bar_hint_value.y).toFixed(2)}°C</span><br/>
-                                            </div>
-                                                
-                                        </Hint>
-                                    )}
-                                    
-                                </XYPlot>
+                                        
+                                        
+                                        <Crosshair values={[this.state.temp_bar_hint_value]}>
+                                            <div></div>
+                                        </Crosshair>
+                                        
+                                        { this.state.temp_bar_hint_value && (
+                                            <Hint value={this.state.temp_bar_hint_value} style={{marginLeft: '1em', marginRight: '1em'}}>
+                                                <div className="hintBox">
+                                                    <h6>{this.state.temp_bar_hint_value.date}</h6>
+                                                    <span><strong>ANOMALY:</strong> {parseFloat(this.state.temp_bar_hint_value.y).toFixed(2)}°C</span><br/>
+                                                </div>
+                                                    
+                                            </Hint>
+                                        )}
+                                        
+                                    </XYPlot>
+                                </div>                             
                             }
                             </div>
                         </Card.Body>
+                        <Card.Footer>
+                            <Row>
+                                <Col></Col>
+                                <Col xs="auto" className="py-2">
+                                    { this.state.loading ? '' :
+                                        <Dropdown className="mt-1">
+                                            <Dropdown.Toggle variant="control-grey">Download</Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item onClick={() => this.chartDownload('anomalyChart')}>Chart (PNG)</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => this.dataDownload('anomalyChart')}>Data (CSV)</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    }
+                                </Col>
+                            </Row>
+                        </Card.Footer>
                     </Card>
                 </Col>
             </Row>
 
             <Row className="mt-4">
                 <Col>
-                    <Card>
+                    <Card className="shadow-sm">
                         <Card.Header className="py-4">
                             <Row>
                                 <Col xs="auto">
-                                    <Icon path={mdiChartTimelineVariantShimmer} size={2} />
+                                    <Icon path={mdiAlertDecagram} size={2} />
                                 </Col>
                                 <Col>
                                     <h5>Timeline of natural disasters for <span className="text-adh-orange">{ this.getPositionDetails('country') }</span> from {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
@@ -992,37 +1098,52 @@ export class Climate extends React.Component {
                             </Row>
                         </Card.Header>
                         <Card.Body>
-                            
-                            <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width - 10 : 600} height={150} onMouseLeave={() => this.setState({hint_value: null})} yDomain={[0, 10]} >
-                                    {/* <VerticalGridLines /> */}
-                                    <HorizontalGridLines />
-                                    <XAxis tickFormat={v => this.state.data[v] != undefined ? this.state.data[v].date : v} />
-                                    <YAxis />
-                                    <MarkSeries data={this.state.disasters_data} onValueMouseOver={(value) => this.setState({hint_value_disaster: value})} colorType="literal" onValueMouseOut={(value) => this.setState({hint_value_disaster: null})}/>
-                                    
-                                   <LineSeries data={this.state.data}/>
-                                    
-                                    { this.state.hint_value_disaster && (
-                                        <Hint value={this.state.hint_value_disaster} style={{marginLeft: '1em', marginRight: '1em'}}>
-                                            <div className="hintBox">
-                                                <div className="badge-pill hint-badge-pill" style={{backgroundColor: this.state.hint_value_disaster.color}}>{this.state.hint_value_disaster.title}</div>
-                                                <h6>{this.state.hint_value_disaster.date}</h6>
-                                                {ReactHtmlParser(this.getTooltip(this.state.hint_value_disaster))}
-                                            </div>
-                                                
-                                        </Hint>
-                                    )}
-                            </XYPlot>
-
-
+                            <div ref={this.disasterChart}>                            
+                                <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width - 10 : 600} height={150} onMouseLeave={() => this.setState({hint_value: null})} yDomain={[0, 10]} >
+                                        {/* <VerticalGridLines /> */}
+                                        <HorizontalGridLines />
+                                        <XAxis tickFormat={v => this.state.data[v] != undefined ? this.state.data[v].date : v} />
+                                        <YAxis />
+                                        <MarkSeries data={this.state.disasters_data} onValueMouseOver={(value) => this.setState({hint_value_disaster: value})} colorType="literal" onValueMouseOut={(value) => this.setState({hint_value_disaster: null})}/>
+                                        
+                                    <LineSeries data={this.state.data}/>
+                                        
+                                        { this.state.hint_value_disaster && (
+                                            <Hint value={this.state.hint_value_disaster} style={{marginLeft: '1em', marginRight: '1em'}}>
+                                                <div className="hintBox">
+                                                    <div className="badge-pill hint-badge-pill" style={{backgroundColor: this.state.hint_value_disaster.color}}>{this.state.hint_value_disaster.title}</div>
+                                                    <h6>{this.state.hint_value_disaster.date}</h6>
+                                                    {ReactHtmlParser(this.getTooltip(this.state.hint_value_disaster))}
+                                                </div>
+                                                    
+                                                </Hint>
+                                        )}
+                                </XYPlot>
+                            </div>
                         </Card.Body>
+                        <Card.Footer>
+                            <Row>
+                                <Col></Col>
+                                <Col xs="auto" className="py-2">
+                                    { this.state.loading ? '' :
+                                        <Dropdown className="mt-1">
+                                            <Dropdown.Toggle variant="control-grey">Download</Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item onClick={() => this.chartDownload('disasterChart')}>Chart (PNG)</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => this.dataDownload('disasterChart')}>Data (CSV)</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    }
+                                </Col>
+                            </Row>
+                        </Card.Footer>
                     </Card>
                 </Col>
             </Row>
 
             <Row className="my-4">
                 <Col md>
-                    <Card className="h-100">
+                    <Card className="h-100 shadow-sm">
                         <Card.Header className="py-4">
                             <Row>
                                 <Col xs="auto">
@@ -1076,10 +1197,25 @@ export class Climate extends React.Component {
                                 </tbody>
                             </Table>
                         </Card.Body>
+                        <Card.Footer>
+                            <Row>
+                                <Col></Col>
+                                <Col xs="auto" className="py-2">
+                                    { this.state.loading ? '' :
+                                        <Dropdown className="mt-1">
+                                            <Dropdown.Toggle variant="control-grey">Download</Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item onClick={() => this.dataDownload('tempTable')}>Data (CSV)</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    }
+                                </Col>
+                            </Row>
+                        </Card.Footer>
                     </Card>
                 </Col>
                 <Col>
-                    <Card>
+                    <Card className="shadow-sm">
                         <Card.Header className="py-4">
                             <Row>
                                 <Col xs="auto">
@@ -1127,6 +1263,21 @@ export class Climate extends React.Component {
                                 </tbody>
                             </Table>
                         </Card.Body>
+                        <Card.Footer>
+                            <Row>
+                                <Col></Col>
+                                <Col xs="auto" className="py-2">
+                                    { this.state.loading ? '' :
+                                        <Dropdown className="mt-1">
+                                            <Dropdown.Toggle variant="control-grey">Download</Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item onClick={() => this.dataDownload('precipTable')}>Data (CSV)</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    }
+                                </Col>
+                            </Row>
+                        </Card.Footer>
                     </Card>
                 </Col>
             </Row>
@@ -1134,7 +1285,7 @@ export class Climate extends React.Component {
             
             <Row>
                 <Col>
-                    <Card>
+                    <Card className="shadow-sm">
                         <Card.Header className="py-4">
                             <Row>
                                 <Col xs="auto">
@@ -1150,63 +1301,81 @@ export class Climate extends React.Component {
                         <Card.Body>
                             {this.state.loading ? <Row><Col className="text-center"><BeatLoader/></Col></Row> :
                             <div className="chart-container3">
-                                <XYPlot
-                                key={this.state.update_precip_chart}
-                                width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width : 1000}
-                                height={this.dateRange().length < 10 ? this.dateRange().length * 40 : this.dateRange().length * 30}
-                                xType="ordinal"
-                                xDomain={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
-                                yType="ordinal"
-                                yDomain={this.dateRange()}>
-                                    <XAxis tickFormat={v => this.getMonthName(v-1)}  />
-                                    <YAxis />
-                                    <HeatmapSeries
-                                        colorType="literal"
-                                        data={
-                                            this.state.precip_data.map((d,index) => {
-                                                return { 
-                                                    x: parseInt(d.month_number),
-                                                    y: parseInt(d.time),
-                                                    color: d.precip == null ? '#ccc' : interpolateYlGnBu(d.precip_scale),
-                                                    precip: d.precip,
-                                                    date: d.date,
-                                                    time: d.time,
-                                                    stroke: (this.state.hint_value_precip && this.state.hint_value_precip.x === parseInt(d.month_number) && this.state.hint_value_precip.y === parseInt(d.time))
-                                                    ? 'red'
-                                                    : 'transparent'
-                                                }
-                                            })
-                                        }
-                                        onValueMouseOver={e => this.setState({hint_value_precip: e})}
-                                        onValueMouseOut={e => this.setState({hint_value_precip: null})}
-                                        cellPadding={0}
-                                        style={{stroke: this.state.hint_value_precip ? this.state.hint_value_precip.stroke : 'transparent'}}
-                                       
-                                    />
-                                        <Crosshair values={[this.state.hint_value_precip]}>
-                                            <div></div>
-                                        </Crosshair>
-                                        { this.state.hint_value_precip && (
-                                            <Hint value={this.state.hint_value_precip} style={{marginLeft: '1em', marginRight: '1em'}}>
-                                                <div className="hintBox">
-                                                    <h6>{this.state.hint_value_precip.date}</h6>
-                                                    {this.state.hint_value_precip.precip} mm
-                                                </div>
-                                                    
-                                            </Hint>
-                                        )}
-                                </XYPlot>
+                                <div ref={this.precipChart}>
+                                    <XYPlot
+                                    key={this.state.update_precip_chart}
+                                    width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width : 1000}
+                                    height={this.dateRange().length < 10 ? this.dateRange().length * 40 : this.dateRange().length * 30}
+                                    xType="ordinal"
+                                    xDomain={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+                                    yType="ordinal"
+                                    yDomain={this.dateRange()}>
+                                        <XAxis tickFormat={v => this.getMonthName(v-1)}  />
+                                        <YAxis />
+                                        <HeatmapSeries
+                                            colorType="literal"
+                                            data={
+                                                this.state.precip_data.map((d,index) => {
+                                                    return { 
+                                                        x: parseInt(d.month_number),
+                                                        y: parseInt(d.time),
+                                                        color: d.precip == null ? '#ccc' : interpolateYlGnBu(d.precip_scale),
+                                                        precip: d.precip,
+                                                        date: d.date,
+                                                        time: d.time,
+                                                        stroke: (this.state.hint_value_precip && this.state.hint_value_precip.x === parseInt(d.month_number) && this.state.hint_value_precip.y === parseInt(d.time))
+                                                        ? 'red'
+                                                        : 'transparent'
+                                                    }
+                                                })
+                                            }
+                                            onValueMouseOver={e => this.setState({hint_value_precip: e})}
+                                            onValueMouseOut={e => this.setState({hint_value_precip: null})}
+                                            cellPadding={0}
+                                            style={{stroke: this.state.hint_value_precip ? this.state.hint_value_precip.stroke : 'transparent'}}
+                                        
+                                        />
+                                            <Crosshair values={[this.state.hint_value_precip]}>
+                                                <div></div>
+                                            </Crosshair>
+                                            { this.state.hint_value_precip && (
+                                                <Hint value={this.state.hint_value_precip} style={{marginLeft: '1em', marginRight: '1em'}}>
+                                                    <div className="hintBox">
+                                                        <h6>{this.state.hint_value_precip.date}</h6>
+                                                        {this.state.hint_value_precip.precip} mm
+                                                    </div>
+                                                        
+                                                </Hint>
+                                            )}
+                                    </XYPlot>
+                                </div>
                             </div>
                             }
                             {/* <ContinuousColorLegend width={200} startTitle="0" endTitle="10" startColor={interpolateYlGnBu(0)} endcolor={interpolateYlGnBu(1)} /> */}
                         </Card.Body>
+                        <Card.Footer>
+                            <Row>
+                                <Col></Col>
+                                <Col xs="auto" className="py-2">
+                                    { this.state.loading ? '' :
+                                        <Dropdown className="mt-1">
+                                            <Dropdown.Toggle variant="control-grey">Download</Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item onClick={() => this.chartDownload('precipChart')}>Chart (PNG)</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => this.dataDownload('precipChart')}>Data (CSV)</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    }
+                                </Col>
+                            </Row>
+                        </Card.Footer>
                     </Card>
                 </Col>
             </Row>
 
             <Row className="my-4">
                 <Col>
-                    <Card>
+                    <Card className="shadow-sm">
                         <Card.Body>
                             <Row className="align-items-end">
                                 <Col></Col>

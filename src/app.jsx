@@ -29,9 +29,7 @@ export class App extends React.Component {
         
     }
 
-    componentDidMount() {
-        console.log(document.location.search);
-    }
+    componentDidMount() {}
 
     componentDidUpdate() {}
 
@@ -41,7 +39,7 @@ export class App extends React.Component {
     render() {
         return (
             <>  <Container className="my-5">
-                    { document.location.search == '' && 
+                    { (!document.location.search.includes('city=') && !document.location.search.includes('position=')) && 
                         <Row className="my-4">
                             <Col md={5}>
                                 <Card className="h-100 shadow-sm">
@@ -72,7 +70,7 @@ export class App extends React.Component {
                     <Search updatePositionDetails={details => this.setState({position_details: details})} />
 
                     
-                    { document.location.search != '' && <Climate positionDetails={this.state.position_details}/> }
+                    { (document.location.search.includes('city=') || document.location.search.includes('position=')) && <Climate positionDetails={this.state.position_details}/> }
                 </Container>
                 
             </>

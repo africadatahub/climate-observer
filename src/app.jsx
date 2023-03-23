@@ -38,7 +38,7 @@ export class App extends React.Component {
 
     render() {
         return (
-            <>  <Container>
+            <>  <Container className="my-2">
                     { document.location.search == '' && 
                         <Row className="my-4">
                             <Col md={5}>

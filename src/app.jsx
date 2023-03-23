@@ -29,7 +29,9 @@ export class App extends React.Component {
         
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        console.log(document.location.search);
+    }
 
     componentDidUpdate() {}
 

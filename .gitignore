@@ -2,3 +2,5 @@ dist
 node_modules
 .parcel-cache
 .env
+.vscode
+yarn-error.log

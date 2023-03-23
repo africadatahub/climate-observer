@@ -749,7 +749,7 @@ export class Climate extends React.Component {
 
         html2canvas(chart.current, { scale: 2 }).then(canvas => {
             const link = document.createElement('a');
-            let filename = chartRef == 'tempChart' ? 'temperature' : chartRef == 'precipChart' ? 'precipitation' : 'disaster';
+            let filename = chartRef == 'tempChart' ? 'temperature' : chartRef == 'anomalyChart' ? 'anomaly' : chartRef == 'precipChart' ? 'precipitation' : 'disasters';
             link.download = filename + '-' + self.state.rounded_lat + '-' + self.state.rounded_lon + '-' + self.state.date_range[0] + '-' + self.state.date_range[1] + '.png'; 
             link.href = canvas.toDataURL();
             link.click();
@@ -804,7 +804,7 @@ export class Climate extends React.Component {
         let csv = Papa.unparse(data);
 
         const link = document.createElement('a');
-        let filename = chartRef == 'tempChart' ? 'temperature' : chartRef == 'anomalyChart' ? 'anomaly' : chartRef == 'precipChart' ? 'precipitation' : 'disaster';
+        let filename = chartRef == 'tempChart' ? 'temperature' : chartRef == 'anomalyChart' ? 'anomaly' : chartRef == 'precipChart' ? 'precipitation' : 'disasters';
         link.download = filename + '-' + self.state.rounded_lat + '-' + self.state.rounded_lon + '-' + self.state.date_range[0] + '-' + self.state.date_range[1] + '.csv';
         link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
         link.click();

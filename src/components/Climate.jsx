@@ -1112,7 +1112,9 @@ export class Climate extends React.Component {
                         </Card.Body>
                         <Card.Footer>
                             <Row>
-                                <Col></Col>
+                                <Col>
+                                    <p style={{fontWeight: '300'}} className="mb-0">Red bars mean the temperature was higher for this month than the historical average, blue bars means that it was cooler. More red than blue bars therefore mean consistent warming over time.</p>
+                                </Col>
                                 <Col xs="auto" className="py-2">
                                     { this.state.loading ? '' :
                                         <Dropdown className="mt-1">
@@ -1140,7 +1142,7 @@ export class Climate extends React.Component {
                                 </Col>
                                 <Col>
                                     <h5>Timeline of natural disasters for <span className="text-adh-orange">{ this.getPositionDetails('country') }</span> from {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows natural disasters in the seleted period for the whole country and <strong>might not have affected the currently viewed location</strong>.</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows natural disasters in the seleted period for the whole country and <strong>might not have affected the currently viewed location</strong>.</p><p>This timeline was taken from the <a className="text-adh-orange text-decoration-none" href="https://public.emdat.be/about" target="_blank">EM Dataset</a>. Note that it is almost impossible to link individual instances to the climate crisis, but scientists expect the number of extreme events to increase in frequency as the planet warms.</p>
                                 </Col>
                             </Row>
                         </Card.Header>
@@ -1172,7 +1174,17 @@ export class Climate extends React.Component {
                         </Card.Body>
                         <Card.Footer>
                             <Row>
-                                <Col></Col>
+                                <Col>
+                                    <div className="mt-3">
+                                    {
+                                        [{name: 'Biological', color: '#d7191c'},
+                                        {name: 'Hydrological', color: '#2c7bb6'},
+                                        {name: 'Geophysical', color: '#fdae61'},
+                                        {name: 'Climatological', color: '#abd9e9'},
+                                        {name: 'Meteorological', color: '#312e81'}].map(type => <div style={{backgroundColor: type.color, color: '#fff', display: 'inline-block', padding: '0.2em 0.5em', borderRadius: '5px', marginRight: '5px'}}>{type.name}</div>)
+                                    }
+                                    </div>
+                                </Col>
                                 <Col xs="auto" className="py-2">
                                     { this.state.loading ? '' :
                                         <Dropdown className="mt-1">

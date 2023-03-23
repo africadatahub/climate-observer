@@ -44,9 +44,9 @@ export class Search extends React.Component {
 
         this.setState({cities: cities}, () => {
 
-            let searchTerms = window.location.search.split('&');
+            let searchTerms = document.location.search.split('&');
         
-            if(window.location.search.includes('city=')){
+            if(document.location.search.includes('city=')){
 
                 let citysearch = searchTerms.filter(term => term.includes('city='))[0];
 
@@ -57,7 +57,7 @@ export class Search extends React.Component {
                 this.setState({lat: city.lat, lon: city.lon});
 
 
-            } else if(window.location.search.includes('position=')){
+            } else if(document.location.search.includes('position=')){
 
 
                 let positionsearch = searchTerms.filter(term => term.includes('position='))[0];
@@ -88,9 +88,9 @@ export class Search extends React.Component {
         let self = this;
         if(value != 'location') {
             if(type == 'city') {
-                window.location.search = '?city=' + value;
+                document.location.search = '?city=' + value;
             } else {
-                window.location.search = '?position=' + value.join(',');
+                document.location.search = '?position=' + value.join(',');
             }
         } else {
             self.setState({

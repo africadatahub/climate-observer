@@ -188,11 +188,11 @@ export class Climate extends React.Component {
 
         let self = this;
 
-        let searchTerms = window.location.search.split('&');
+        let searchTerms = document.location.search.split('&');
 
         let daterangesearch = searchTerms.filter(term => term.includes('daterange='))[0];
 
-        if(window.location.search.includes('daterange=')) {
+        if(document.location.search.includes('daterange=')) {
 
             let date_range = daterangesearch.split('=')[1];
 
@@ -208,7 +208,7 @@ export class Climate extends React.Component {
 
         }
 
-        if(window.location.search.includes('position=')) {
+        if(document.location.search.includes('position=')) {
 
             let positionsearch = searchTerms.filter(term => term.includes('position='))[0];
 
@@ -227,7 +227,7 @@ export class Climate extends React.Component {
                 })
             }
 
-        } else if(window.location.search.includes('city=')) {
+        } else if(document.location.search.includes('city=')) {
 
             
             let citysearch = searchTerms.filter(term => term.includes('city='))[0];
@@ -573,10 +573,10 @@ export class Climate extends React.Component {
                 startref.current.value = endref.current.value;
             }
 
-            // set the daterange in the window.location.search
-            let searchParams = new URLSearchParams(window.location.search);
+            // set the daterange in the document.location.search
+            let searchParams = new URLSearchParams(document.location.search);
             searchParams.set('daterange', startref.current.value + ',' + endref.current.value);
-            window.history.replaceState({}, '', window.location.pathname + '?' + searchParams.toString().replace('%2C',','));
+            window.history.replaceState({}, '', document.location.pathname + '?' + searchParams.toString().replace('%2C',','));
 
 
             self.setState({date_range: [parseInt(startref.current.value), parseInt(endref.current.value)]}, () => {

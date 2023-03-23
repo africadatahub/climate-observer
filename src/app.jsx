@@ -39,7 +39,7 @@ export class App extends React.Component {
     render() {
         return (
             <>  <Container>
-                    { window.location.search == '' && 
+                    { document.location.search == '' && 
                         <Row className="my-4">
                             <Col md={5}>
                                 <Card className="h-100 shadow-sm">
@@ -70,7 +70,7 @@ export class App extends React.Component {
                     <Search updatePositionDetails={details => this.setState({position_details: details})} />
 
                     
-                    { window.location.search != '' && <Climate positionDetails={this.state.position_details}/> }
+                    { document.location.search != '' && <Climate positionDetails={this.state.position_details}/> }
                 </Container>
                 
             </>

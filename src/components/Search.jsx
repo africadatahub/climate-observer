@@ -42,6 +42,7 @@ export class Search extends React.Component {
             return 0;
         });
 
+
         this.setState({cities: cities}, () => {
 
             let searchTerms = document.location.search.split('&');

@@ -115,27 +115,27 @@ export class Climate extends React.Component {
                     value: 'temp_range'
                 },
                 {
-                    label: 'Average',
+                    label: 'Monthly Average',
                     value: 'calculated_temp_avg'
                 },
                 {
-                    label: 'Max',
+                    label: 'Monthly Max',
                     value: 'calculated_temp_max'
                 },
                 {
-                    label: 'Min',
+                    label: 'Monthly Min',
                     value: 'calculated_temp_min'
                 },
                 {
-                    label: 'Average Climatology',
+                    label: 'Historical Average',
                     value: 'climatology_avg'
                 },
                 {
-                    label: 'Max Climatology',
+                    label: 'Historical Max',
                     value: 'climatology_max'
                 },
                 {
-                    label: 'Min Climatology',
+                    label: 'Historical Min',
                     value: 'climatology_min'
                 }
                 
@@ -146,7 +146,7 @@ export class Climate extends React.Component {
                     value: 'temp_range'
                 },
                 {
-                    label: 'Average',
+                    label: 'Monthly Average',
                     value: 'calculated_temp_avg'
                 }
             ],
@@ -877,11 +877,9 @@ export class Climate extends React.Component {
                             <Card.Body className="p-4">
                                 <Row>
                                     <Col>
-                                        <p className="fs-5">The Climate Observer uses temperature data from <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a> and precitiptation date 
+                                        <p className="fs-5">The Climate Observer uses temperature data from <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a> and rainfall data 
                                         from the <a className="text-adh-orange text-decoration-none" href="https://www.dwd.de/EN/ourservices/gpcc/gpcc.html" target="_blank">Precipitation Climatology Centre</a>. It is based on both observations made (eg. weather stations) and modelled data based on observations (for areas where there are no monitoring stations).
                                         </p>
-                                        <p>All temperature data shown is taken from <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/data/" target="_blank">Berkeley Earth</a>, and precipitation (rainfall) data from the <a className="text-adh-orange text-decoration-none" href="https://www.dwd.de/EN/ourservices/gpcc/gpcc.html" target="_blank">Precipitation Climatology Centre</a>.</p>
-
                                         <p>When using this data, it is important to note and communicate to readers that not all data points are direct measurements from weather stations. For information on Berkeley Earth's methodology for producing broad geographic data from weather station observations, <a className="text-adh-orange text-decoration-none" href="https://berkeleyearth.org/methodology/" target="_blank"> see here</a>.
                                         </p>
                                     </Col>
@@ -1113,7 +1111,7 @@ export class Climate extends React.Component {
                         <Card.Footer>
                             <Row>
                                 <Col>
-                                    <p style={{fontWeight: '300'}} className="mb-0">Red bars mean the temperature was higher for this month than the historical average, blue bars means that it was cooler. More red than blue bars therefore mean consistent warming over time.</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">Red bars mean the temperature was higher for this month than the historical average, blue means that it was cooler. More red than blue bars therefore mean consistent warming over time.</p>
                                 </Col>
                                 <Col xs="auto" className="py-2">
                                     { this.state.loading ? '' :
@@ -1258,10 +1256,12 @@ export class Climate extends React.Component {
                                 </tbody>
                             </Table>
                         </Card.Body>
-                        {/* <Card.Footer>
+                        <Card.Footer>
                             <Row>
-                                <Col></Col>
-                                <Col xs="auto" className="py-2">
+                                <Col>
+                                    <p style={{fontWeight: '300'}} className="mb-0">Source: Berkeley Earth</p>
+                                </Col>
+                                {/* <Col xs="auto" className="py-2">
                                     { this.state.loading ? '' :
                                         <Dropdown className="mt-1">
                                             <Dropdown.Toggle variant="control-grey">Download</Dropdown.Toggle>
@@ -1270,9 +1270,9 @@ export class Climate extends React.Component {
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     }
-                                </Col>
+                                </Col> */}
                             </Row>
-                        </Card.Footer> */}
+                        </Card.Footer>
                     </Card>
                 </Col>
                 <Col>
@@ -1324,10 +1324,12 @@ export class Climate extends React.Component {
                                 </tbody>
                             </Table>
                         </Card.Body>
-                        {/* <Card.Footer>
+                        <Card.Footer>
                             <Row>
-                                <Col></Col>
-                                <Col xs="auto" className="py-2">
+                                <Col>
+                                    <p style={{fontWeight: '300'}} className="mb-0">Source: GPCC</p>
+                                </Col>
+                                {/* <Col xs="auto" className="py-2">
                                     { this.state.loading ? '' :
                                         <Dropdown className="mt-1">
                                             <Dropdown.Toggle variant="control-grey">Download</Dropdown.Toggle>
@@ -1336,9 +1338,9 @@ export class Climate extends React.Component {
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     }
-                                </Col>
+                                </Col> */}
                             </Row>
-                        </Card.Footer> */}
+                        </Card.Footer>
                     </Card>
                 </Col>
             </Row>

@@ -31,22 +31,22 @@ export class App extends React.Component {
     }
 
     componentDidMount() {
-        const pymChild = new pym.Child();
+        const pymChild = new pym.Child({ polling: 500 });
 
-        pymChild.sendHeight();
+        // pymChild.sendHeight();
 
-        window.addEventListener('resize', () => {
-            pymChild.sendHeight();
-        });
+        // window.addEventListener('resize', () => {
+        //     pymChild.sendHeight();
+        // });
     }
 
     componentDidUpdate() {
     }
 
     handleSendHeight() {
-        const pymChild = new pym.Child();
+        // const pymChild = new pym.Child();
 
-        pymChild.sendHeight();
+        // pymChild.sendHeight();
         
     }
     

@@ -265,6 +265,11 @@ export class Climate extends React.Component {
         }, 1000);
         
     }
+
+    componentDidUpdate() {
+        let self = this;
+        self.props.handleSendHeight();
+    }
    
 
     // selectDatasets = (selected_datasets) => {

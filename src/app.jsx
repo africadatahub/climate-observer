@@ -33,16 +33,16 @@ export class App extends React.Component {
 
     componentDidMount() {
         let self = this;
-
+        this.handleSendHeight();
         
     }
 
     componentDidUpdate() {
+        
     }
 
     handleSendHeight() {
         window.parent.postMessage(document.body.scrollHeight, '*');
-        
     }
     
 

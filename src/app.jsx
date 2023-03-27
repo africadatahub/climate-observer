@@ -47,7 +47,7 @@ export class App extends React.Component {
     }
 
     handleSendHeight() {
-        
+        console.log('here');
         let self = this;
         self.state.pymChild.sendHeight();
         

@@ -79,8 +79,12 @@ export class App extends React.Component {
                         </Row>
                     }
                     <Search updatePositionDetails={details => this.setState({position_details: details})} />
+                    <>
+                        { (!document.location.search.includes('city=') && !document.location.search.includes('position=')) &&
+                        <div className="my-4">&nbsp;</div>
+                        }
+                    </>
 
-                    
                     { (document.location.search.includes('city=') || document.location.search.includes('position=')) && <Climate positionDetails={this.state.position_details} handleSendHeight={() => this.handleSendHeight()}/> }
                 </Container>
                 

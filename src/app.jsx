@@ -25,21 +25,30 @@ export class App extends React.Component {
     constructor(){
         super();
         this.state = {
-            position_details: {}
+            pymChild: new pym.Child()
+            position_details: {},
         }
         
     }
 
     componentDidMount() {
-        const pymChild = new pym.Child();
-        pymChild.sendHeight();
+
+        let self = this;
+
+        self.state.pymChild.sendHeight();
         window.addEventListener('resize', () => {
-            pymChild.sendHeight();
+            self.state.pymChild.sendHeight();
         });
     }
 
     componentDidUpdate() {}
 
+    handleSendHeight() {
+        
+        let self = this;
+        self.state.pymChild.sendHeight();
+        
+    }
     
 
 
@@ -77,7 +86,7 @@ export class App extends React.Component {
                     <Search updatePositionDetails={details => this.setState({position_details: details})} />
 
                     
-                    { (document.location.search.includes('city=') || document.location.search.includes('position=')) && <Climate positionDetails={this.state.position_details}/> }
+                    { (document.location.search.includes('city=') || document.location.search.includes('position=')) && <Climate positionDetails={this.state.position_details} handleSendHeight={() => this.handleSendHeight()}/> }
                 </Container>
                 
             </>

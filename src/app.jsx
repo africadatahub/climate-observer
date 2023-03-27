@@ -25,31 +25,28 @@ export class App extends React.Component {
     constructor(){
         super();
         this.state = {
-            pymChild: new pym.Child(),
             position_details: {}
         }
         
     }
 
     componentDidMount() {
+        const pymChild = new pym.Child();
 
-        let self = this;
+        pymChild.sendHeight();
 
-        self.state.pymChild.sendHeight();
         window.addEventListener('resize', () => {
-            self.state.pymChild.sendHeight();
+            pymChild.sendHeight();
         });
     }
 
     componentDidUpdate() {
-        let self = this;
-        self.state.pymChild.sendHeight();
     }
 
     handleSendHeight() {
-        console.log('here');
-        let self = this;
-        self.state.pymChild.sendHeight();
+        const pymChild = new pym.Child();
+
+        pymChild.sendHeight();
         
     }
     

@@ -41,7 +41,10 @@ export class App extends React.Component {
         });
     }
 
-    componentDidUpdate() {}
+    componentDidUpdate() {
+        let self = this;
+        self.state.pymChild.sendHeight();
+    }
 
     handleSendHeight() {
         

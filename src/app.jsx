@@ -1,5 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import pym from 'pym.js';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -29,7 +30,13 @@ export class App extends React.Component {
         
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        const pymChild = new pym.Child();
+        pymChild.sendHeight();
+        window.addEventListener('resize', () => {
+            pymChild.sendHeight();
+        });
+    }
 
     componentDidUpdate() {}
 

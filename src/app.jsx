@@ -25,8 +25,8 @@ export class App extends React.Component {
     constructor(){
         super();
         this.state = {
-            pymChild: new pym.Child()
-            position_details: {},
+            pymChild: new pym.Child(),
+            position_details: {}
         }
         
     }

@@ -25,28 +25,23 @@ export class App extends React.Component {
     constructor(){
         super();
         this.state = {
-            position_details: {}
+            position_details: {},
+           
         }
         
     }
 
     componentDidMount() {
-        const pymChild = new pym.Child({ polling: 500 });
+        let self = this;
 
-        // pymChild.sendHeight();
-
-        // window.addEventListener('resize', () => {
-        //     pymChild.sendHeight();
-        // });
+        
     }
 
     componentDidUpdate() {
     }
 
     handleSendHeight() {
-        // const pymChild = new pym.Child();
-
-        // pymChild.sendHeight();
+        window.parent.postMessage(document.body.scrollHeight, '*');
         
     }
     

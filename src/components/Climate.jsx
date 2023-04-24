@@ -21,6 +21,8 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 import getCountryISO2 from 'country-iso-3-to-2';
 import ReactCountryFlag from 'react-country-flag';
@@ -292,6 +294,8 @@ export class Climate extends React.Component {
     }
 
     getPositionDetails = (type) => {
+
+
     
         let self = this;
 
@@ -316,7 +320,7 @@ export class Climate extends React.Component {
             if(self.state.position_details.place) {
                 return self.state.position_details.place + ', ' + self.state.position_details.country;
             } else {
-                return self.props.positionDetails.county + ', ' + self.props.positionDetails.country;
+                return self.props.positionDetails.county ? self.props.positionDetails.county : self.props.positionDetails.state + ', ' + self.props.positionDetails.country;
             }
         }
     
@@ -979,20 +983,19 @@ export class Climate extends React.Component {
                                         <XAxis tickFormat={v => this.state.data[v] != undefined ? this.state.data[v].date : v} />
                                         <YAxis tickFormat={v => v + '°C'} />
 
-                                        {
-                                        this.state.temp_chart_selected.some(item => item.value === 'temp_range') &&
-                                            <AreaSeries
-                                            className="area-elevated-series-1"
-                                            color={'url(#CoolGradient)'}
-                                            data={this.state.data}
-                                            onNearestX={(value) => this.setState({hint_value: value})}
-                                            />
-                                        }
+                                        <AreaSeries
+                                        className="area-elevated-series-1"
+                                        color={this.state.temp_chart_selected.some(item => item.value === 'temp_range') ? 'url(#CoolGradient)' : 'transparent'}
+                                        data={this.state.data}
+                                        onNearestX={(value) => { return this.setState({hint_value: value})}}
+                                        />
+                                        
 
                                         
                                         {
                                         this.state.temp_chart_selected.map((selected_dataset,index) => 
                                             <LineSeries
+                                            key={index}
                                             className="area-elevated-line-series"
                                             data={ this.state.data.map(item => { return { x: item.x, y: item[selected_dataset.value] } }) }
                                             color={ 
@@ -1005,6 +1008,7 @@ export class Climate extends React.Component {
                                             }
                                             strokeStyle={selected_dataset.value.includes('climatology') ? 'dashed' : 'solid'}
                                             strokeWidth={selected_dataset.value.includes('climatology') ? 1 : 2}
+                                            
                                             />
                                         )}
 
@@ -1078,7 +1082,7 @@ export class Climate extends React.Component {
                             <div className="chart-container2">
                             {this.state.loading ? <Row><Col className="text-center"><BeatLoader/></Col></Row> :
                                 <div ref={this.anomalyChart}>
-                                    <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width : 600} height={300} onMouseLeave={() => this.setState({hint_value: null})} yDomain={[-3, 3]} >
+                                    <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width : 600} height={300} onMouseLeave={() => this.setState({temp_bar_hint_value: null})} yDomain={[-3, 3]} >
                                         <VerticalGridLines />
                                         <HorizontalGridLines />
                                         <XAxis tickFormat={v => this.state.data[v] != undefined ? this.state.data[v].date : v} />
@@ -1180,11 +1184,22 @@ export class Climate extends React.Component {
                                 <Col>
                                     <div className="mt-3">
                                     {
-                                        [{name: 'Biological', color: '#d7191c'},
-                                        {name: 'Hydrological', color: '#2c7bb6'},
-                                        {name: 'Geophysical', color: '#fdae61'},
-                                        {name: 'Climatological', color: '#abd9e9'},
-                                        {name: 'Meteorological', color: '#312e81'}].map(type => <div style={{backgroundColor: type.color, color: '#fff', display: 'inline-block', padding: '0.2em 0.5em', borderRadius: '5px', marginRight: '5px'}}>{type.name}</div>)
+                                        [{name: 'Biological', color: '#d7191c', description: 'Epidemic, Insect Infestation, Animal Disease' },
+                                        {name: 'Hydrological', color: '#2c7bb6', description: 'Flood, Landslide, Wave action'},
+                                        {name: 'Geophysical', color: '#fdae61', description: 'Earthquake, Volcanic activity, Mass Movement'},
+                                        {name: 'Climatological', color: '#abd9e9', description: 'Drought, Wildfire, Glacial Lake Outburst'},
+                                        {name: 'Meteorological', color: '#312e81', description: 'Storms, Extreme Temperature, Fog'}].map((type,index) => 
+                                            <OverlayTrigger
+                                            key={index}
+                                            placement="top"
+                                            overlay={
+                                              <Tooltip>
+                                                {type.description}
+                                              </Tooltip>
+                                            }
+                                          >
+                                            <div style={{backgroundColor: type.color, color: '#fff', display: 'inline-block', padding: '0.2em 0.5em', borderRadius: '5px', marginRight: '5px'}}>{type.name}</div></OverlayTrigger>)
+                                            
                                     }
                                     </div>
                                 </Col>

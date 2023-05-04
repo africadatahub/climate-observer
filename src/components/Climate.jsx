@@ -11,7 +11,6 @@ import { interpolateYlGnBu, interpolateRdBu } from 'd3-scale-chromatic';
 import { MapContainer, TileLayer, Tooltip, CircleMarker, Rectangle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
-
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';

@@ -49,7 +49,7 @@ export class App extends React.Component {
 
     render() {
         return (
-            <>  <Container className="my-5">
+            <>  <Container className="py-5">
                     { (!document.location.search.includes('city=') && !document.location.search.includes('position=')) && 
                         <Row className="my-4">
                             <Col md={5}>

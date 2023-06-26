@@ -87,6 +87,11 @@ export class Search extends React.Component {
 
     changeLocation = (type, value) => {
         let self = this;
+
+        if(value == '') {
+            return
+        }
+
         if(value != 'location') {
             if(type == 'city') {
                 document.location.search = '?city=' + value;

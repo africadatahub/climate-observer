@@ -34,11 +34,7 @@ import { MultiSelect } from 'react-multi-select-component';
 import { BeatLoader } from 'react-spinners';
 
 import { Animation } from 'react-web-animation';
-
-import milestones from 'd3-milestones';
-
-import '../../node_modules/d3-milestones/build/d3-milestones.css';
-
+ 
 import * as cities from '../data/places.json';
 
 import ReactHtmlParser from 'react-html-parser';

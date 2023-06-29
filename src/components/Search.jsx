@@ -88,10 +88,6 @@ export class Search extends React.Component {
     changeLocation = (type, value) => {
         let self = this;
 
-        if(value == '') {
-            return
-        }
-
         if(value != 'location') {
             if(type == 'city') {
                 document.location.search = '?city=' + value;
@@ -153,8 +149,8 @@ export class Search extends React.Component {
             <Row>
                 <Col>
                     <Form.Select size="lg" ref={this.citySelectRef} onChange={(e) => this.changeLocation('city', e.target.value)} className="bg-control-grey">
-                        <option value="">Select a city</option>
-                        <option value="location">Custom Location</option>
+                        <option value="" disabled>Select a city</option>
+                        <option value="location" disabled>Custom Location</option>
                         {this.state.cities.map((city, index) => {
                             return <option key={'c'+index} value={city.city.toLowerCase().replaceAll(' ','-')}>{city.city}</option>
                         })}

@@ -73,6 +73,10 @@ body {
     border-bottom: none;
 }
 
+.rv-hint {
+    z-index: 99999;
+}
+
 .hintBox {
     background: #fff;
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
@@ -81,6 +85,10 @@ body {
     color: #333;
     border-radius: 5px;
     opacity: 0.95;
+}
+
+.hintBox.wide {
+    min-width: 400px;
 }
 
 .badge-pill {

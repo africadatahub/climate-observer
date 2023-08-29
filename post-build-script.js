@@ -2,7 +2,19 @@ const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
 
-const randomClass = 'unique-' + Math.random().toString(36).substring(2, 8);
+var randomClass = 'unique-' + Math.random().toString(36).substring(2, 8);
+var env = 'production';
+
+if(process.argv.length > 2) {
+    if (process.argv[2] == 'dev') {
+        env = 'development';
+    } else {
+        randomClass = process.argv[2];
+    }
+    if(process.argv[3] != undefined) {
+        randomClass = process.argv[3];
+    }
+}
 
 // Find the name of the generated CSS file
 const files = glob.sync('dist/*.css');
@@ -194,4 +206,18 @@ const updatedHtml = htmlFile.replace('<div class="app"></div>', `<div class="${r
 fs.writeFileSync(htmlFiles[0], updatedHtml);
 console.log(`Added class '${randomClass}' to the 'app' element in '${htmlFiles[0]}'`);
 
-// TODO: Rename files?
+//  find the js file
+// const jsFiles = glob.sync('dist/*.dist.js');
+// let jsFile;
+
+// if(env === 'development') {
+
+
+
+    
+// } else {
+
+
+
+
+// }

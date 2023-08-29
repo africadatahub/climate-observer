@@ -53,7 +53,17 @@ export class Search extends React.Component {
 
                 this.citySelectRef.current.value = citysearch.split('city=')[1];
 
-                let city = cities.filter(city => city.city.toLowerCase().replaceAll(' ','-') == citysearch.split('city=')[1])[0];
+                let citysearchParsed = citysearch.split('city=')[1];
+
+                if(citysearch.split('city=')[1] == 'abomey-calavi') {
+                    citysearchParsed = 'abomey-calavi';
+                } else if(citysearch.split('city=')[1] == 'mbuji-mayi') {
+                    citysearchParsed = 'mbuji-mayi';
+                } else if(citysearch.split('city=')[1] == 'pointe-noire') {
+                    citysearchParsed = 'pointe-noire';
+                }
+
+                let city = cities.filter(city => city.city.toLowerCase().replaceAll(' ','-').replaceAll("'",'') == citysearchParsed)[0];
 
                 this.setState({lat: city.lat, lon: city.lon});
 
@@ -149,10 +159,10 @@ export class Search extends React.Component {
             <Row>
                 <Col>
                     <Form.Select size="lg" ref={this.citySelectRef} onChange={(e) => this.changeLocation('city', e.target.value)} className="bg-control-grey">
-                        <option value="" disabled>Select a city</option>
-                        <option value="location" disabled>Custom Location</option>
+                        <option value="" disabled selected>Select a city</option>
+                        <option value="location" disabled hidden>Custom Location</option>
                         {this.state.cities.map((city, index) => {
-                            return <option key={'c'+index} value={city.city.toLowerCase().replaceAll(' ','-')}>{city.city}</option>
+                            return <option key={'c'+index} value={city.city.toLowerCase().replaceAll(' ','-').replaceAll("'",'')}>{city.city}</option>
                         })}
                     </Form.Select>
                 </Col>

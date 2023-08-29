@@ -1038,7 +1038,9 @@
 .unique-lpxjij .chart-container{width:100%}
 .unique-lpxjij .card{border:1px solid #0000001a!important}
 .unique-lpxjij .card-header{background-color:#e8eef7;border-bottom:none}
+.unique-lpxjij .rv-hint{z-index:99999}
 .unique-lpxjij .hintBox{color:#333;opacity:.95;background:#fff;border-radius:5px;padding:1em;font-size:12px;box-shadow:0 0 5px #0003}
+.unique-lpxjij .hintBox.wide{min-width:400px}
 .unique-lpxjij .badge-pill{height:22px;border-radius:5px;padding:.1em .5em;font-weight:700;display:inline-block;box-shadow:0 0 2px #0003}
 .unique-lpxjij .hint-badge-pill{color:#fff;margin-bottom:1em}
 .unique-lpxjij .react-vis-magic-css-import-rule{display:inherit}

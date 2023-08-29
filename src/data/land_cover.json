@@ -1,0 +1,118 @@
+[
+    {
+        "land_cover_class": "bare_areas",
+        "color": "#A9A9A9"
+    },
+    {
+        "land_cover_class": "cropland_irrigated",
+        "color": "#FFD700"
+    },
+    {
+        "land_cover_class": "urban",
+        "color": "#696969"
+    },
+    {
+        "land_cover_class": "cropland_rainfed_herbaceous_cover",
+        "color": "#FFA07A"
+    },
+    {
+        "land_cover_class": "cropland_rainfed",
+        "color": "#FFB6C1"
+    },
+    {
+        "land_cover_class": "water",
+        "color": "#1E90FF"
+    },
+    {
+        "land_cover_class": "bare_areas_consolidated",
+        "color": "#B0C4DE"
+    },
+    {
+        "land_cover_class": "sparse_vegetation",
+        "color": "#EEE8AA"
+    },
+    {
+        "land_cover_class": "mosaic_cropland",
+        "color": "#DEB887"
+    },
+    {
+        "land_cover_class": "mosaic_natural_vegetation",
+        "color": "#F5DEB3"
+    },
+    {
+        "land_cover_class": "shrubland_deciduous",
+        "color": "#556B2F"
+    },
+    {
+        "land_cover_class": "shrub_or_herbaceous_cover_flooded",
+        "color": "#8FBC8F"
+    },
+    {
+        "land_cover_class": "shrubland",
+        "color": "#2E8B57"
+    },
+    {
+        "land_cover_class": "bare_areas_unconsolidated",
+        "color": "#D3D3D3"
+    },
+    {
+        "land_cover_class": "tree_needleleaved_deciduous_closed_to_open",
+        "color": "#B22222"
+    },
+    {
+        "land_cover_class": "tree_broadleaved_deciduous_open",
+        "color": "#DB7093"
+    },
+    {
+        "land_cover_class": "mosaic_tree_and_shrub",
+        "color": "#FFE4E1"
+    },
+    {
+        "land_cover_class": "tree_broadleaved_evergreen_closed_to_open",
+        "color": "#228B22"
+    },
+    {
+        "land_cover_class": "tree_broadleaved_deciduous_closed_to_open",
+        "color": "#008000"
+    },
+    {
+        "land_cover_class": "mosaic_herbaceous",
+        "color": "#D2B48C"
+    },
+    {
+        "land_cover_class": "grassland",
+        "color": "#228B22"
+    },
+    {
+        "land_cover_class": "tree_cover_flooded_fresh_or_brakish_water",
+        "color": "#32CD32"
+    },
+    {
+        "land_cover_class": "tree_cover_flooded_saline_water",
+        "color": "#7CFC00"
+    },
+    {
+        "land_cover_class": "tree_broadleaved_deciduous_closed",
+        "color": "#FF00FF"
+    },
+    {
+        "land_cover_class": "tree_mixed",
+        "color": "#9370DB"
+    },
+    {
+        "land_cover_class": "cropland_rainfed_tree_or_shrub_cover",
+        "color": "#FF4500"
+    },
+    {
+        "land_cover_class": "sparse_herbaceous",
+        "color": "#FFDAB9"
+    },
+    {
+        "land_cover_class": "sparse_shrub",
+        "color": "#EE82EE"
+    },
+    {
+        "land_cover_class": "tree_needleleaved_evergreen_closed_to_open",
+        "color": "#DA70D6"
+    }
+]

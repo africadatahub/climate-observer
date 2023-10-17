@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
 
-var randomClass = 'unique-' + Math.random().toString(36).substring(2, 8);
+// var randomClass = 'unique-' + Math.random().toString(36).substring(2, 8);
+var randomClass = 'unique-lpxjij';
 var env = 'production';
 
 if(process.argv.length > 2) {

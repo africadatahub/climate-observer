@@ -383,7 +383,7 @@ export class Climate extends React.Component {
                     setTimeout(() => {
                         self.getDisasters();
                     }, 3000);
-                    // self.getLandCover();
+                    self.getLandCover();
                 })
             }
             
@@ -1717,7 +1717,7 @@ export class Climate extends React.Component {
                 </Col>
             </Row>
 
-            {/* <Row className="my-4">
+            <Row className="my-4">
                 <Col>
                     <Card className="shadow-sm">
                         <Card.Header className="py-4">
@@ -1780,7 +1780,7 @@ export class Climate extends React.Component {
                         </Card.Body>
                     </Card>
                 </Col>
-            </Row> */}
+            </Row>
 
             <Row className="my-4">
                 <Col>

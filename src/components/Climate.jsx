@@ -1733,13 +1733,15 @@ export class Climate extends React.Component {
                             
                         </Card.Header>
                         <Card.Body>
-                            <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width - 10 : 600} height={300} yDomain={[-3, 3]} onMouseLeave={() => this.setState({hint_value_land_cover: null})}>
+                            <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width - 10 : 600} height={300} yDomain={[-1, 1]} onMouseLeave={() => this.setState({hint_value_land_cover: null})}>
                                     <HorizontalGridLines />
                                     <XAxis 
                                         tickFormat={v => parseInt(v)}
                                         tickTotal={this.state.date_range[1] - this.state.date_range[0]}
                                     />
-                                    <YAxis />
+                                    <YAxis
+                                        tickFormat={v => v + '%'}
+                                    />
                                     {
                                         Object.keys(this.state.land_cover_data).map((land_cover, index) => {
                                             if(this.state.land_cover_data[land_cover][this.state.date_range[0]] > 1) {

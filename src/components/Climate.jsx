@@ -1715,7 +1715,7 @@ export class Climate extends React.Component {
                                 </Col>
                                 <Col>
                                     <h5>Land cover for <span className="text-adh-orange">{this.getPositionDetails() }</span> in {this.state.date_range[1] > 2018 ? 2018 : this.state.date_range[1]}</h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the land cover percentage by type.<br/><br/></p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the land cover percentage by type. Values are aggregated from the original 300m<sup>2</sup> set from <a href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/satellite-land-cover" target="_blank" className="text-adh-orange text-decoration-none">Copernicus Climate Change Service</a><br/><br/></p>
                                 </Col>
                             </Row>
                         </Card.Header>

@@ -1740,7 +1740,16 @@ export class Climate extends React.Component {
                                         Object.keys(this.state.land_cover_data).map((land_cover, index) => {
                                             if(this.state.land_cover_data[land_cover][this.state.date_range[0]] > 1) {
                                                 return <tr key={index}>
-                                                    <td><span style={{color: land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}}>{ land_cover_lookup.find(lc => lc.land_cover_class === land_cover).name}</span></td>
+                                                    <td>
+                                                        <OverlayTrigger
+                                                            placement="top"
+                                                            overlay={
+                                                            <Tooltip>
+                                                                {land_cover_lookup.find(lc => lc.land_cover_class === land_cover).description}
+                                                            </Tooltip>}>
+                                                                <span style={{color: land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}}>{ land_cover_lookup.find(lc => lc.land_cover_class === land_cover).name}</span>
+                                                        </OverlayTrigger>    
+                                                        </td>
                                                     <td className="text-end">{this.state.land_cover_data[land_cover][[this.state.date_range[1] > 2018 ? 2018 : this.state.date_range[1]]]}</td>
                                                 </tr>
                                             }

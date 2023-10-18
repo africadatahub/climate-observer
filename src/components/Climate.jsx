@@ -579,8 +579,6 @@ export class Climate extends React.Component {
 
             let current_precipitation_dataset = current_dataset.precipitation;
 
-            console.log(current_precipitation_dataset);
-
             axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + current_precipitation_dataset + '"%20WHERE%20latitude%20%3E%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%20' + (self.state.lon - 0.5) + '%20AND%20longitude%20%3C%20' + (self.state.lon + 0.5) + '%20AND%20year%3E%3D' + self.state.date_range[0] + '%20AND%20year%3C%3D' + self.state.date_range[1] + '%20',
                 { headers: {
                     "Authorization": process.env.CKAN
@@ -698,8 +696,6 @@ export class Climate extends React.Component {
             }
         }).then(function(response) {
 
-            console.log(response);
-
             let land_cover_data = {}
 
             response.data.result.records.forEach((record) => {
@@ -715,7 +711,6 @@ export class Climate extends React.Component {
             })
 
             self.setState({land_cover_data: land_cover_data}, () => {
-                console.log(self.state.land_cover_data)
             })
 
         })
@@ -1745,7 +1740,7 @@ export class Climate extends React.Component {
                                         Object.keys(this.state.land_cover_data).map((land_cover, index) => {
                                             if(this.state.land_cover_data[land_cover][this.state.date_range[0]] > 1) {
                                                 return <tr key={index}>
-                                                    <td><span style={{color: land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}}>{land_cover.replace('_',' ')}</span></td>
+                                                    <td><span style={{color: land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}}>{ land_cover_lookup.find(lc => lc.land_cover_class === land_cover).name}</span></td>
                                                     <td className="text-end">{this.state.land_cover_data[land_cover][[this.state.date_range[1] > 2018 ? 2018 : this.state.date_range[1]]]}</td>
                                                 </tr>
                                             }
@@ -1808,7 +1803,7 @@ export class Climate extends React.Component {
                                                         {
                                                             Object.keys(this.state.land_cover_data).map((land_cover, index) => {
                                                                 if(this.state.land_cover_data[land_cover][this.state.date_range[0]] > 1) {
-                                                                    return <Row><Col key={index}><span style={{color: land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}}>{land_cover.replace('_',' ')}</span></Col><Col xs={2}>{(parseFloat(this.state.land_cover_data[land_cover][this.state.hint_value_land_cover.x]) - parseFloat(this.state.land_cover_data[land_cover][this.state.date_range[0]])).toLocaleString()}</Col></Row>
+                                                                    return <Row><Col key={index}><span style={{color: land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}}>{land_cover_lookup.find(lc => lc.land_cover_class === land_cover).name}</span></Col><Col xs={2}>{(parseFloat(this.state.land_cover_data[land_cover][this.state.hint_value_land_cover.x]) - parseFloat(this.state.land_cover_data[land_cover][this.state.date_range[0]])).toLocaleString()}</Col></Row>
                                                                 }
                                                             }
                                                         )}

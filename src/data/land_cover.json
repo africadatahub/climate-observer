@@ -1,118 +1,176 @@
 [
     {
         "land_cover_class": "bare_areas",
-        "color": "#A9A9A9"
+        "color": "#A9A9A9",
+        "name": "Bare Areas",
+        "description": "Areas with little to no vegetation, such as sand, rock, and gravel."
     },
     {
         "land_cover_class": "cropland_irrigated",
-        "color": "#FFD700"
+        "color": "#FFD700",
+        "name": "Irrigated Cropland",
+        "description": "Areas of cultivated land that are irrigated with water."
     },
     {
         "land_cover_class": "urban",
-        "color": "#696969"
+        "color": "#696969",
+        "name": "Urban Areas",
+        "description": "Areas with a high concentration of human-made structures, such as buildings, roads, and parking lots."
     },
     {
         "land_cover_class": "cropland_rainfed_herbaceous_cover",
-        "color": "#FFA07A"
+        "color": "#FFA07A",
+        "name": "Rainfed Cropland with Herbaceous Cover",
+        "description": "Areas of cultivated land that are rainfed and have herbaceous vegetation cover, such as grass and crops."
     },
     {
         "land_cover_class": "cropland_rainfed",
-        "color": "#FFB6C1"
+        "color": "#FFB6C1",
+        "name": "Rainfed Cropland",
+        "description": "Areas of cultivated land that are rainfed."
     },
     {
         "land_cover_class": "water",
-        "color": "#1E90FF"
+        "color": "#1E90FF",
+        "name": "Water",
+        "description": "Areas of open water, such as lakes, rivers, and oceans."
     },
     {
         "land_cover_class": "bare_areas_consolidated",
-        "color": "#B0C4DE"
+        "color": "#B0C4DE",
+        "name": "Consolidated Bare Areas",
+        "description": "Areas with little to no vegetation that have been compacted or hardened, such as roads and parking lots."
     },
     {
         "land_cover_class": "sparse_vegetation",
-        "color": "#EEE8AA"
+        "color": "#EEE8AA",
+        "name": "Sparse Vegetation",
+        "description": "Areas with scattered vegetation, such as desert shrublands and grasslands."
     },
     {
         "land_cover_class": "mosaic_cropland",
-        "color": "#DEB887"
+        "color": "#DEB887",
+        "name": "Cropland Mosaic",
+        "description": "Areas with a mix of different types of cropland."
     },
     {
         "land_cover_class": "mosaic_natural_vegetation",
-        "color": "#F5DEB3"
+        "color": "#F5DEB3",
+        "name": "Natural Vegetation Mosaic",
+        "description": "Areas with a mix of different types of natural vegetation."
     },
     {
         "land_cover_class": "shrubland_deciduous",
-        "color": "#556B2F"
+        "color": "#556B2F",
+        "name": "Deciduous Shrubland",
+        "description": "Areas with deciduous shrubs, which are shrubs that lose their leaves seasonally."
     },
     {
         "land_cover_class": "shrub_or_herbaceous_cover_flooded",
-        "color": "#8FBC8F"
+        "color": "#8FBC8F",
+        "name": "Flooded Shrub or Herbaceous Cover",
+        "description": "Areas of shrub or herbaceous vegetation that are flooded with water."
     },
     {
         "land_cover_class": "shrubland",
-        "color": "#2E8B57"
+        "color": "#2E8B57",
+        "name": "Shrubland",
+        "description": "Areas with shrubs, which are woody plants that are smaller than trees."
     },
     {
         "land_cover_class": "bare_areas_unconsolidated",
-        "color": "#D3D3D3"
+        "color": "#D3D3D3",
+        "name": "Unconsolidated Bare Areas",
+        "description": "Areas with little to no vegetation that are loose and not compacted, such as sand dunes and gravel beds."
     },
     {
         "land_cover_class": "tree_needleleaved_deciduous_closed_to_open",
-        "color": "#B22222"
+        "color": "#B22222",
+        "name": "Closed-to-Open Needleleaved Deciduous Forest",
+        "description": "Areas of forest with needleleaved deciduous trees, which are trees that lose their leaves seasonally."
     },
     {
         "land_cover_class": "tree_broadleaved_deciduous_open",
-        "color": "#DB7093"
+        "color": "#DB7093",
+        "name": "Open Broadleaved Deciduous Forest",
+        "description": "Areas of forest with broadleaved deciduous trees, which are trees that lose their leaves seasonally."
     },
     {
         "land_cover_class": "mosaic_tree_and_shrub",
-        "color": "#FFE4E1"
+        "color": "#FFE4E1",
+        "name": "Tree and Shrub Mosaic",
+        "description": "Areas with a mix of trees and shrubs."
     },
     {
         "land_cover_class": "tree_broadleaved_evergreen_closed_to_open",
-        "color": "#228B22"
+        "color": "#228B22",
+        "name": "Closed-to-Open Broadleaved Evergreen Forest",
+        "description": "Areas of forest with broadleaved evergreen trees, which are trees that keep their leaves year-round."
     },
     {
         "land_cover_class": "tree_broadleaved_deciduous_closed_to_open",
-        "color": "#008000"
+        "color": "#008000",
+        "name": "Closed-to-Open Broadleaved Deciduous Forest",
+        "description": "Areas of forest with broadleaved deciduous trees, which are trees that lose their leaves seasonally."
     },
     {
         "land_cover_class": "mosaic_herbaceous",
-        "color": "#D2B48C"
+        "color": "#D2B48C",
+        "name": "Herbaceous Mosaic",
+        "description": "Areas with a mix of different types of herbaceous vegetation."
     },
     {
         "land_cover_class": "grassland",
-        "color": "#228B22"
+        "color": "#228B22",
+        "name": "Grassland",
+        "description": "Areas dominated by grasses."
     },
     {
         "land_cover_class": "tree_cover_flooded_fresh_or_brakish_water",
-        "color": "#32CD32"
+        "color": "#32CD32",
+        "name": "Flooded Tree Cover (Fresh or Brackish Water)",
+        "description": "Areas of forest that are flooded with fresh or brackish water."
     },
     {
         "land_cover_class": "tree_cover_flooded_saline_water",
-        "color": "#7CFC00"
+        "color": "#7CFC00",
+        "name": "Flooded Tree Cover (Saline Water)",
+        "description": "Areas of forest that are flooded with saline water."
     },
     {
         "land_cover_class": "tree_broadleaved_deciduous_closed",
-        "color": "#FF00FF"
+        "color": "#FF00FF",
+        "name": "Closed Broadleaved Deciduous Forest",
+        "description": "Areas of forest with broadleaved deciduous trees, which are trees that lose their leaves seasonally."
     },
     {
         "land_cover_class": "tree_mixed",
-        "color": "#9370DB"
+        "color": "#9370DB",
+        "name": "Mixed Forest",
+        "description": "Areas of forest with a mix of broadleaved and needleleaved trees."
     },
     {
         "land_cover_class": "cropland_rainfed_tree_or_shrub_cover",
-        "color": "#FF4500"
+        "color": "#FF4500",
+        "name": "Rainfed Cropland with Tree or Shrub Cover",
+        "description": "Areas of cultivated land that are rainfed and have tree or shrub cover, such as orchards and vineyards."
     },
     {
         "land_cover_class": "sparse_herbaceous",
-        "color": "#FFDAB9"
+        "color": "#FFDAB9",
+        "name": "Sparse Herbaceous Vegetation",
+        "description": "Areas with very little herbaceous vegetation."
     },
     {
         "land_cover_class": "sparse_shrub",
-        "color": "#EE82EE"
+        "color": "#EE82EE",
+        "name": "Sparse Shrubland",
+        "description": "Areas with very little shrubland."
     },
     {
         "land_cover_class": "tree_needleleaved_evergreen_closed_to_open",
-        "color": "#DA70D6"
+        "color": "#DA70D6",
+        "name": "Closed-to-Open Needleleaved Evergreen Forest",
+        "description": "Areas of forest with needleleaved evergreen trees, which are trees that keep their leaves year-round."
     }
 ]

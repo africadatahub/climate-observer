@@ -1415,16 +1415,8 @@ export class Climate extends React.Component {
                                         {name: 'Geophysical', color: '#fdae61', description: 'Earthquake, Volcanic activity, Mass Movement'},
                                         {name: 'Climatological', color: '#abd9e9', description: 'Drought, Wildfire, Glacial Lake Outburst'},
                                         {name: 'Meteorological', color: '#312e81', description: 'Storms, Extreme Temperature, Fog'}].map((type,index) => 
-                                            <OverlayTrigger
-                                            key={index}
-                                            placement="top"
-                                            overlay={
-                                              <Tooltip>
-                                                {type.description}
-                                              </Tooltip>
-                                            }
-                                          >
-                                            <div style={{backgroundColor: type.color, color: '#fff', display: 'inline-block', padding: '0.2em 0.5em', borderRadius: '5px', marginRight: '5px'}}>{type.name}</div></OverlayTrigger>)
+                                            
+                                            <div title={type.description} style={{backgroundColor: type.color, color: '#fff', display: 'inline-block', padding: '0.2em 0.5em', borderRadius: '5px', marginRight: '5px'}}>{type.name}</div>)
                                             
                                     }
                                     </div>
@@ -1741,15 +1733,10 @@ export class Climate extends React.Component {
                                             if(this.state.land_cover_data[land_cover][this.state.date_range[0]] > 1) {
                                                 return <tr key={index}>
                                                     <td>
-                                                        <OverlayTrigger
-                                                            placement="top"
-                                                            overlay={
-                                                            <Tooltip>
-                                                                {land_cover_lookup.find(lc => lc.land_cover_class === land_cover).description}
-                                                            </Tooltip>}>
-                                                                <span style={{color: land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}}>{ land_cover_lookup.find(lc => lc.land_cover_class === land_cover).name}</span>
-                                                        </OverlayTrigger>    
-                                                        </td>
+                                                        
+                                                        <span title={land_cover_lookup.find(lc => lc.land_cover_class === land_cover).description} style={{color: land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}}>{ land_cover_lookup.find(lc => lc.land_cover_class === land_cover).name}</span>
+                                                         
+                                                    </td>
                                                     <td className="text-end">{this.state.land_cover_data[land_cover][[this.state.date_range[1] > 2018 ? 2018 : this.state.date_range[1]]]}</td>
                                                 </tr>
                                             }

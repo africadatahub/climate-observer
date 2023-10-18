@@ -715,6 +715,7 @@ export class Climate extends React.Component {
             })
 
             self.setState({land_cover_data: land_cover_data}, () => {
+                console.log(self.state.land_cover_data)
             })
 
         })
@@ -1463,7 +1464,7 @@ export class Climate extends React.Component {
 
             <Row className="my-4">
                 <Col md>
-                    <Card className="h-100 shadow-sm">
+                    <Card className="h-md-100 shadow-sm mb-4 mb-md-0">
                         <Card.Header className="py-4">
                             <Row>
                                 <Col xs="auto">
@@ -1537,7 +1538,7 @@ export class Climate extends React.Component {
                     </Card>
                 </Col>
                 <Col>
-                    <Card className="shadow-sm">
+                    <Card className="shadow-sm h-md-100">
                         <Card.Header className="py-4">
                             <Row>
                                 <Col xs="auto">
@@ -1718,7 +1719,44 @@ export class Climate extends React.Component {
             </Row>
 
             <Row className="my-4">
-                <Col>
+                <Col md={4}>
+                    <Card className="h-md-100 shadow-sm mb-4 mb-md-0">
+                        <Card.Header className="py-4">
+                            <Row>
+                                <Col xs="auto">
+                                    <Icon path={mdiLandPlots} size={2} />
+                                </Col>
+                                <Col>
+                                    <h5>Land cover for <span className="text-adh-orange">{this.getPositionDetails() }</span> in {this.state.date_range[1] > 2018 ? 2018 : this.state.date_range[1]}</h5>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the land cover percentage by type.</p>
+                                </Col>
+                            </Row>
+                        </Card.Header>
+                        <Card.Body>
+                            <Table>
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th className="text-end" style={{width: '25%'}}>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        Object.keys(this.state.land_cover_data).map((land_cover, index) => {
+                                            if(this.state.land_cover_data[land_cover][this.state.date_range[0]] > 1) {
+                                                return <tr key={index}>
+                                                    <td><span style={{color: land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}}>{land_cover.replace('_',' ')}</span></td>
+                                                    <td className="text-end">{this.state.land_cover_data[land_cover][[this.state.date_range[1] > 2018 ? 2018 : this.state.date_range[1]]]}</td>
+                                                </tr>
+                                            }
+                                        })
+                                    }
+                                </tbody>
+                             </Table>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={8}>
                     <Card className="shadow-sm">
                         <Card.Header className="py-4">
                             <Row>
@@ -1726,62 +1764,65 @@ export class Climate extends React.Component {
                                     <Icon path={mdiLandPlots} size={2} />
                                 </Col>
                                 <Col>
-                                    <h5>Land cover for <span className="text-adh-orange">{this.getPositionDetails() }</span></h5>
+                                    <h5>Land cover percentage change for <span className="text-adh-orange">{this.getPositionDetails()}</span> from  {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
                                     <p style={{fontWeight: '300'}} className="mb-0">This chart shows the change in land coverage and type over the selected period. The Y-axis shows percentage change while the tooltips show total percentage.</p>
                                 </Col>
                             </Row>
                             
                         </Card.Header>
                         <Card.Body>
-                            <XYPlot width={document.querySelector('.chart-container2') != null ? document.querySelector('.chart-container2').getBoundingClientRect().width - 10 : 600} height={300} yDomain={[-1, 1]} onMouseLeave={() => this.setState({hint_value_land_cover: null})}>
-                                    <HorizontalGridLines />
-                                    <XAxis 
-                                        tickFormat={v => parseInt(v)}
-                                        tickTotal={this.state.date_range[1] - this.state.date_range[0]}
-                                    />
-                                    <YAxis
-                                        tickFormat={v => v + '%'}
-                                    />
-                                    {
-                                        Object.keys(this.state.land_cover_data).map((land_cover, index) => {
-                                            if(this.state.land_cover_data[land_cover][this.state.date_range[0]] > 1) {
-                                                return <LineSeries
-                                                    key={index}
-                                                    data={ 
-                                                        Object.keys(this.state.land_cover_data[land_cover]).map((year, index) => { 
-                                                            return { x: year, y: (parseFloat(this.state.land_cover_data[land_cover][year]) - parseFloat(this.state.land_cover_data[land_cover][this.state.date_range[0]]))}
-                                                            }) 
-                                                    }
-                                                    onNearestX={(value) => { return this.setState({hint_value_land_cover: value})}}
-                                                    color={land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}
-                                                />
-                                                }
-                                            }
-                                        )
-                                    }
-                                    <Crosshair values={[this.state.hint_value_land_cover]}>
-                                        <div></div>
-                                    </Crosshair>
-                                    { this.state.hint_value_land_cover && (
-                                        <Hint value={this.state.hint_value_land_cover} style={{marginLeft: '1em', marginRight: '1em'}}>
-                                            <div className="hintBox wide">
-                                                <h6>{this.state.hint_value_land_cover.x}</h6>
-                                                    {
-                                                        Object.keys(this.state.land_cover_data).map((land_cover, index) => {
-                                                            if(this.state.land_cover_data[land_cover][this.state.date_range[0]] > 1) {
-                                                                return <Row><Col key={index}><span style={{color: land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}}>{land_cover}</span></Col><Col xs={2}>{this.state.land_cover_data[land_cover][this.state.hint_value_land_cover.x]}</Col></Row>
-                                                            }
+                            <div className="chart-container4">
+                                <XYPlot width={document.querySelector('.chart-container4') != null ? document.querySelector('.chart-container4').getBoundingClientRect().width - 10 : 300} height={250} yDomain={[-1, 1]} onMouseLeave={() => this.setState({hint_value_land_cover: null})}>
+                                        <HorizontalGridLines />
+                                        <XAxis 
+                                            tickFormat={v => parseInt(v)}
+                                            tickTotal={this.state.date_range[1] - this.state.date_range[0]}
+                                        />
+                                        <YAxis
+                                            tickFormat={v => v + '%'}
+                                        />
+                                        {
+                                            Object.keys(this.state.land_cover_data).map((land_cover, index) => {
+                                                if(this.state.land_cover_data[land_cover][this.state.date_range[0]] > 1) {
+                                                    return <LineSeries
+                                                        key={index}
+                                                        data={ 
+                                                            Object.keys(this.state.land_cover_data[land_cover]).map((year, index) => { 
+                                                                return { x: year, y: (parseFloat(this.state.land_cover_data[land_cover][year]) - parseFloat(this.state.land_cover_data[land_cover][this.state.date_range[0]]))}
+                                                                }) 
                                                         }
-                                                    )}
-                                            </div>
-                                        </Hint>
-                                    )}
-                            </XYPlot>
+                                                        onNearestX={(value) => { return this.setState({hint_value_land_cover: value})}}
+                                                        color={land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}
+                                                    />
+                                                    }
+                                                }
+                                            )
+                                        }
+                                        <Crosshair values={[this.state.hint_value_land_cover]}>
+                                            <div></div>
+                                        </Crosshair>
+                                        { this.state.hint_value_land_cover && (
+                                            <Hint value={this.state.hint_value_land_cover} style={{marginLeft: '1em', marginRight: '1em'}}>
+                                                <div className="hintBox wide">
+                                                    <h6>{this.state.hint_value_land_cover.x}</h6>
+                                                        {
+                                                            Object.keys(this.state.land_cover_data).map((land_cover, index) => {
+                                                                if(this.state.land_cover_data[land_cover][this.state.date_range[0]] > 1) {
+                                                                    return <Row><Col key={index}><span style={{color: land_cover_lookup.find(lc => lc.land_cover_class === land_cover).color}}>{land_cover.replace('_',' ')}</span></Col><Col xs={2}>{(parseFloat(this.state.land_cover_data[land_cover][this.state.hint_value_land_cover.x]) - parseFloat(this.state.land_cover_data[land_cover][this.state.date_range[0]])).toLocaleString()}</Col></Row>
+                                                                }
+                                                            }
+                                                        )}
+                                                </div>
+                                            </Hint>
+                                        )}
+                                </XYPlot>
+                            </div>
                             
 
                         </Card.Body>
                     </Card>
                 </Col>
+                
             </Row>
 
             <Row className="my-4">

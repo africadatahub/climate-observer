@@ -1714,7 +1714,7 @@ export class Climate extends React.Component {
             </Row>
 
             <Row className="my-4">
-                <Col md={4}>
+                <Col md={5}>
                     <Card className="h-md-100 shadow-sm mb-4 mb-md-0">
                         <Card.Header className="py-4">
                             <Row>
@@ -1723,7 +1723,7 @@ export class Climate extends React.Component {
                                 </Col>
                                 <Col>
                                     <h5>Land cover for <span className="text-adh-orange">{this.getPositionDetails() }</span> in {this.state.date_range[1] > 2018 ? 2018 : this.state.date_range[1]}</h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the land cover percentage by type.</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the land cover percentage by type.<br/><br/></p>
                                 </Col>
                             </Row>
                         </Card.Header>
@@ -1751,7 +1751,7 @@ export class Climate extends React.Component {
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col md={8}>
+                <Col md={7}>
                     <Card className="shadow-sm">
                         <Card.Header className="py-4">
                             <Row>
@@ -1759,7 +1759,7 @@ export class Climate extends React.Component {
                                     <Icon path={mdiLandPlots} size={2} />
                                 </Col>
                                 <Col>
-                                    <h5>Land cover percentage change for <span className="text-adh-orange">{this.getPositionDetails()}</span> from  {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
+                                    <h5>Land cover % change for <span className="text-adh-orange">{this.getPositionDetails()}</span> from  {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
                                     <p style={{fontWeight: '300'}} className="mb-0">This chart shows the change in land coverage and type over the selected period. The Y-axis shows percentage change while the tooltips show total percentage.</p>
                                 </Col>
                             </Row>

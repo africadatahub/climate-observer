@@ -1542,7 +1542,7 @@ export class Climate extends React.Component {
 
                                         }
                                     </Form.Select></h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the how the monthly average precipitation in {this.precip_table_year} compare with the average between 1950 and 1980</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This table shows the how the monthly actual precipitation in the given year compares with the average between 1950 and 1980</p>
                                 </Col>
                             </Row>
                         </Card.Header>
@@ -1612,7 +1612,7 @@ export class Climate extends React.Component {
                                 </Col>
                                 <Col>
                                     <h5>Monthly Precipitation for <span className="text-adh-orange">{this.getPositionDetails() }</span></h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the average monthly preciptitation for every month from {this.state.date_range[0]} to {this.state.date_range[1]}. the colour scale ranges from <span className="badge-pill" style={{background: '#feffd8', color: '#333'}}>0mm</span> to <span className="badge-pill" style={{backgroundColor: '#081d58', color: '#fff'}}>100mm</span>.</p>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the actual monthly preciptitation for every month from {this.state.date_range[0]} to {this.state.date_range[1]}. the colour scale ranges from <span className="badge-pill" style={{background: '#feffd8', color: '#333'}}>0mm</span> to <span className="badge-pill" style={{backgroundColor: '#081d58', color: '#fff'}}>100mm</span>.</p>
                                 </Col>
                             </Row>
                             

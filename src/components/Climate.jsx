@@ -128,26 +128,26 @@ export class Climate extends React.Component {
                     label: 'Monthly Average',
                     value: 'calculated_temp_avg'
                 },
-                {
-                    label: 'Monthly Max',
-                    value: 'calculated_temp_max'
-                },
-                {
-                    label: 'Monthly Min',
-                    value: 'calculated_temp_min'
-                },
+                // {
+                //     label: 'Monthly Max',
+                //     value: 'calculated_temp_max'
+                // },
+                // {
+                //     label: 'Monthly Min',
+                //     value: 'calculated_temp_min'
+                // },
                 {
                     label: 'Historical Average',
                     value: 'climatology_avg'
                 },
-                {
-                    label: 'Historical Max',
-                    value: 'climatology_max'
-                },
-                {
-                    label: 'Historical Min',
-                    value: 'climatology_min'
-                }
+                // {
+                //     label: 'Historical Max',
+                //     value: 'climatology_max'
+                // },
+                // {
+                //     label: 'Historical Min',
+                //     value: 'climatology_min'
+                // }
                 
             ],
             temp_chart_selected: [
@@ -1126,8 +1126,8 @@ export class Climate extends React.Component {
                                     <Icon path={mdiThermometer} size={2} />
                                 </Col>
                                 <Col>
-                                    <h5>Monthly Temperature for <span className="text-adh-orange">{ this.getPositionDetails() }</span> from {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
-                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the minimum, maximum and average temperatures per month from from {this.state.date_range[0]} to {this.state.date_range[1]}. Use the dropdown to show or hide different metrics. Dotted climatology lines show the average monthly temperature for the period 1950-1980.</p>
+                                    <h5>Average Monthly Temperature for <span className="text-adh-orange">{ this.getPositionDetails() }</span> from {this.state.date_range[0]} to {this.state.date_range[1]}</h5>
+                                    <p style={{fontWeight: '300'}} className="mb-0">This chart shows the average monthly temperature from {this.state.date_range[0]} to {this.state.date_range[1]}. Dotted climatology lines show the average monthly temperature for the period 1950-1980. The coloured area shows the average monthly maximum and minimum temperatures.</p>
                                 </Col>
                                 <Col md={3}>
 
@@ -1213,13 +1213,13 @@ export class Climate extends React.Component {
                                                                 </>
                                                             )
                                                         }
-                                                        {
+                                                        {/* {
                                                             this.state.disasters_data.filter(disaster => disaster.x == this.state.hint_value.x).map((disaster,index) =>
                                                                 <>
                                                                     <strong>{disaster['Disaster Type']}</strong>: {disaster['Event Name']}<br/>
                                                                 </>
                                                             )
-                                                        }
+                                                        } */}
                                                     </div>
                                                 </Hint>
                                             )}

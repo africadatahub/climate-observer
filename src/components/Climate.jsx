@@ -579,7 +579,7 @@ export class Climate extends React.Component {
 
             let current_precipitation_dataset = current_dataset.precipitation;
 
-            axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + current_precipitation_dataset + '"%20WHERE%20latitude%20%3E%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%20' + (self.state.lon - 0.5) + '%20AND%20longitude%20%3C%20' + (self.state.lon + 0.5) + '%20AND%20year%3E%3D' + self.state.date_range[0] + '%20AND%20year%3C%3D' + self.state.date_range[1] + '%20',
+            axios.get('https://ckan.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + current_precipitation_dataset + '"%20WHERE%20latitude%20%3E%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%20' + (self.state.lon - 0.5) + '%20AND%20longitude%20%3C%20' + (self.state.lon + 0.5) + '%20AND%20year%3E%3D' + self.state.date_range[0] + '%20AND%20year%3C%3D' + self.state.date_range[1] + '%20',
                 { headers: {
                     "Authorization": process.env.CKAN
                 }
@@ -613,7 +613,7 @@ export class Climate extends React.Component {
 
             let current_precipitation_dataset = current_dataset.precipitation;
 
-            axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + current_precipitation_dataset + '"%20WHERE%20latitude%20%3E%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%20' + (self.state.lon - 0.5) + '%20AND%20longitude%20%3C%20' + (self.state.lon + 0.5) + '%20',
+            axios.get('https://ckan.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + current_precipitation_dataset + '"%20WHERE%20latitude%20%3E%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%20' + (self.state.lon - 0.5) + '%20AND%20longitude%20%3C%20' + (self.state.lon + 0.5) + '%20',
                 { headers: {
                     "Authorization": process.env.CKAN
                 }
@@ -631,7 +631,7 @@ export class Climate extends React.Component {
 
         let disasters_dataset = self.state.datasets.find((d) => d.value == 'disasters').disasters;
 
-        axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + disasters_dataset + '"%20WHERE%20"ISO"%20LIKE%20%27' + self.state.position_details.iso_code + '%27',
+        axios.get('https://ckan.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + disasters_dataset + '"%20WHERE%20"ISO"%20LIKE%20%27' + self.state.position_details.iso_code + '%27',
             { headers: {
                 "Authorization": process.env.CKAN
             }
@@ -690,7 +690,7 @@ export class Climate extends React.Component {
 
         let land_cover_dataset = self.state.datasets.find((d) => d.value == 'land_cover').land_cover;
 
-        axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + land_cover_dataset + '"%20WHERE%20latutiude%3D' + self.state.lat + '%20AND%20longitude%3D' + self.state.lon + '%20AND%20year%3E%3D' + self.state.date_range[0] + '%20AND%20year%3C%3D' + self.state.date_range[1] + '%20',
+        axios.get('https://ckan.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + land_cover_dataset + '"%20WHERE%20latutiude%3D' + self.state.lat + '%20AND%20longitude%3D' + self.state.lon + '%20AND%20year%3E%3D' + self.state.date_range[0] + '%20AND%20year%3C%3D' + self.state.date_range[1] + '%20',
             { headers: {
                 "Authorization": process.env.CKAN
             }
@@ -770,7 +770,7 @@ export class Climate extends React.Component {
 
             let current_climatology_dataset = current_dataset.climatology;
 
-            axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + current_climatology_dataset + '"%20WHERE%20latitude%20%3E%3D%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%3D%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%3D%20' + (self.state.lon - 0.5) + '%20AND%20longitude%20%3C%3D%20' + (self.state.lon + 0.5) + '%20',
+            axios.get('https://ckan.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + current_climatology_dataset + '"%20WHERE%20latitude%20%3E%3D%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%3D%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%3D%20' + (self.state.lon - 0.5) + '%20AND%20longitude%20%3C%3D%20' + (self.state.lon + 0.5) + '%20',
                 { headers: {
                     "Authorization": process.env.CKAN
                 }
@@ -786,7 +786,7 @@ export class Climate extends React.Component {
 
                     let current_temperature_dataset = current_dataset.temperature;
 
-                    axios.get('https://ckandev.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + current_temperature_dataset + '"%20WHERE%20latitude%20%3E%3D%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%3D%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%3D%20' + (self.state.lon - 0.5) + '%20AND%20longitude%20%3C%3D%20' + (self.state.lon + 0.5) + '%20AND%20time%3E%3D' + self.state.date_range[0] + '%20AND%20time%3C%3D' + (self.state.date_range[1] + 1) + '%20',
+                    axios.get('https://ckan.africadatahub.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20"' + current_temperature_dataset + '"%20WHERE%20latitude%20%3E%3D%20' + (self.state.lat - 0.5) + '%20AND%20latitude%20%3C%3D%20' + (self.state.lat + 0.5) + '%20AND%20longitude%20%3E%3D%20' + (self.state.lon - 0.5) + '%20AND%20longitude%20%3C%3D%20' + (self.state.lon + 0.5) + '%20AND%20time%3E%3D' + self.state.date_range[0] + '%20AND%20time%3C%3D' + (self.state.date_range[1] + 1) + '%20',
                         { headers: {
                             "Authorization": process.env.CKAN
                         }
